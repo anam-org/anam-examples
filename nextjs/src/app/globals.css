@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 11, 74, 111;
+  --background-end-rgb: 137, 18, 62;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: #130A43;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.blurred-top {
+  position: relative;
+}
+
+.blurred-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px; /* You can adjust this value to control the height of the fade effect */
+  background: linear-gradient(
+    rgba(19, 10, 67, 1) 0%,
+    rgba(229, 231, 235, 0) 100%
+  );
+  pointer-events: none; /* This prevents the pseudo-element from interfering with scrolling and other mouse events */
+}
+
+
+/* typing animation */
+@keyframes typingAnimation {
+  0% {
+    transform: translateY(0px);
+    background-color:#6CAD96;
+  }
+  28% {
+    transform: translateY(-7px);
+    background-color:#9ECAB9;
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #B5D9CB;
+  }
+}
