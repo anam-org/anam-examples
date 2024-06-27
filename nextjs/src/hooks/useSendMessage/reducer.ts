@@ -3,7 +3,7 @@ import {
   MessageAction,
   MessageActionType,
   SendMessageState,
-} from "./types";
+} from './types';
 
 export const initialState: SendMessageState = {
   showTypingIndicator: false,
@@ -12,7 +12,7 @@ export const initialState: SendMessageState = {
 
 const sentMessagesReducer = (
   state: SendMessageState,
-  action: MessageAction
+  action: MessageAction,
 ): SendMessageState => {
   switch (action.type) {
     case MessageActionType.ADD_USER_MESSAGE:
@@ -29,15 +29,15 @@ const sentMessagesReducer = (
       };
     case MessageActionType.PROCESS_RECEIVED_MESSAGE:
       const existingMessage = state.sentMessages.find(
-        (m) => m.id === action.payload.message_id
+        (m) => m.id === action.payload.id,
       );
       if (existingMessage) {
         return {
           showTypingIndicator: false,
           sentMessages: state.sentMessages.map((msg) =>
-            msg.id === action.payload.message_id
+            msg.id === action.payload.id
               ? { ...msg, content: msg.content + action.payload.content }
-              : msg
+              : msg,
           ),
         };
       } else {
@@ -48,7 +48,7 @@ const sentMessagesReducer = (
             {
               author: Author.BOT,
               content: action.payload.content,
-              id: action.payload.message_id,
+              id: action.payload.id,
             },
           ],
         };

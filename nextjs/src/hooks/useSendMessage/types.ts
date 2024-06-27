@@ -1,10 +1,4 @@
-export interface TextResponseMessageEvent {
-  message_id: string;
-  content_index: number;
-  content: string;
-  message_type: string;
-  end_of_speech: boolean;
-}
+import { MessageStreamEvent } from '@anam-ai/js-sdk/dist/module/types';
 
 export enum Author {
   USER = 'user',
@@ -23,7 +17,7 @@ export type MessageAction =
   | { type: MessageActionType.ADD_USER_MESSAGE; payload: Message }
   | {
       type: MessageActionType.PROCESS_RECEIVED_MESSAGE;
-      payload: TextResponseMessageEvent;
+      payload: MessageStreamEvent;
     };
 
 export type SendMessageState = {

@@ -11,8 +11,6 @@ import ConversationPanel from '@/components/ConversationPanel';
 import { useAnam } from '@/contexts/AnamContext';
 import TalkPanel from '@/components/TalkPanel';
 
-const PERSONA_ID = process.env.NEXT_PUBLIC_PERSONA_ID;
-
 export default function Session() {
   const router = useRouter();
   const { anamClient } = useAnam();
@@ -53,7 +51,7 @@ export default function Session() {
 
   const {
     onSendMessage,
-    onReceiveMessage,
+    onReceiveMessageStreamEvent,
     state: messageState,
   } = useSendMessage();
 
@@ -68,16 +66,12 @@ export default function Session() {
 
   useEffect(() => {
     const startStream = async () => {
-      if (!PERSONA_ID) {
-        console.error('No persona id provided');
-        return;
-      }
       try {
         await anamClient.streamToVideoAndAudioElements('video', 'audio', {
           onConnectionEstablishedCallback: onConnectionEstablished,
           onVideoPlayStartedCallback: onVideoStartedStreaming,
           onConnectionClosedCallback: onConnectionClosed,
-          onReceiveMessageCallback: onReceiveMessage,
+          onMessageStreamEventCallback: onReceiveMessageStreamEvent,
         });
       } catch (error: any) {
         if (error instanceof Error) {

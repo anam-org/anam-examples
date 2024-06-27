@@ -1,15 +1,11 @@
 import { useReducer } from 'react';
-import {
-  Author,
-  MessageActionType,
-  SendMessageState,
-  TextResponseMessageEvent,
-} from './types';
+import { Author, MessageActionType, SendMessageState } from './types';
 import sentMessagesReducer, { initialState } from './reducer';
+import { MessageStreamEvent } from '@anam-ai/js-sdk/dist/module/types';
 
 const useSendMessage = (): {
   onSendMessage: (message: string) => void;
-  onReceiveMessage: (message: TextResponseMessageEvent) => void;
+  onReceiveMessageStreamEvent: (message: MessageStreamEvent) => void;
   state: SendMessageState;
 } => {
   const [state, dispatch] = useReducer(sentMessagesReducer, initialState);
@@ -21,23 +17,23 @@ const useSendMessage = (): {
     });
   };
 
-  const onReceiveMessage = (message: TextResponseMessageEvent) => {
-    if (message.message_type === 'persona') {
+  const onReceiveMessageStreamEvent = (message: MessageStreamEvent) => {
+    if (message.role === 'persona') {
       dispatch({
         type: MessageActionType.PROCESS_RECEIVED_MESSAGE,
         payload: message,
       });
-    } else if (message.message_type === 'user') {
+    } else if (message.role === 'user') {
       onSendMessage(message.content);
     } else {
-      console.log('Unknown message type: ' + message.message_type);
+      console.log('Unknown message type: ' + message.role);
       console.log(message);
     }
   };
 
   return {
     onSendMessage,
-    onReceiveMessage,
+    onReceiveMessageStreamEvent,
     state,
   };
 };
