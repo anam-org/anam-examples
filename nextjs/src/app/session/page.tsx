@@ -10,6 +10,7 @@ import AlertModal from '@/components/AlertModal';
 import ConversationPanel from '@/components/ConversationPanel';
 import { useAnam } from '@/contexts/AnamContext';
 import TalkPanel from '@/components/TalkPanel';
+import { AnamEvent } from '@anam-ai/js-sdk/dist/module/types';
 
 export default function Session() {
   const router = useRouter();
@@ -66,13 +67,21 @@ export default function Session() {
 
   useEffect(() => {
     const startStream = async () => {
+      anamClient.addListener(
+        AnamEvent.CONNECTION_ESTABLISHED,
+        onConnectionEstablished,
+      );
+      anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      anamClient.addListener(
+        AnamEvent.VIDEO_PLAY_STARTED,
+        onVideoStartedStreaming,
+      );
+      anamClient.addListener(
+        AnamEvent.MESSAGE_STREAM_EVENT_RECEIVED,
+        onReceiveMessageStreamEvent,
+      );
       try {
-        await anamClient.streamToVideoAndAudioElements('video', 'audio', {
-          onConnectionEstablishedCallback: onConnectionEstablished,
-          onVideoPlayStartedCallback: onVideoStartedStreaming,
-          onConnectionClosedCallback: onConnectionClosed,
-          onMessageStreamEventCallback: onReceiveMessageStreamEvent,
-        });
+        await anamClient.streamToVideoAndAudioElements('video', 'audio');
       } catch (error: any) {
         if (error instanceof Error) {
           setModalMessage({
