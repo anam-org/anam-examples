@@ -10,7 +10,7 @@ import AlertModal from '@/components/AlertModal';
 import ConversationPanel from '@/components/ConversationPanel';
 import { useAnam } from '@/contexts/AnamContext';
 import TalkPanel from '@/components/TalkPanel';
-import { Message } from '@anam-ai/js-sdk/dist/module/types';
+import { AnamEvent, Message } from '@anam-ai/js-sdk/dist/module/types';
 import { getPersonaResponse } from '@/utils/api';
 
 export default function Session() {
@@ -82,14 +82,23 @@ export default function Session() {
 
   useEffect(() => {
     const startStream = async () => {
+      anamClient.addListener(
+        AnamEvent.CONNECTION_ESTABLISHED,
+        onConnectionEstablished,
+      );
+      anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      anamClient.addListener(
+        AnamEvent.VIDEO_PLAY_STARTED,
+        onVideoStartedStreaming,
+      );
+      anamClient.addListener(
+        AnamEvent.MESSAGE_STREAM_EVENT_RECEIVED,
+        onReceiveMessageStreamEvent,
+      );
+      // Respond to the user when the message history is updated
+      anamClient.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, respondToUser);
       try {
-        await anamClient.streamToVideoAndAudioElements('video', 'audio', {
-          onConnectionEstablishedCallback: onConnectionEstablished,
-          onVideoPlayStartedCallback: onVideoStartedStreaming,
-          onConnectionClosedCallback: onConnectionClosed,
-          onMessageStreamEventCallback: onReceiveMessageStreamEvent,
-          onMessageHistoryUpdatedCallback: respondToUser,
-        });
+        await anamClient.streamToVideoAndAudioElements('video', 'audio');
       } catch (error: any) {
         if (error instanceof Error) {
           setModalMessage({
