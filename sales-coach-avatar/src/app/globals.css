@@ -10,36 +10,36 @@ a {
 /* Responsive adjustments for larger screens */
 @media (max-width: 3840px) {
   .appcontainer {
-    padding-left: 32em;
-    padding-right: 32em;
+    padding-left: 20em;
+    padding-right: 20em;
   }
 }
 
 @media (max-width: 2560px) {
   .appcontainer {
-    padding-left: 24em;
-    padding-right: 24em;
+    padding-left: 14em;
+    padding-right: 14em;
   }
 }
 
 @media (max-width: 1920px) {
-  .appcontainer {
-    padding-left: 16em;
-    padding-right: 16em;
-  }
-}
-
-@media (max-width: 1280px) {
   .appcontainer {
     padding-left: 8em;
     padding-right: 8em;
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1280px) {
   .appcontainer {
     padding-left: 4em;
     padding-right: 4em;
+  }
+}
+
+@media (max-width: 960px) {
+  .appcontainer {
+    padding-left: 3em;
+    padding-right: 3em;
   }
 }
 

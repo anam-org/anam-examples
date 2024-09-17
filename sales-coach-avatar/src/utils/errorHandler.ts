@@ -23,7 +23,9 @@ export const errorHandler = (
     const detailedErrors = typedError.errors
       ? `Errors: ${typedError.errors.join(", ")}`
       : "";
-    const operation = typedError.operation ? `Operation: ${typedError.operation}` : "";
+    const operation = typedError.operation
+      ? `Operation: ${typedError.operation}`
+      : "";
 
     const logMessage = `${errorCode}Error: ${errorMessage} Context: ${context} ${detailedErrors} ${operation} Error Info: ${
       errorInfo ? errorInfo.componentStack : "No Error Info"

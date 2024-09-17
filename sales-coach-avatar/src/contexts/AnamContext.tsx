@@ -1,46 +1,45 @@
 "use client";
 
 import { createClient, AnamClient } from "@anam-ai/js-sdk";
-import { useEffect, useState, useMemo } from "react";
 import constate from "constate";
 import { env } from "@/env";
-import { errorHandler, FetchError } from "@/utils";
+import { FetchError, errorHandler, logger } from "@/utils";
 
-interface UseAnamProps {
-  sessionToken?: string;
-}
+const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_ID!;
+const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
+const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 
-const useAnam = ({ sessionToken }: UseAnamProps) => {
-  const [anamClient, setAnamClient] = useState<AnamClient | null>(null);
-  const [isClientInitialized, setIsClientInitialized] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
+  let anamClient: AnamClient;
 
-  useEffect(() => {
-    const initializeClient = async () => {
-      try {
-        if (sessionToken) {
-          const client = createClient(sessionToken, {
-            personaId: env.NEXT_PUBLIC_PERSONA_ID!,
-            disableBrains: env.NEXT_PUBLIC_DISABLE_BRAINS,
-            disableFillerPhrases: env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES,
-          });
-          setAnamClient(client);
-        } else {
-          throw new FetchError("No session token provided", 400);
-        }
-        setIsClientInitialized(true);
-      } catch (err) {
-        errorHandler(err as FetchError, "Initializing Anam Client");
-        setError("Failed to initialize Anam client");
-      }
-    };
+  if (sessionToken) {
+    try {
+      anamClient = createClient(sessionToken, {
+        personaId: PERSONA_ID,
+        disableBrains: DISABLE_BRAINS,
+        disableFillerPhrases: DISABLE_FILLER_PHRASES,
+      });
+      logger.info(
+        `Anam client initialized with session token: ${sessionToken}`,
+      );
+    } catch (err) {
+      errorHandler(err as FetchError, "Initializing Anam Client");
+      anamClient = createClient("dummy", {
+        personaId: PERSONA_ID,
+        disableBrains: DISABLE_BRAINS,
+        disableFillerPhrases: DISABLE_FILLER_PHRASES,
+      });
+    }
+  } else {
+    logger.warn("Anam Client: No session token provided, using dummy client");
+    anamClient = createClient("dummy", {
+      personaId: PERSONA_ID,
+      disableBrains: DISABLE_BRAINS,
+      disableFillerPhrases: DISABLE_FILLER_PHRASES,
+    });
+  }
 
-    initializeClient();
-  }, [sessionToken]);
-
-  const memoizedClient = useMemo(() => ({ anamClient, isClientInitialized, error }), [anamClient, isClientInitialized, error]);
-
-  return memoizedClient;
+  return { anamClient, isClientInitialized: !!sessionToken };
 };
 
 export const [AnamContextProvider, useAnamContext] = constate(useAnam);

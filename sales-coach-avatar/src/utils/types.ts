@@ -28,16 +28,11 @@ const clientUnavailableError: ErrorBase & {
   code: number;
   operation: string;
 } = {
-  message: 'Client is not available. Please try again later.',
+  message: "Client is not available. Please try again later.",
   code: 500,
-  operation: 'Stream Initialization',
-  logLevel: 'error',  // Ensuring it matches the defined union type
-  name: 'ClientUnavailableError',
+  operation: "Stream Initialization",
+  logLevel: "error",
+  name: "ClientUnavailableError",
 };
 
-
-export {
-  ErrorBase,
-  FetchError,
-  clientUnavailableError
-};
+export { ErrorBase, FetchError, clientUnavailableError };

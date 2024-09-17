@@ -18,19 +18,17 @@ export function Providers({ children }: { children: ReactNode }) {
 
   if (isValidating) {
     return (
-      <Flex align="center" justify="center">
-        <Spinner />
+      <Flex align="center" justify="center" height="100vh" width="100vw">
+        <Spinner size="3" />
         <Text>Loading...</Text>
       </Flex>
     );
   }
 
   return (
-    <>
-      <AnamContextProvider sessionToken={sessionToken}>
-        {children}
-      </AnamContextProvider>
+    <AnamContextProvider sessionToken={sessionToken}>
+      {children}
       <Toaster />
-    </>
+    </AnamContextProvider>
   );
 }

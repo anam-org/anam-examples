@@ -1,19 +1,25 @@
-import { DemoButton } from "@/components/DemoButton";
-import { Flex, Grid, Heading } from "@radix-ui/themes";
+"use client";
+
+import { useState } from "react";
+import { Box } from "@radix-ui/themes";
+import InitialView from "./_views/initial";
+import DescriptionView from "./_views/description";
+import { DemoView } from "./_views/demo";
 
 export default function HomePage() {
+  const [currentView, setCurrentView] = useState("initial");
+
+  const changeView = (view: string) => {
+    setCurrentView(view);
+  };
+
   return (
-    <Flex align="center" justify="center" height="100vh">
-      <Grid columns="2" rows="1" gap="5">
-        <Flex justify="center" align="center">
-          <Heading as="h1" weight="light" size="9">
-            Experience the future
-          </Heading>
-        </Flex>
-        <Flex align="center" justify="center" direction="row" gap="2">
-          <DemoButton />
-        </Flex>
-      </Grid>
-    </Flex>
+    <Box>
+      {currentView === "initial" && <InitialView changeView={changeView} />}
+      {currentView === "description" && (
+        <DescriptionView changeView={changeView} />
+      )}
+      {currentView === "demo" && <DemoView changeView={changeView} />}
+    </Box>
   );
 }
