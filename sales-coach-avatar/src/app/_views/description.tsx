@@ -11,6 +11,7 @@ import {
   Strong,
   Text,
 } from "@radix-ui/themes";
+import { VideoCheckModal } from "../_components/VideoCheckModal/VideoCheckModal";
 
 interface DescriptionViewProps {
   changeView: (view: string) => void;
@@ -152,9 +153,23 @@ const CustomerDetails = () => (
 
 export default function DescriptionView({ changeView }: DescriptionViewProps) {
   const [showFullText, setShowFullText] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleTextVisibility = () => {
     setShowFullText((prevState) => !prevState);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handlePermissionGranted = () => {
+    setIsModalOpen(false);
+    changeView("demo");
   };
 
   return (
@@ -185,8 +200,14 @@ export default function DescriptionView({ changeView }: DescriptionViewProps) {
         </Flex>
       </Section>
       <Flex justify="end">
-        <Button onClick={() => changeView("demo")}>Start Conversation</Button>
+        <Button onClick={handleOpenModal}>Start Conversation</Button>
       </Flex>
+      {isModalOpen && (
+        <VideoCheckModal
+          onClose={handleCloseModal}
+          onPermissionGranted={handlePermissionGranted}
+        />
+      )}
     </Box>
   );
 }

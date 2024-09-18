@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Box } from "@radix-ui/themes";
-import InitialView from "./_views/initial";
+import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
 import DescriptionView from "./_views/description";
 import { DemoView } from "./_views/demo";
+import { TriangleRightIcon } from "@radix-ui/react-icons";
 
 export default function HomePage() {
   const [currentView, setCurrentView] = useState("initial");
@@ -15,7 +15,50 @@ export default function HomePage() {
 
   return (
     <Box>
-      {currentView === "initial" && <InitialView changeView={changeView} />}
+      {currentView === "initial" && (
+        <Box className="appcontainer">
+          <Flex justify="start" align="start" style={{ paddingTop: "1.5em" }}>
+            <Heading>ANAM.AI</Heading>
+          </Flex>
+          <Flex
+            align="center"
+            justify="center"
+            height="80vh"
+            direction="column"
+          >
+            <Heading size="8">AI-powered training platform</Heading>
+            <Text>
+              Practice customer conversations and get personalized feedback
+            </Text>
+            <Box position="relative" display="inline-block">
+              <video
+                width="500px"
+                height="auto"
+                src="/videos/personas/leo_gen_1.mp4"
+                poster="/jpg/posters/leo_gen_1_poster.jpg"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              <IconButton
+                color="gray"
+                size="4"
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 1,
+                }}
+                onClick={() => changeView("description")}
+              >
+                <TriangleRightIcon width="30" height="30" />
+              </IconButton>
+            </Box>
+          </Flex>
+        </Box>
+      )}
       {currentView === "description" && (
         <DescriptionView changeView={changeView} />
       )}

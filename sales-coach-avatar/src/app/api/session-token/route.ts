@@ -26,9 +26,6 @@ export async function GET() {
     }
 
     const data = await response.json();
-    logger.info(
-      `Session token fetched successfully: { sessionToken: ${data.sessionToken} }`,
-    );
     const nextResponse = NextResponse.json({ sessionToken: data.sessionToken });
 
     nextResponse.headers.set(
