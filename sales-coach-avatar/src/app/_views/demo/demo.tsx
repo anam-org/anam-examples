@@ -1,7 +1,4 @@
-import {
-  Grid,
-  Section,
-} from "@radix-ui/themes";
+import { Grid, Section } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { AvatarSection } from "./AvatarSection";
 import { RightPanel } from "./RightPanel";

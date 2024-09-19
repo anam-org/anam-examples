@@ -14,34 +14,38 @@ const Timer = ({ secondsElapsed }: { secondsElapsed: number }) => {
   return <Text style={{ color: "#EEEEEE" }}>{formatTime(secondsElapsed)}</Text>;
 };
 
-export const VideoControls = ({ secondsElapsed }: { secondsElapsed: number }) => {
-    return (
-      <Flex
-        justify="center"
-        align="center"
-        gap="2"
-        style={{
-          padding: "0.75em 2em",
-          borderRadius: "30px",
-          backgroundColor: "#444444",
-          position: "absolute",
-          bottom: "1em",
-        }}
-      >
-        <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
-          <PauseIcon width="30" height="30" />
-        </IconButton>
-        <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
-          <VolumeUpIcon width="30" height="30" />
-        </IconButton>
-        <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
-          <VideocamIcon width="30" height="30" />
-        </IconButton>
-        <Separator orientation="vertical" />
-        <Timer secondsElapsed={secondsElapsed} />
-        <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
-          <RefreshIcon width="30" height="30" />
-        </IconButton>
-      </Flex>
-    );
-  };
+export const VideoControls = ({
+  secondsElapsed,
+}: {
+  secondsElapsed: number;
+}) => {
+  return (
+    <Flex
+      justify="center"
+      align="center"
+      gap="2"
+      style={{
+        padding: "0.75em 2em",
+        borderRadius: "30px",
+        backgroundColor: "#444444",
+        position: "absolute",
+        bottom: "1em",
+      }}
+    >
+      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+        <PauseIcon width="30" height="30" />
+      </IconButton>
+      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+        <VolumeUpIcon width="30" height="30" />
+      </IconButton>
+      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+        <VideocamIcon width="30" height="30" />
+      </IconButton>
+      <Separator orientation="vertical" />
+      <Timer secondsElapsed={secondsElapsed} />
+      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+        <RefreshIcon width="30" height="30" />
+      </IconButton>
+    </Flex>
+  );
+};

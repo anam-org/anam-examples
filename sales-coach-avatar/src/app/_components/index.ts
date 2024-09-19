@@ -1,1 +1,1 @@
-export * from './VideoCheckModal';
+export * from "./VideoCheckModal";

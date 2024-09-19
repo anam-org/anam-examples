@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Section,
-  Separator,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Section, Separator } from "@radix-ui/themes";
 import { VideoCheckModal } from "@/app/_components";
 import { BackButton } from "./BackButton";
 import { ScenarioDetails } from "./ScenarioDetails";
