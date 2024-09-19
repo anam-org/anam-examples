@@ -6,6 +6,7 @@ import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 import { ReactNode } from "react";
+import { VideoAudioPermissionProvider } from "@/contexts/VideoAudioPermissionContext";
 
 export function Providers({ children }: { children: ReactNode }) {
   const { data: sessionToken, error, isValidating } = useFetchToken();
@@ -26,9 +27,11 @@ export function Providers({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AnamContextProvider sessionToken={sessionToken}>
-      {children}
-      <Toaster />
-    </AnamContextProvider>
+    <VideoAudioPermissionProvider>
+      <AnamContextProvider sessionToken={sessionToken}>
+        {children}
+        <Toaster />
+      </AnamContextProvider>
+    </VideoAudioPermissionProvider>
   );
 }

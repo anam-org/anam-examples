@@ -8,9 +8,10 @@ import {
   Skeleton,
   Text,
 } from "@radix-ui/themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { VideoControls } from "./VideoControls";
+import { useVideoAudioPermissionContext } from "@/contexts";
 
 interface VideoCheckModalProps {
   onClose: () => void;
@@ -21,70 +22,38 @@ export function VideoCheckModal({
   onClose,
   onPermissionGranted,
 }: VideoCheckModalProps) {
+  const {
+    cameras,
+    microphones,
+    selectedCamera,
+    selectedMicrophone,
+    permissionsGranted,
+    errorMessage,
+    mediaStream,
+    setSelectedCamera,
+    setSelectedMicrophone,
+    requestPermissions,
+  } = useVideoAudioPermissionContext();
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string>("");
-  const [selectedMicrophone, setSelectedMicrophone] = useState<string>("");
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
-      .then(() => {
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-          const videoDevices = devices.filter(
-            (device) => device.kind === "videoinput",
-          );
-          const audioDevices = devices.filter(
-            (device) => device.kind === "audioinput",
-          );
-
-          setCameras(videoDevices);
-          setMicrophones(audioDevices);
-
-          if (videoDevices.length > 0)
-            setSelectedCamera(videoDevices[0].deviceId);
-          if (audioDevices.length > 0)
-            setSelectedMicrophone(audioDevices[0].deviceId);
-        });
-      })
-      .catch((error) => {
-        console.error("Permission denied", error);
-      });
+    requestPermissions();
   }, []);
 
   useEffect(() => {
-    let stream: MediaStream;
-
-    if (selectedCamera && selectedMicrophone) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            deviceId: selectedCamera ? { exact: selectedCamera } : undefined,
-          },
-          audio: {
-            deviceId: selectedMicrophone
-              ? { exact: selectedMicrophone }
-              : undefined,
-          },
-        })
-        .then((mediaStream) => {
-          stream = mediaStream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        })
-        .catch((error) => {
-          console.error("Permission denied", error);
-        });
+    if (mediaStream && videoRef.current) {
+      videoRef.current.srcObject = mediaStream;
     }
+  }, [mediaStream]);
 
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [selectedCamera, selectedMicrophone]);
+  const handlePermissionGranted = () => {
+    if (permissionsGranted) {
+      onPermissionGranted();
+    } else {
+      alert("Please grant camera and microphone permissions to proceed.");
+    }
+  };
 
   return (
     <>
@@ -159,21 +128,20 @@ export function VideoCheckModal({
           >
             <Cross2Icon />
           </IconButton>
-          <Heading as="h2" size="3" mb="3">
+          <Heading as="h2" size="3" mb="1">
             Ready to Start?
           </Heading>
-          <Text mb="4" align="center">
+          <Text mb="1" align="center">
             Before proceeding, we need to check your camera and microphone.
           </Text>
-          <Flex gap="3">
-            <Button
-              size="4"
-              style={{ borderRadius: "30px" }}
-              onClick={onPermissionGranted}
-            >
-              Start Demo
-            </Button>
-          </Flex>
+          {errorMessage && <Text mb="3" align="center" color="red">{errorMessage}</Text>}
+          <Button
+            size="4"
+            style={{ borderRadius: "30px" }}
+            onClick={handlePermissionGranted}
+          >
+            Start Demo
+          </Button>
         </Flex>
       </Grid>
     </>
