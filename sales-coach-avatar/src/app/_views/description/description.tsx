@@ -1,21 +1,36 @@
 import { useState } from "react";
-import { Box, Button, Flex, Section, Separator } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Section,
+  Separator,
+} from "@radix-ui/themes";
 import { VideoCheckModal } from "@/app/_components";
-import { BackButton } from "./BackButton";
-import { ScenarioDetails } from "./ScenarioDetails";
-import { InstructionDetails } from "./InstructionDetails";
+import { LeftPanel } from "./LeftPanel";
+import { X } from "lucide-react";
+import { RightPanel } from "./RightPanel";
 
 interface DescriptionViewProps {
   changeView: (view: string) => void;
 }
 
-export default function DescriptionView({ changeView }: DescriptionViewProps) {
-  const [showFullText, setShowFullText] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
+  <Flex justify="start" align="start" style={{ paddingTop: "1.5em" }}>
+    <IconButton
+      variant="ghost"
+      color="gray"
+      size="4"
+      onClick={() => changeView("initial")}
+    >
+      <X width="30" height="30" />
+    </IconButton>
+  </Flex>
+);
 
-  const toggleTextVisibility = () => {
-    setShowFullText((prevState) => !prevState);
-  };
+export default function DescriptionView({ changeView }: DescriptionViewProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -33,6 +48,7 @@ export default function DescriptionView({ changeView }: DescriptionViewProps) {
   return (
     <Box className="appcontainer">
       <BackButton changeView={changeView} />
+
       <Section size="1">
         <Flex
           direction="row"
@@ -45,16 +61,13 @@ export default function DescriptionView({ changeView }: DescriptionViewProps) {
             minHeight: "400px",
           }}
         >
-          <InstructionDetails />
+          <LeftPanel />
           <Separator
             orientation="vertical"
             size="4"
             style={{ margin: "0 20px", height: "auto", alignSelf: "stretch" }}
           />
-          <ScenarioDetails
-            showFullText={showFullText}
-            toggleTextVisibility={toggleTextVisibility}
-          />
+          <RightPanel />
         </Flex>
       </Section>
       <Flex justify="end">

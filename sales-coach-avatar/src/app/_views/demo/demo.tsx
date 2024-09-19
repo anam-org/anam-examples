@@ -1,6 +1,6 @@
 import { Grid, Section } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { AvatarSection } from "./AvatarSection";
+import { LeftPanel } from "./LeftPanel";
 import { RightPanel } from "./RightPanel";
 
 export function DemoView({
@@ -24,9 +24,7 @@ export function DemoView({
 
   return (
     <Grid columns="2fr 1fr" rows="1">
-      <Section size="1">
-        <AvatarSection secondsElapsed={secondsElapsed} />
-      </Section>
+      <LeftPanel secondsElapsed={secondsElapsed} />
       <RightPanel
         showFullText={showFullText}
         toggleTextVisibility={toggleTextVisibility}

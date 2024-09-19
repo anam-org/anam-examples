@@ -45,7 +45,6 @@ export const VideoControls = ({
           </Select.Content>
         </Select.Root>
       </Flex>
-
       <Flex align="center" gap="2" width="100%">
         <Select.Root
           value={selectedMicrophone}
