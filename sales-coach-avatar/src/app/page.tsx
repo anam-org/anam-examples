@@ -13,6 +13,7 @@ export default function HomePage() {
     setCurrentView(view);
   };
 
+  
   return (
     <Box>
       {currentView === "initial" && (
