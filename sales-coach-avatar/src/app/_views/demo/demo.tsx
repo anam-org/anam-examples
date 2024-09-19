@@ -1,7 +1,7 @@
-import { Grid, Section } from "@radix-ui/themes";
+import { Grid } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { LeftPanel } from "./LeftPanel";
-import { RightPanel } from "./RightPanel";
+import { LeftPanel } from "./components/LeftPanel";
+import { RightPanel } from "./components/RightPanel";
 
 export function DemoView({
   changeView,
