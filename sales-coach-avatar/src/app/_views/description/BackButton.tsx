@@ -1,5 +1,5 @@
 import { Flex, IconButton } from "@radix-ui/themes";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { X } from "lucide-react";
 
 export const BackButton = ({
   changeView,
@@ -13,7 +13,7 @@ export const BackButton = ({
       size="4"
       onClick={() => changeView("initial")}
     >
-      <Cross2Icon width="30" height="30" />
+      <X width="30" height="30" />
     </IconButton>
   </Flex>
 );

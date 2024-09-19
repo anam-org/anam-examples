@@ -1,4 +1,4 @@
-import { SpeakerOffIcon } from "@radix-ui/react-icons";
+import { VolumeOff } from "lucide-react";
 import { Flex, Heading, Strong, Text } from "@radix-ui/themes";
 
 export const InstructionDetails = () => (
@@ -25,7 +25,7 @@ export const InstructionDetails = () => (
         borderWidth: "1px",
       }}
     >
-      <SpeakerOffIcon />
+      <VolumeOff />
       <Text as="p" size="2" style={{ marginLeft: "1em" }}>
         Find a quiet space to focus on the conversation
       </Text>

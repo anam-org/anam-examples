@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
 import { DemoView } from "./_views/demo/demo";
-import { TriangleRightIcon } from "@radix-ui/react-icons";
+import { Play } from "lucide-react";
 import DescriptionView from "./_views/description/description";
 
 export default function HomePage() {
@@ -53,7 +53,7 @@ export default function HomePage() {
                 }}
                 onClick={() => changeView("description")}
               >
-                <TriangleRightIcon width="30" height="30" />
+                <Play width="30" height="30" />
               </IconButton>
             </Box>
           </Flex>

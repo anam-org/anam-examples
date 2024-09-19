@@ -1,6 +1,5 @@
 import { Flex, Grid, Select } from "@radix-ui/themes";
-import MicNoneIcon from "@mui/icons-material/MicNone";
-import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
+import { Mic, Video } from "lucide-react";
 
 export const VideoControls = ({
   cameras,
@@ -18,8 +17,8 @@ export const VideoControls = ({
   onSelectMicrophone: (deviceId: string) => void;
 }) => {
   const data = {
-    camera: { label: "Camera", icon: <VideocamOutlinedIcon /> },
-    microphone: { label: "Microphone", icon: <MicNoneIcon /> },
+    camera: { label: "Camera", icon: <Video /> },
+    microphone: { label: "Microphone", icon: <Mic /> },
   };
 
   return (

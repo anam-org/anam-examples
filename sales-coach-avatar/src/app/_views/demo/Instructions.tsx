@@ -1,43 +1,31 @@
-import { Heading, Text } from "@radix-ui/themes";
-import Image from "next/image";
+import { Heading, Text, Flex } from "@radix-ui/themes";
+import { Dot } from "lucide-react";
 
 export const Instructions = () => {
+  const instructions = [
+    "Listen empathetically to Patrick’s request.",
+    "Verify the account details and confirm the identity.",
+    "Ensure the removal happens in the next billing period.",
+    "Check that no services are disrupted or incur unexpected charges.",
+    "Provide a follow-up confirmation to Patrick.",
+  ];
+
   return (
     <>
-      <Heading as="h2" size="3" mb="1" weight="medium">
+      <Heading as="h2" size="3" mb="3" weight="medium">
         Key Steps for Support Agent
       </Heading>
-      <ul style={{ paddingLeft: "1em" }}>
-        <li style={{ display: "flex", marginBottom: "0.5em" }}>
-          <Image src="/point.svg" alt="icon" width="15" height="15" />
-          <Text as="span" style={{ marginLeft: "0.5em" }}>
-            Listen empathetically to Patrick’s request.
-          </Text>
-        </li>
-        <li style={{ display: "flex", marginBottom: "0.5em" }}>
-          <Image src="/point.svg" alt="icon" width="15" height="15" />
-          <Text as="span" style={{ marginLeft: "0.5em" }}>
-            Verify the account details and confirm the identity.
-          </Text>
-        </li>
-        <li style={{ display: "flex", marginBottom: "0.5em" }}>
-          <Image src="/point.svg" alt="icon" width="15" height="15" />
-          <Text as="span" style={{ marginLeft: "0.5em" }}>
-            Ensure the removal happens in the next billing period.
-          </Text>
-        </li>
-        <li style={{ display: "flex", marginBottom: "0.5em" }}>
-          <Image src="/point.svg" alt="icon" width="15" height="15" />
-          <Text as="span" style={{ marginLeft: "0.5em" }}>
-            Check that no services are disrupted or incur unexpected charges.
-          </Text>
-        </li>
-        <li style={{ display: "flex" }}>
-          <Image src="/point.svg" alt="icon" width="15" height="15" />
-          <Text as="span" style={{ marginLeft: "0.5em" }}>
-            Provide a follow-up confirmation to Patrick.
-          </Text>
-        </li>
+      <ul>
+        {instructions.map((instruction, index) => (
+          <li key={index}>
+            <Flex align="center" mb="1">
+              <Dot size="30" />
+              <Text as="span" style={{ marginLeft: "0.5em" }}>
+                {instruction}
+              </Text>
+            </Flex>
+          </li>
+        ))}
       </ul>
     </>
   );

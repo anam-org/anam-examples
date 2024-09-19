@@ -1,7 +1,7 @@
 import { Button, Flex, Heading, Section, Text } from "@radix-ui/themes";
 import { Instructions } from "./Instructions";
-import Image from "next/image";
 import { ScenarioText } from "./ScenarioText";
+import { Phone } from "lucide-react";
 
 export const RightPanel = ({
   showFullText,
@@ -25,7 +25,7 @@ export const RightPanel = ({
     >
       <Section size="1">
         <Flex align="center" mb="3">
-          <Image src="/phone-call.svg" alt="icon" width="18" height="18" />
+          <Phone size="18" />
           <Text as="p" size="2" style={{ marginLeft: "0.5em" }}>
             Phone
           </Text>

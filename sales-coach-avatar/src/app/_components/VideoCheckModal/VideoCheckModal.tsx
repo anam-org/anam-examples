@@ -9,7 +9,7 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { useEffect, useRef } from "react";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { X } from "lucide-react";
 import { VideoControls } from "./VideoControls";
 import { useVideoAudioPermissionContext } from "@/contexts";
 
@@ -126,7 +126,7 @@ export function VideoCheckModal({
             style={{ position: "absolute", top: "0.5em", right: "0.5em" }}
             onClick={onClose}
           >
-            <Cross2Icon />
+            <X />
           </IconButton>
           <Heading as="h2" size="3" mb="1">
             Ready to Start?
