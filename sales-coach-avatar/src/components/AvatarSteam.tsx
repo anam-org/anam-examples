@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useRef, Fragment, useCallback } from "react";
 import { Spinner } from "@radix-ui/themes";
-import { FetchError } from "@/utils";
-import { useAnamContext } from "@/contexts";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { AvatarContainer } from "@/components/AvatarContainer";
 import { toast } from "sonner";
+import { useAnamContext } from "@/app/_contexts";
 
 interface AvatarStreamProps {
   startStream: boolean;

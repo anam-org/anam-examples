@@ -1,12 +1,11 @@
 "use client";
 
-import { AnamContextProvider } from "@/contexts";
 import { useFetchToken } from "@/hooks";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 import { ReactNode } from "react";
-import { VideoAudioPermissionProvider } from "@/contexts/VideoAudioPermissionContext";
+import { AnamContextProvider, VideoAudioPermissionProvider } from "../_contexts";
 
 export function Providers({ children }: { children: ReactNode }) {
   const { data: sessionToken, error, isValidating } = useFetchToken();
