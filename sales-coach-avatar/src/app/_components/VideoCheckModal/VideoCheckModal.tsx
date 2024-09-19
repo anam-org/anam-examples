@@ -134,7 +134,11 @@ export function VideoCheckModal({
           <Text mb="1" align="center">
             Before proceeding, we need to check your camera and microphone.
           </Text>
-          {errorMessage && <Text mb="3" align="center" color="red">{errorMessage}</Text>}
+          {errorMessage && (
+            <Text mb="3" align="center" color="red">
+              {errorMessage}
+            </Text>
+          )}
           <Button
             size="4"
             style={{ borderRadius: "30px" }}
