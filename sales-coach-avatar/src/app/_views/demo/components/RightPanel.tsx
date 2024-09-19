@@ -1,3 +1,4 @@
+import { useAnamContext } from "@/app/_contexts";
 import { Button, Flex, Heading, Section, Text } from "@radix-ui/themes";
 import { Dot, Phone } from "lucide-react";
 
@@ -69,6 +70,15 @@ export const RightPanel = ({
   toggleTextVisibility: () => void;
   changeView: (view: string) => void;
 }) => {
+  const { anamClient } = useAnamContext();
+
+  const handleEndDemo = () => {
+    if (anamClient && anamClient.isStreaming()) {
+      anamClient.stopStreaming();
+    }
+    changeView("initial");
+  };
+
   return (
     <Flex
       direction="column"
@@ -100,7 +110,7 @@ export const RightPanel = ({
         <Instructions />
       </Section>
       <Flex justify="end">
-        <Button onClick={() => changeView("initial")}>End Demo</Button>
+        <Button onClick={handleEndDemo}>End Demo</Button>
       </Flex>
     </Flex>
   );

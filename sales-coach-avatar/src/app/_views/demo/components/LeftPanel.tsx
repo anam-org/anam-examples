@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "react";
-import { Flex, IconButton, Separator, Section, Text } from "@radix-ui/themes";
+import { useEffect, useRef, useState } from "react";
+import { Flex, IconButton, Separator, Section, Text, Spinner, Box } from "@radix-ui/themes";
 import { Pause, RotateCcw, Video, Volume2 } from "lucide-react";
-import { useVideoAudioPermissionContext } from "@/app/_contexts";
+import { useVideoAudioPermissionContext, useAnamContext } from "@/app/_contexts";
+import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
+import { useToast } from "@/hooks";
 
 const Timer = ({ secondsElapsed }: { secondsElapsed: number }) => {
   const formatTime = (seconds: number) => {
@@ -45,6 +47,93 @@ const VideoControls = ({ secondsElapsed }: { secondsElapsed: number }) => {
   );
 };
 
+const AvatarSection = () => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { anamClient, isClientInitialized } = useAnamContext();
+  const [loading, setLoading] = useState(true);
+  const [loadingText, setLoadingText] = useState("Connecting...");
+  const { toast } = useToast();
+
+  const onConnectionEstablished = () => {
+    setLoadingText("Connected to a Persona. Starting video stream...");
+    toast({
+      title: "Connection Established",
+      description: "The video stream is starting now.",
+    });
+  };
+
+  const onVideoStartedStreaming = () => {
+    setLoading(false);
+    toast({
+      title: "Video Started",
+      description: "Streaming successfully started.",
+    });
+  };
+
+  const onConnectionClosed = (reason: string) => {
+    toast({
+      title: "Connection Closed",
+      description: reason,
+    });
+  };
+
+  useEffect(() => {
+    const startStreaming = async () => {
+      if (isClientInitialized && anamClient && videoRef.current && audioRef.current) {
+        try {
+          console.log("Starting streaming...");
+          anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
+          anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+          anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+          await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to connect to persona.",
+          });
+        }
+      }
+    };
+
+    startStreaming();
+  }, [isClientInitialized, anamClient]);
+
+  return (
+    <Box>
+      {loading ? (
+        <Flex
+          justify="center"
+          align="center"
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
+        >
+          <Spinner aria-label="Loading..." size="1" />
+          <label style={{ marginLeft: "0.5em" }}>{loadingText}</label>
+        </Flex>
+      ) : null}
+      <video
+        id="video"
+        ref={videoRef}
+        autoPlay
+        playsInline
+        style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: "15px",
+          objectFit: "cover",
+        }}
+      />
+      <audio id="audio" ref={audioRef} autoPlay />
+    </Box>
+  );
+};
+
 const VideoSection = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { mediaStream } = useVideoAudioPermissionContext();
@@ -75,15 +164,6 @@ const VideoSection = () => {
 };
 
 export const LeftPanel = ({ secondsElapsed }: { secondsElapsed: number }) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const { mediaStream } = useVideoAudioPermissionContext();
-
-  useEffect(() => {
-    if (mediaStream && videoRef.current) {
-      videoRef.current.srcObject = mediaStream;
-    }
-  }, [mediaStream]);
-
   return (
     <Section size="1">
       <Flex
@@ -99,18 +179,7 @@ export const LeftPanel = ({ secondsElapsed }: { secondsElapsed: number }) => {
           position: "relative",
         }}
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: "15px",
-            objectFit: "cover",
-          }}
-        />
+        <AvatarSection />
         <VideoControls secondsElapsed={secondsElapsed} />
         <VideoSection />
       </Flex>
