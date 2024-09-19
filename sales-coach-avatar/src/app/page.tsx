@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
-import DescriptionView from "./_views/description";
-import { DemoView } from "./_views/demo";
+import { DemoView } from "./_views/demo/demo";
 import { TriangleRightIcon } from "@radix-ui/react-icons";
+import DescriptionView from "./_views/description/description";
 
 export default function HomePage() {
   const [currentView, setCurrentView] = useState("initial");
