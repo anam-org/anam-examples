@@ -7,10 +7,10 @@ import {
   Section,
   Separator,
 } from "@radix-ui/themes";
-import { VideoCheckModal } from "@/app/_components";
 import { LeftPanel } from "./LeftPanel";
 import { X } from "lucide-react";
 import { RightPanel } from "./RightPanel";
+import { VideoCheckModal } from "./VideoCheckModal";
 
 interface DescriptionViewProps {
   changeView: (view: string) => void;
