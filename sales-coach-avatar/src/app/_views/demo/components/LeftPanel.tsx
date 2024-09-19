@@ -1,5 +1,7 @@
-import { Flex, IconButton, Separator, Skeleton, Text } from "@radix-ui/themes";
-import { Pause, RotateCcw, Section, Video, Volume2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Flex, IconButton, Separator, Section, Text } from "@radix-ui/themes";
+import { Pause, RotateCcw, Video, Volume2 } from "lucide-react";
+import { useVideoAudioPermissionContext } from "@/app/_contexts";
 
 const Timer = ({ secondsElapsed }: { secondsElapsed: number }) => {
   const formatTime = (seconds: number) => {
@@ -44,12 +46,19 @@ const VideoControls = ({ secondsElapsed }: { secondsElapsed: number }) => {
 };
 
 const VideoSection = () => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { mediaStream } = useVideoAudioPermissionContext();
+
+  useEffect(() => {
+    if (mediaStream && videoRef.current) {
+      videoRef.current.srcObject = mediaStream;
+    }
+  }, [mediaStream]);
+
   return (
     <video
-      src="/videos/personas/astrid_gen_1.mp4"
-      poster="/jpg/posters/astrid_gen_1_poster.jpg"
+      ref={videoRef}
       autoPlay
-      loop
       muted
       playsInline
       style={{
@@ -66,6 +75,15 @@ const VideoSection = () => {
 };
 
 export const LeftPanel = ({ secondsElapsed }: { secondsElapsed: number }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { mediaStream } = useVideoAudioPermissionContext();
+
+  useEffect(() => {
+    if (mediaStream && videoRef.current) {
+      videoRef.current.srcObject = mediaStream;
+    }
+  }, [mediaStream]);
+
   return (
     <Section size="1">
       <Flex
@@ -81,22 +99,18 @@ export const LeftPanel = ({ secondsElapsed }: { secondsElapsed: number }) => {
           position: "relative",
         }}
       >
-        <Skeleton>
-          <video
-            src="/videos/personas/leo_gen_1.mp4"
-            poster="/jpg/posters/leo_gen_1_poster.jpg"
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "15px",
-              objectFit: "cover",
-            }}
-          />
-        </Skeleton>
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "15px",
+            objectFit: "cover",
+          }}
+        />
         <VideoControls secondsElapsed={secondsElapsed} />
         <VideoSection />
       </Flex>

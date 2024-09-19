@@ -51,8 +51,8 @@ const VideoWithPlayButton = ({
       <video
         width="500px"
         height="auto"
-        src="/videos/personas/leo_gen_1.mp4"
-        poster="/jpg/posters/leo_gen_1_poster.jpg"
+        src="leo_gen_1.mp4"
+        poster="leo_gen_1_poster.jpg"
         autoPlay
         loop
         muted
