@@ -86,6 +86,7 @@ const AvatarSection = () => {
           anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
           anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
           anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+          console.log(`${videoRef.current.id} ${audioRef.current.id}`);
           await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
         } catch (error) {
           toast({
@@ -97,6 +98,14 @@ const AvatarSection = () => {
     };
 
     startStreaming();
+
+    return () => {
+      if (anamClient) {
+        anamClient.removeListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
+        anamClient.removeListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+        anamClient.removeListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      }
+    };
   }, [isClientInitialized, anamClient]);
 
   return (
