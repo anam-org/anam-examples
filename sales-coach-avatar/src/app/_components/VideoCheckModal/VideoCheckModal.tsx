@@ -112,19 +112,17 @@ export function VideoCheckModal({
           borderRadius: "10px",
           border: "1px solid #e0e0e0",
           zIndex: 1000,
-          padding: "1em",
+          padding: "0em 1em",
           width: "clamp(300px, 90vw, 1200px)",
           height: "clamp(300px, 80vh, 700px)",
         }}
       >
         <Flex
-          position="relative"
+          height="100%"
           justify="center"
           align="center"
-          style={{
-            flexGrow: 1,
-            height: "100%",
-          }}
+          direction="column"
+          gap="2"
         >
           <Skeleton>
             <video
@@ -148,17 +146,11 @@ export function VideoCheckModal({
             onSelectMicrophone={setSelectedMicrophone}
           />
         </Flex>
-
         <Flex
           direction="column"
           justify="center"
           align="center"
-          style={{
-            padding: "1em",
-            position: "relative",
-            flexGrow: 1,
-            minWidth: "200px",
-          }}
+          style={{ padding: "1em" }}
         >
           <IconButton
             variant="ghost"
