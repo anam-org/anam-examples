@@ -7,4 +7,3 @@ import PersonaPlayer from './components/PersonaPlayer.vue'
     <PersonaPlayer />
   </main>
 </template>
-
