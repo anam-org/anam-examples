@@ -5,7 +5,7 @@ import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 import { ReactNode } from "react";
-import { AnamContextProvider, VideoAudioPermissionProvider } from "../_contexts";
+import { AnamContextProvider, VideoAudioPermissionProvider } from "@/contexts";
 
 export function Providers({ children }: { children: ReactNode }) {
   const { data: sessionToken, error, isValidating } = useFetchToken();

@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import constate from "constate";
+import { errorHandler } from "@/utils";
 
+/**
+ * Custom hook for managing video and audio permissions, including access
+ * to cameras and microphones, along with selected devices and permission states.
+ */
 const useVideoAudioPermission = () => {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
@@ -12,6 +17,15 @@ const useVideoAudioPermission = () => {
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  /**
+   * Requests permissions for accessing the user's camera and microphone. On success,
+   * it sets the available video and audio devices, the selected camera and microphone,
+   * and the media stream. If permissions are denied, an error message is set.
+   *
+   * @async
+   * @function
+   * @throws Will call the error handler on failure.
+   */
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -39,6 +53,7 @@ const useVideoAudioPermission = () => {
     } catch (error) {
       setErrorMessage("Camera and microphone permissions are required.");
       setPermissionsGranted(false);
+      errorHandler(error, "Video/Audio Permission Request");
     }
   };
 
@@ -56,5 +71,8 @@ const useVideoAudioPermission = () => {
   };
 };
 
+/**
+ * Provider and hook for accessing the video/audio permission state within React context.
+ */
 export const [VideoAudioPermissionProvider, useVideoAudioPermissionContext] =
   constate(useVideoAudioPermission);

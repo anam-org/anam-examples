@@ -3,11 +3,21 @@
 import { errorHandler, FetchError, logger } from "@/utils";
 import useSWR, { Revalidator, SWRConfiguration, SWRResponse } from "swr";
 
+/**
+ * Interface representing the response structure of the session token.
+ */
 interface SessionTokenResponse {
   sessionToken: string;
 }
 
+/**
+ * Custom hook to fetch the session token using SWR with error handling and retry logic.
+ * including data, error, isLoading, and mutate functionalities.
+ */
 export const useFetchToken = (): SWRResponse<string, FetchError> => {
+  /**
+   * Function to fetch the session token from the server.
+   */
   const fetchSessionToken = async (): Promise<string> => {
     try {
       const response = await fetch("/api/session-token", {
@@ -17,9 +27,11 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
         },
         cache: "no-cache",
       });
+
       if (!response.ok) {
         throw new FetchError("Failed to fetch session token", response.status);
       }
+
       const data: SessionTokenResponse = await response.json();
       return data.sessionToken;
     } catch (error) {
@@ -33,6 +45,10 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
     revalidateOnReconnect: false,
     shouldRetryOnError: false,
     dedupingInterval: 60000,
+    /**
+     * Retry logic to attempt fetching the session token a maximum of 3 times with a delay of 2 seconds.
+     * Logs each retry attempt and stops after the maximum retries.
+     */
     onErrorRetry: (
       error: FetchError,
       _key: string,
@@ -50,6 +66,8 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
         );
         return;
       }
+
+      errorHandler(error, "Retrying Session Token Fetch");
       setTimeout(() => revalidate({ retryCount }), 2000);
     },
   });

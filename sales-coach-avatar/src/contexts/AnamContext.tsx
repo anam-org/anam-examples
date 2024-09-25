@@ -2,13 +2,16 @@
 
 import { createClient, AnamClient } from "@anam-ai/js-sdk";
 import constate from "constate";
-import { env } from "@/env";
-import { FetchError, errorHandler, logger } from "@/utils";
+import { FetchError, errorHandler, logger, env } from "@/utils";
 
 const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_ID!;
 const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
 const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 
+/**
+ * Hook to initialize the Anam client. If a session token is provided, the client
+ * is initialized with the provided token; otherwise, a dummy client is used.
+ */
 const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   let anamClient: AnamClient;
 
@@ -42,4 +45,7 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   return { anamClient, isClientInitialized: !!sessionToken };
 };
 
+/**
+ * Context provider and hook for using the Anam client within React context.
+ */
 export const [AnamContextProvider, useAnamContext] = constate(useAnam);
