@@ -1,1 +1,1 @@
-export * from './useFetchToken';
+export * from "./useFetchToken";
