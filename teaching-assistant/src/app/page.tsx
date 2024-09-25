@@ -7,5 +7,5 @@ export default function HomePage() {
         <Heading>ANAM.AI</Heading>
       </Flex>
     </Box>
-  )
+  );
 }

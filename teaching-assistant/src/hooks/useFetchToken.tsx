@@ -3,11 +3,26 @@
 import { errorHandler, FetchError, logger } from "@/utils";
 import useSWR, { Revalidator, SWRConfiguration, SWRResponse } from "swr";
 
+/**
+ * Interface representing the response structure of the session token.
+ */
 interface SessionTokenResponse {
   sessionToken: string;
 }
 
+/**
+ * Custom hook to fetch the session token using SWR with error handling and retry logic.
+ *
+ * @returns {SWRResponse<string, FetchError>} - Returns the session token wrapped in SWR response object,
+ * including data, error, isLoading, and mutate functionalities.
+ */
 export const useFetchToken = (): SWRResponse<string, FetchError> => {
+  /**
+   * Function to fetch the session token from the server.
+   *
+   * @returns {Promise<string>} - The session token as a string.
+   * @throws {FetchError} - Throws an error if the fetch fails.
+   */
   const fetchSessionToken = async (): Promise<string> => {
     try {
       const response = await fetch("/api/session-token", {
@@ -17,9 +32,11 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
         },
         cache: "no-cache",
       });
+
       if (!response.ok) {
         throw new FetchError("Failed to fetch session token", response.status);
       }
+
       const data: SessionTokenResponse = await response.json();
       return data.sessionToken;
     } catch (error) {
@@ -33,6 +50,16 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
     revalidateOnReconnect: false,
     shouldRetryOnError: false,
     dedupingInterval: 60000,
+    /**
+     * Retry logic to attempt fetching the session token a maximum of 3 times with a delay of 2 seconds.
+     * Logs each retry attempt and stops after the maximum retries.
+     *
+     * @param {FetchError} error - The error thrown during fetch, typed as FetchError.
+     * @param {string} _key - The SWR key used for caching.
+     * @param {SWRConfiguration} _config - SWR configuration object.
+     * @param {Revalidator} revalidate - Revalidation function provided by SWR.
+     * @param {object} retryOptions - Contains the retry count.
+     */
     onErrorRetry: (
       error: FetchError,
       _key: string,
@@ -50,6 +77,8 @@ export const useFetchToken = (): SWRResponse<string, FetchError> => {
         );
         return;
       }
+
+      errorHandler(error, "Retrying Session Token Fetch");
       setTimeout(() => revalidate({ retryCount }), 2000);
     },
   });
