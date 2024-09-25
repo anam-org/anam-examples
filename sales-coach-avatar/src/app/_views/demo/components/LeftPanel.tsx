@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Flex, IconButton, Separator, Section, Text, Spinner, Box } from "@radix-ui/themes";
 import { Pause, RotateCcw, Video, Volume2 } from "lucide-react";
-import { useVideoAudioPermissionContext, useAnamContext } from "@/app/_contexts";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { useToast } from "@/hooks";
+import { useAnamContext, useVideoAudioPermissionContext } from "@/contexts";
+import { errorHandler } from "@/utils";
 
 const Timer = ({ secondsElapsed }: { secondsElapsed: number }) => {
   const formatTime = (seconds: number) => {
@@ -89,10 +90,7 @@ const AvatarSection = () => {
           console.log(`${videoRef.current.id} ${audioRef.current.id}`);
           await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
         } catch (error) {
-          toast({
-            title: "Error",
-            description: "Failed to connect to persona.",
-          });
+          errorHandler(error);
         }
       }
     };

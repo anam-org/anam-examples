@@ -11,7 +11,7 @@ import {
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { VideoControls } from "./VideoControls";
-import { useVideoAudioPermissionContext } from "@/app/_contexts";
+import { useVideoAudioPermissionContext } from "@/contexts";
 
 interface VideoCheckModalProps {
   onClose: () => void;

@@ -1,4 +1,4 @@
-import { useAnamContext } from "@/app/_contexts";
+import { useAnamContext } from "@/contexts";
 import { Button, Flex, Heading, Section, Text } from "@radix-ui/themes";
 import { Dot, Phone } from "lucide-react";
 
