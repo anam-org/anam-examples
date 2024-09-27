@@ -10,7 +10,7 @@ import {
   Strong,
 } from "@radix-ui/themes";
 import { VolumeOff, X } from "lucide-react";
-import { useViewContext } from "@/contexts/ViewContext";
+import { useViewContext } from "@/contexts";
 import { PermissionsModal } from "@/components";
 
 const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (

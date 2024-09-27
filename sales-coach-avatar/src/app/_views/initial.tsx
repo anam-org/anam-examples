@@ -1,4 +1,4 @@
-import { useViewContext } from "@/contexts/ViewContext";
+import { useViewContext } from "@/contexts";
 import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
 import { Play } from "lucide-react";
 
