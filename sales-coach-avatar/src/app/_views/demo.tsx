@@ -174,7 +174,7 @@ const AvatarSection = () => {
   }, [isClientInitialized, anamClient]);
 
   return (
-    <Box>
+    <Box className="relative w-full h-full">
       {loading && (
         <Flex
           justify="center"
@@ -190,7 +190,7 @@ const AvatarSection = () => {
         ref={videoRef}
         autoPlay
         playsInline
-        className="w-full h-full rounded-lg object-cover"
+        className="absolute top-0 left-0 w-full h-full object-cover"
       />
       <audio id="audio" ref={audioRef} autoPlay />
     </Box>
