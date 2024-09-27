@@ -1,11 +1,18 @@
-import { Box, Flex, Heading } from "@radix-ui/themes";
+"use client";
+
+import { ViewContextProvider } from "@/contexts";
+import { Sidebar } from "./_components/Sidebar";
+import ViewRenderer from "./_components/RenderView";
 
 export default function HomePage() {
   return (
-    <Box className="appcontainer">
-      <Flex justify="start" align="start" style={{ paddingTop: "1.5em" }}>
-        <Heading>ANAM.AI</Heading>
-      </Flex>
-    </Box>
+    <ViewContextProvider>
+      <div className="flex h-screen">
+        <Sidebar />
+        <main className="flex-grow">
+          <ViewRenderer />
+        </main>
+      </div>
+    </ViewContextProvider>
   );
 }

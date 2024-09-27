@@ -3,10 +3,10 @@ import { z } from "zod";
 
 /**
  * Environment configuration using `createEnv` from `@t3-oss/env-nextjs`.
- * 
+ *
  * This configuration validates environment variables both on the server and client.
  * It uses `zod` to enforce type and format validations for the variables.
- * 
+ *
  * - **server**: Contains sensitive server-side environment variables.
  * - **client**: Contains environment variables exposed to the client-side, validated for correct types.
  * - **runtimeEnv**: Defines the actual runtime values for the environment variables.
@@ -16,12 +16,12 @@ import { z } from "zod";
  * @property {object} server
  * @property {z.ZodString} server.ANAM_API_KEYquired
  *
- * @property {object} client 
+ * @property {object} client
  * @property {z.ZodString} client.NEXT_PUBLIC_PERSONA_ID
  * @property {z.ZodString} client.NEXT_PUBLIC_BASE_URL
  * @property {z.ZodBoolean} client.NEXT_PUBLIC_DISABLE_BRAINS
  * @property {z.ZodBoolean} client.NEXT_PUBLIC_DISABLE_FILLER_PHRASES
- * 
+ *
  * @property {object} runtimeEnv
  * @property {string | undefined} runtimeEnv.ANAM_API_KEY
  * @property {string | undefined} runtimeEnv.NEXT_PUBLIC_PERSONA_ID
@@ -30,7 +30,7 @@ import { z } from "zod";
  * @property {boolean} runtimeEnv.NEXT_PUBLIC_DISABLE_FILLER_PHRASES
  *
  * @property {boolean} skipValidation
- * @property {boolean} emptyStringAsUndefined 
+ * @property {boolean} emptyStringAsUndefined
  */
 export const env = createEnv({
   server: {

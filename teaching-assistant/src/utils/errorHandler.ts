@@ -3,16 +3,8 @@ import { logger } from "./logger";
 import { ErrorBase } from "./types";
 
 /**
- * Handles errors by logging them with an appropriate log level based on error type, 
+ * Handles errors by logging them with an appropriate log level based on error type,
  * and provides additional context and error information if available.
- *
- * @param {unknown} error - The error object that occurred, which can be of any type. 
- *                          If it contains a message, it is treated as an error to be logged.
- * @param {string} [context=""] - An optional string providing additional context 
- *                                to describe where the error occurred.
- * @param {ErrorInfo | null} [errorInfo=null] - React component stack trace information 
- *                                              (useful for React component errors), 
- *                                              default is null if not provided.
  */
 export const errorHandler = (
   error: unknown,

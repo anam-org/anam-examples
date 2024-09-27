@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 /**
  * Handles the GET request to fetch a session token from the Anam API.
- * 
+ *
  * The API key is retrieved from environment variables and used to authorize the request.
  * The session token is cached for 600 seconds, with a stale-while-revalidate time of 60 seconds.
- * 
+ *
  * If the API key is missing, or the request fails, appropriate error messages are logged, and
  * error responses are returned to the client.
  *
@@ -38,7 +38,10 @@ export async function GET() {
     if (!response.ok) {
       const errorMessage = "Failed to fetch session token";
       logger.error(`${errorMessage}. Status code: ${response.status}`);
-      return NextResponse.json({ error: errorMessage }, { status: response.status });
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: response.status },
+      );
     }
 
     // Parse the response and return the session token
