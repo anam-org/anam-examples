@@ -9,10 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { X } from "lucide-react";
 import { LeftPanel, RightPanel, VideoCheckModal } from "./components";
-
-interface DescriptionViewProps {
-  changeView: (view: string) => void;
-}
+import { useViewContext } from "@/contexts/ViewContext";
 
 const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
   <Flex justify="start" align="start" style={{ paddingTop: "1.5em" }}>
@@ -27,7 +24,8 @@ const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
   </Flex>
 );
 
-export default function DescriptionView({ changeView }: DescriptionViewProps) {
+export function DescriptionView() {
+  const { changeView } = useViewContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {

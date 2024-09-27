@@ -2,12 +2,10 @@ import { Grid } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { LeftPanel } from "./components/LeftPanel";
 import { RightPanel } from "./components/RightPanel";
+import { useViewContext } from "@/contexts/ViewContext";
 
-export function DemoView({
-  changeView,
-}: {
-  changeView: (view: string) => void;
-}) {
+export function DemoView() {
+  const { changeView } = useViewContext();
   const [showFullText, setShowFullText] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
 
