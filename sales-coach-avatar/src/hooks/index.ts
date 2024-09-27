@@ -1,2 +1,2 @@
 export * from "./useFetch";
-export * from './use-toast';
+export * from "./use-toast";

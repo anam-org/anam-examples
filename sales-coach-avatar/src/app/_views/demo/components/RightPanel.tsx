@@ -18,10 +18,7 @@ const ScenarioText = ({
         color="gray"
         size="2"
         onClick={toggleTextVisibility}
-        style={{
-          cursor: "pointer",
-          transition: "color 0.2s ease",
-        }}
+        className="cursor-pointer transition-colors duration-200 ease-in"
         onMouseEnter={(e) => (e.currentTarget.style.color = "#b0b0b0")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "gray")}
       >
@@ -50,7 +47,7 @@ const Instructions = () => {
           <li key={index}>
             <Flex align="center" mb="1">
               <Dot size="30" />
-              <Text as="span" style={{ marginLeft: "0.5em" }}>
+              <Text as="span" className="ml-2">
                 {instruction}
               </Text>
             </Flex>
@@ -82,18 +79,12 @@ export const RightPanel = ({
   return (
     <Flex
       direction="column"
-      style={{
-        padding: "0em 2em 2em 2em",
-        borderColor: "#e0e0e0",
-        borderLeftWidth: "1px",
-        height: "100vh",
-        justifyContent: "space-between",
-      }}
+      className="p-[0em_2em_2em_2em] border-l border-gray-300 h-screen justify-between"
     >
       <Section size="1">
         <Flex align="center" mb="3">
           <Phone size="18" />
-          <Text as="p" size="2" style={{ marginLeft: "0.5em" }}>
+          <Text as="p" size="2" className="ml-2">
             Phone
           </Text>
         </Flex>

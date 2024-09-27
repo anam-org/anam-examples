@@ -2,7 +2,7 @@ import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { Box, Theme } from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 import { Providers } from "./_providers";
 
 export const metadata: Metadata = {
@@ -20,12 +20,12 @@ export default function RootLayout({
       <body className={GeistSans.className}>
         <Providers>
           <Theme
-            accentColor="gray"
+            accentColor="mint"
             grayColor="slate"
             scaling="110%"
             radius="large"
           >
-            <Box>{children}</Box>
+            {children}
           </Theme>
         </Providers>
       </body>

@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Flex, IconButton, Separator, Section, Text, Spinner, Box } from "@radix-ui/themes";
+import {
+  Flex,
+  IconButton,
+  Separator,
+  Section,
+  Text,
+  Spinner,
+  Box,
+} from "@radix-ui/themes";
 import { Pause, RotateCcw, Video, Volume2 } from "lucide-react";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { useToast } from "@/hooks";
@@ -13,7 +21,7 @@ const Timer = ({ secondsElapsed }: { secondsElapsed: number }) => {
     return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
   };
 
-  return <Text style={{ color: "#EEEEEE" }}>{formatTime(secondsElapsed)}</Text>;
+  return <Text className="text-gray-200">{formatTime(secondsElapsed)}</Text>;
 };
 
 const VideoControls = ({ secondsElapsed }: { secondsElapsed: number }) => {
@@ -22,26 +30,20 @@ const VideoControls = ({ secondsElapsed }: { secondsElapsed: number }) => {
       justify="center"
       align="center"
       gap="2"
-      style={{
-        padding: "0.75em 2em",
-        borderRadius: "30px",
-        backgroundColor: "#444444",
-        position: "absolute",
-        bottom: "1em",
-      }}
+      className="p-[0.75em_2em] rounded-[30px] bg-gray-700 absolute bottom-[1em]"
     >
-      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+      <IconButton variant="ghost" className="text-gray-200">
         <Pause size="20" />
       </IconButton>
-      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+      <IconButton variant="ghost" className="text-gray-200">
         <Volume2 size="20" />
       </IconButton>
-      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+      <IconButton variant="ghost" className="text-gray-200">
         <Video size="20" />
       </IconButton>
       <Separator orientation="vertical" />
       <Timer secondsElapsed={secondsElapsed} />
-      <IconButton variant="ghost" style={{ color: "#EEEEEE" }}>
+      <IconButton variant="ghost" className="text-gray-200">
         <RotateCcw size="20" />
       </IconButton>
     </Flex>
@@ -81,14 +83,31 @@ const AvatarSection = () => {
 
   useEffect(() => {
     const startStreaming = async () => {
-      if (isClientInitialized && anamClient && videoRef.current && audioRef.current) {
+      if (
+        isClientInitialized &&
+        anamClient &&
+        videoRef.current &&
+        audioRef.current
+      ) {
         try {
           console.log("Starting streaming...");
-          anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
-          anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
-          anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+          anamClient.addListener(
+            AnamEvent.CONNECTION_ESTABLISHED,
+            onConnectionEstablished,
+          );
+          anamClient.addListener(
+            AnamEvent.VIDEO_PLAY_STARTED,
+            onVideoStartedStreaming,
+          );
+          anamClient.addListener(
+            AnamEvent.CONNECTION_CLOSED,
+            onConnectionClosed,
+          );
           console.log(`${videoRef.current.id} ${audioRef.current.id}`);
-          await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
+          await anamClient.streamToVideoAndAudioElements(
+            videoRef.current.id,
+            audioRef.current.id,
+          );
         } catch (error) {
           errorHandler(error);
         }
@@ -99,9 +118,18 @@ const AvatarSection = () => {
 
     return () => {
       if (anamClient) {
-        anamClient.removeListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
-        anamClient.removeListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
-        anamClient.removeListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+        anamClient.removeListener(
+          AnamEvent.CONNECTION_ESTABLISHED,
+          onConnectionEstablished,
+        );
+        anamClient.removeListener(
+          AnamEvent.VIDEO_PLAY_STARTED,
+          onVideoStartedStreaming,
+        );
+        anamClient.removeListener(
+          AnamEvent.CONNECTION_CLOSED,
+          onConnectionClosed,
+        );
       }
     };
   }, [isClientInitialized, anamClient]);
@@ -112,16 +140,10 @@ const AvatarSection = () => {
         <Flex
           justify="center"
           align="center"
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            top: 0,
-            left: 0,
-          }}
+          className="w-full h-full absolute top-0 left-0"
         >
           <Spinner aria-label="Loading..." size="1" />
-          <label style={{ marginLeft: "0.5em" }}>{loadingText}</label>
+          <label className="ml-2">{loadingText}</label>
         </Flex>
       ) : null}
       <video
@@ -129,12 +151,7 @@ const AvatarSection = () => {
         ref={videoRef}
         autoPlay
         playsInline
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: "15px",
-          objectFit: "cover",
-        }}
+        className="w-full h-full rounded-lg object-cover"
       />
       <audio id="audio" ref={audioRef} autoPlay />
     </Box>
@@ -157,15 +174,7 @@ const VideoSection = () => {
       autoPlay
       muted
       playsInline
-      style={{
-        position: "absolute",
-        width: "250px",
-        height: "250px",
-        borderRadius: "15px 0px 15px 0px",
-        objectFit: "cover",
-        bottom: "0em",
-        right: "0em",
-      }}
+      className="absolute w-[250px] h-[250px] rounded-[15px_0px_15px_0px] object-cover bottom-0 right-0"
     />
   );
 };
@@ -176,15 +185,7 @@ export const LeftPanel = ({ secondsElapsed }: { secondsElapsed: number }) => {
       <Flex
         justify="center"
         align="center"
-        style={{
-          margin: "0em 2em 2em 2em",
-          backgroundColor: "#f9f9f9",
-          borderRadius: "15px",
-          borderColor: "#e0e0e0",
-          borderWidth: "1px",
-          height: "95vh",
-          position: "relative",
-        }}
+        className="m-[0_2em_2em_2em] bg-gray-100 rounded-lg border border-gray-300 h-[95vh] relative"
       >
         <AvatarSection />
         <VideoControls secondsElapsed={secondsElapsed} />

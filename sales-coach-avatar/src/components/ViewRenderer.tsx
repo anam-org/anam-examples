@@ -3,13 +3,13 @@
 import { useViewContext } from "@/contexts/ViewContext";
 import { DemoView, DescriptionView, InitialView } from "@/app/_views";
 
-const ViewRenderer = () => {
+export const ViewRenderer = () => {
   const { currentView } = useViewContext();
 
   const renderView = () => {
     switch (currentView) {
       case "description":
-        return <DescriptionView/>;
+        return <DescriptionView />;
       case "demo":
         return <DemoView />;
       case "initial":
@@ -20,5 +20,3 @@ const ViewRenderer = () => {
 
   return <>{renderView()}</>;
 };
-
-export default ViewRenderer;
