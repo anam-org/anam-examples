@@ -51,13 +51,13 @@ export function LessonsView() {
   ];
 
   return (
-    <Grid columns="5fr 1fr" rows="1" className="h-screen overflow-hidden">
+    <Grid columns="3fr 1fr" rows="1" className="h-screen overflow-hidden">
       {/* Left Section - Grid Layout */}
-      <Grid rows="3fr 1fr" className="border-r border-gray-200 shadow-lg h-full">
+      <Grid rows="2fr 1fr" className="border-r border-gray-200 shadow-lg h-full">
         {/* Top Half - Split into two sections */}
         <Flex gap="3" className="p-5">
           {/* Avatar Video */}
-          <Box className="w-1/2 h-full relative flex items-center justify-center bg-gray-200 rounded-lg">
+          <Box className="w-3/4 h-full relative flex items-center justify-center bg-gray-200 rounded-lg">
             <Text size="2">Avatar Video/Interaction Here</Text>
             {/* Controls - Bottom Center */}
             <Flex justify="center" align="center" className="absolute bottom-4 inset-x-0">
@@ -86,7 +86,7 @@ export function LessonsView() {
           </Box>
 
           {/* Conversation Tracker + Text Input */}
-          <Flex direction="column" className="w-1/2 h-full p-4 bg-gray-100 rounded-lg">
+          <Flex direction="column" className="w-1/4 h-full p-4 bg-gray-100 rounded-lg">
             <Heading size="4" className="text-center mb-4">
               Conversation
             </Heading>
@@ -123,14 +123,11 @@ export function LessonsView() {
         </Flex>
 
         {/* Bottom Half - Progress Tracker */}
-        <Box className="p-5 border-t border-gray-200">
-          <Heading size="4" className="text-center mb-4">
-            Progress Tracker
-          </Heading>
+        <Flex direction="column" className="p-5 border-t border-gray-100 shadow">
           <Box className="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center">
             <Text size="2">Progress will be displayed here</Text>
           </Box>
-        </Box>
+        </Flex>
       </Grid>
 
       {/* Lessons Section */}
