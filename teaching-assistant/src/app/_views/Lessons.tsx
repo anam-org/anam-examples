@@ -1,12 +1,18 @@
 import { Flex, Heading, Text, Box, IconButton, Progress } from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
-import { useState, useRef } from "react";
-import { LessonsSidebar } from "@/components/LessonsSidebar"; // Import the LessonsSidebar
+import { useState, useRef, useEffect } from "react";
+import { LessonsSidebar } from "@/components/LessonsSidebar";
+import { errorHandler, logger } from "@/utils";
+import { useAnamContext } from "@/contexts";
+import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
 export function LessonsView() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { anamClient, isClientInitialized } = useAnamContext();
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [loadingText, setLoadingText] = useState("Connecting...");
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -28,20 +34,76 @@ export function LessonsView() {
 
   const handleFullScreen = () => {
     if (videoRef.current) {
-      if (videoRef.current.requestFullscreen) {
-        videoRef.current.requestFullscreen();
-      }
+      videoRef.current.requestFullscreen();
     }
   };
+
+  const onConnectionEstablished = () => {
+    setLoadingText("Connected to a Persona. Starting video stream...");
+    logger.info("Connection established");
+  };
+
+  const onVideoStartedStreaming = () => {
+    setLoadingText("");
+    logger.info("Video started streaming");
+  };
+
+  const onConnectionClosed = (reason: string) => {
+    logger.info("Connection closed", reason);
+  };
+
+  useEffect(() => {
+    const startStreaming = async () => {
+      if (isClientInitialized && anamClient && videoRef.current && audioRef.current) {
+        try {
+          anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
+          anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+          anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+
+          await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
+        } catch (error) {
+          errorHandler(error);
+        }
+      }
+    };
+
+    startStreaming();
+
+    return () => {
+      if (anamClient) {
+        anamClient.removeListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
+        anamClient.removeListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+        anamClient.removeListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      }
+    };
+  }, [isClientInitialized, anamClient]);
 
   return (
     <Flex className="h-screen overflow-hidden">
       {/* Main Section */}
       <Flex direction="column" className="flex-1">
-        <Flex gap="3" className="p-5 h-full"> {/* Adjusted height for main content */}
+        <Flex gap="3" className="p-5 h-full">
           {/* Avatar Video */}
           <Box className="w-3/4 h-full relative flex items-center justify-center bg-gray-200 rounded-lg">
-            <Text size="2">Avatar Video/Interaction Here</Text>
+            <video
+              id="avatar-video"
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="absolute top-0 left-0 w-full h-full object-cover"
+              muted={isMuted}
+            />
+            <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
+            {loadingText && (
+              <Flex
+                justify="center"
+                align="center"
+                className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50"
+              >
+                <Text size="2" >{loadingText}</Text>
+              </Flex>
+            )}
+
             {/* Controls - Bottom Center */}
             <Flex justify="center" align="center" className="absolute bottom-4 inset-x-0">
               <IconButton
