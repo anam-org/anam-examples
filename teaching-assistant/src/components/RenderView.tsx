@@ -2,6 +2,7 @@
 
 import { useViewContext } from "@/contexts";
 import { LessonsView } from "@/app/_views";
+import { InitialView } from "@/app/_views/Initial";
 
 const VocabularyView = () => <div>Vocabulary Placeholder</div>;
 const PracticeView = () => <div>Practice Placeholder</div>;
@@ -24,7 +25,7 @@ export const ViewRenderer = () => {
       case "Settings":
         return <SettingsView />;
       default:
-        return <div>Select a view from the sidebar</div>;
+        return <InitialView />;
     }
   };
 

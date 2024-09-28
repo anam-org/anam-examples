@@ -1,7 +1,7 @@
 "use client";
 
 import { useFetchToken } from "@/hooks";
-import { AnamContextProvider, VideoAudioPermissionProvider } from "@/contexts";
+import { AnamContextProvider, VideoAudioPermissionProvider, ViewContextProvider } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";
@@ -28,8 +28,10 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <VideoAudioPermissionProvider>
       <AnamContextProvider sessionToken={sessionToken}>
-        {children}
-        <Toaster />
+        <ViewContextProvider>
+          {children}
+          <Toaster />
+        </ViewContextProvider>
       </AnamContextProvider>
     </VideoAudioPermissionProvider>
   );

@@ -9,18 +9,20 @@ export const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const { currentView, changeView } = useViewContext();
 
+  // Updated Menus array with title, navigateTo, and src parameters
   const Menus = [
-    { title: "Lessons", src: "Book" },
-    { title: "Vocabulary", src: "Clipboard" },
-    { title: "Practice", src: "Pencil", gap: true },
-    { title: "Progress", src: "BarChart" },
-    { title: "Settings", src: "Settings", gap: true },
+    { title: "Lessons", navigateTo: "Lessons", src: "Book" },
+    { title: "Vocabulary", navigateTo: "Vocabulary", src: "Clipboard" },
+    { title: "Practice", navigateTo: "Practice", src: "Pencil", gap: true },
+    { title: "Progress", navigateTo: "Progress", src: "BarChart" },
+    { title: "Settings", navigateTo: "Settings", src: "Settings", gap: true },
+    { title: "Exit", navigateTo: "Initial", src: "X", gap: true },
   ];
 
   return (
     <div
-      className={` ${
-        open ? "w-72" : "w-20 "
+      className={`${
+        open ? "w-72" : "w-20"
       } bg-dark-purple h-screen p-5 pt-8 relative duration-300 border-r border-gray-200 shadow-lg`}
     >
       <div
@@ -47,11 +49,13 @@ export const Sidebar = () => {
         {Menus.map((Menu, index) => (
           <li
             key={index}
-            onClick={() => changeView(Menu.title)}
+            onClick={() => changeView(Menu.navigateTo)} // Navigate based on the navigateTo param
             className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 text-sm 
               ${Menu.gap ? "mt-9" : "mt-2"}
               ${
-                currentView === Menu.title ? "bg-gray-200" : "hover:bg-gray-100"
+                currentView === Menu.navigateTo
+                  ? "bg-gray-200"
+                  : "hover:bg-gray-100"
               }`}
           >
             <img src={`/icons/${Menu.src}.svg`} className="w-6 h-6" />
