@@ -2,50 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (max-width: 3840px) {
-  .appcontainer {
-    padding-left: 20em;
-    padding-right: 20em;
-  }
-}
-
-@media (max-width: 2560px) {
-  .appcontainer {
-    padding-left: 14em;
-    padding-right: 14em;
-  }
-}
-
-@media (max-width: 1920px) {
-  .appcontainer {
-    padding-left: 8em;
-    padding-right: 8em;
-  }
-}
-
-@media (max-width: 1280px) {
-  .appcontainer {
-    padding-left: 4em;
-    padding-right: 4em;
-  }
-}
-
-@media (max-width: 960px) {
-  .appcontainer {
-    padding-left: 3em;
-    padding-right: 3em;
-  }
+.appcontainer {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 75em;
+  padding-left: 2em;
+  padding-right: 2em;
 }
 
 @media (max-width: 600px) {
   .appcontainer {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 }
 
