@@ -1,14 +1,14 @@
 "use client";
 
 import { useViewContext } from "@/contexts";
-import { LessonsView } from "../_views/lessons/Lessons";
+import { LessonsView } from "@/app/_views";
 
 const VocabularyView = () => <div>Vocabulary Placeholder</div>;
 const PracticeView = () => <div>Practice Placeholder</div>;
 const ProgressView = () => <div>Progress Placeholder</div>;
 const SettingsView = () => <div>Settings Placeholder</div>;
 
-const ViewRenderer = () => {
+export const ViewRenderer = () => {
   const { currentView } = useViewContext();
 
   const renderView = () => {
@@ -30,5 +30,3 @@ const ViewRenderer = () => {
 
   return <>{renderView()}</>;
 };
-
-export default ViewRenderer;

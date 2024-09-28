@@ -1,8 +1,8 @@
 "use client";
 
 import { ViewContextProvider } from "@/contexts";
-import { Sidebar } from "./_components/Sidebar";
-import ViewRenderer from "./_components/RenderView";
+import { Sidebar } from "../components/Sidebar";
+import { ViewRenderer } from "@/components";
 
 export default function HomePage() {
   return (

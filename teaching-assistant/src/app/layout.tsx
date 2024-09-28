@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Theme } from "@radix-ui/themes";
-import { Providers } from "./_providers";
+import { Providers } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
