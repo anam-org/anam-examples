@@ -9,7 +9,7 @@ export default function HomePage() {
     <ViewContextProvider>
       <div className="flex h-screen">
         <Sidebar />
-        <main className="flex-grow">
+        <main className="flex-grow overflow-hidden">
           <ViewRenderer />
         </main>
       </div>
