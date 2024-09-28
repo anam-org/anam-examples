@@ -3,8 +3,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Box, Theme } from "@radix-ui/themes";
-import { Providers } from "./_providers";
+import { Providers } from "@/providers";
 import { ReactNode } from "react";
+import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +27,10 @@ export default function RootLayout({
             scaling="110%"
             radius="large"
           >
-            <Box>{children}</Box>
+            <Box className="appcontainer">
+              <Header />
+              {children}
+            </Box>
           </Theme>
         </Providers>
       </body>
