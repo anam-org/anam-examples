@@ -1,6 +1,7 @@
-import { Flex, Grid, Heading, Text, Box, IconButton } from "@radix-ui/themes";
+import { Flex, Heading, Text, Box, IconButton, Progress } from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
 import { useState, useRef } from "react";
+import { LessonsSidebar } from "@/components/LessonsSidebar"; // Import the LessonsSidebar
 
 export function LessonsView() {
   const [isMuted, setIsMuted] = useState(false);
@@ -33,29 +34,11 @@ export function LessonsView() {
     }
   };
 
-  const lessons = [
-    {
-      title: "Introduction to French",
-      description: "Basic greetings and phrases",
-    },
-    { title: "French Numbers", description: "Learn to count in French" },
-    {
-      title: "Basic Conversations",
-      description: "Common questions and answers",
-    },
-    { title: "French Verbs", description: "Introduction to verb conjugation" },
-    {
-      title: "Everyday Vocabulary",
-      description: "Essential words for daily life",
-    },
-  ];
-
   return (
-    <Grid columns="3fr 1fr" rows="1" className="h-screen overflow-hidden">
-      {/* Left Section - Grid Layout */}
-      <Grid rows="2fr 1fr" className="border-r border-gray-200 shadow-lg h-full">
-        {/* Top Half - Split into two sections */}
-        <Flex gap="3" className="p-5">
+    <Flex className="h-screen overflow-hidden">
+      {/* Main Section */}
+      <Flex direction="column" className="flex-1">
+        <Flex gap="3" className="p-5 h-full"> {/* Adjusted height for main content */}
           {/* Avatar Video */}
           <Box className="w-3/4 h-full relative flex items-center justify-center bg-gray-200 rounded-lg">
             <Text size="2">Avatar Video/Interaction Here</Text>
@@ -122,32 +105,15 @@ export function LessonsView() {
           </Flex>
         </Flex>
 
-        {/* Bottom Half - Progress Tracker */}
-        <Flex direction="column" className="p-5 border-t border-gray-100 shadow">
-          <Box className="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center">
-            <Text size="2">Progress will be displayed here</Text>
-          </Box>
+        {/* Progress Bar Section */}
+        <Flex direction="column" align="center" className="p-4">
+          <Progress value={50} max={100} className="w-full" />
+          <Text size="2" align="center" className="mt-2">Lesson Progress: 50%</Text>
         </Flex>
-      </Grid>
-
-      {/* Lessons Section */}
-      <Flex direction="column" className="p-5 pt-8 space-y-4">
-        <Heading size="4">French Lessons</Heading>
-        <Text size="2">Select a lesson to get started</Text>
-        <Box className="space-y-4">
-          {lessons.map((lesson, index) => (
-            <Box
-              key={index}
-              className="p-4 border border-gray-200 rounded-lg shadow hover:bg-gray-100 transition duration-150"
-            >
-              <Heading size="3">{lesson.title}</Heading>
-              <Text size="2" className="text-gray-500">
-                {lesson.description}
-              </Text>
-            </Box>
-          ))}
-        </Box>
       </Flex>
-    </Grid>
+
+      {/* Sidebar with Lessons */}
+      <LessonsSidebar />
+    </Flex>
   );
 }
