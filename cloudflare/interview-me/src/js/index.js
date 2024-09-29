@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (endInterviewButton) {
-    endInterviewButton.addEventListener('click', () => {
+    endInterviewButton.addEventListener('click', async () => {
       if (client) {
         client.stopStreaming();
         console.log('Final message history:', messageHistory);
@@ -143,6 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
       startInterviewButton.style.display = 'block';
       endInterviewButton.disabled = true;
       interviewerImage.style.display = 'block';
+
+      // Call the Cloudflare Function after ending the interview
+      try {
+        const response = await fetch('/llama3');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.text();
+        console.log("Response from Cloudflare Function:", data);
+        // You can add code here to handle the response, e.g., update the UI
+      } catch (error) {
+        console.error("Error calling Cloudflare Function:", error);
+      }
+
     });
   } else {
     console.error('End interview button not found');
