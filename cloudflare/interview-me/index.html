@@ -3,24 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Roast Me</title>
+        <title>Interview Me</title>
         <link rel="stylesheet" href="/global.css">
     </head>
     <body>
-        <h1>Roast Me</h1>
-        <div id="roast-form">
-            <textarea id="user-input" rows="5" placeholder="Enter some information about yourself..."></textarea>
-            <button id="submit-roast">Roast Me</button>
+        <h1>Interview Me</h1>
+        <div id="interview-form">
+            <textarea id="interview-setup" rows="5" placeholder="Describe who's interviewing you and what the job is..."></textarea>
+            <button id="start-interview">Interview Me</button>
         </div>
         <div id="video-container" style="display: none;">
             <div id="loading-spinner">
-                <img src="/chicken.png" alt="Loading">
+                <img src="/loading_spinner.png" alt="Loading">
             </div>
             <video id="video-stream" autoplay playsinline></video>
         </div>
         <audio id="audio-stream" autoplay></audio>
         <div id="stream-controls" style="display: none;">
-            <button id="stop-roast" disabled>Stop Roast</button>
+            <button id="end-interview" disabled>Stop Interview</button>
         </div>
         <script src="/dist/bundle.js"></script>
     </body>

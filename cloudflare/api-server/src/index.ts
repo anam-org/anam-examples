@@ -14,7 +14,7 @@ async function createPersona(
   env: Env,
   clientIp: string,
   {
-    name = `replit_persona_test_${clientIp}`,
+    name = `persona_${clientIp}`,
     description = "A roaster AI",
     personaPreset = "leo_desk",
     systemPrompt = "You are a witty AI assistant specializing in roasting people based on the information they provide. Your task is to analyze the following user input and provide a humorous roast.",

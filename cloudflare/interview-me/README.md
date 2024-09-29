@@ -1,4 +1,4 @@
-# Roast Me
+# Interview Me
 
 This example shows the most basic Anam SDK integration with plain JavaScript, HTML and using your API directly in the client.
 
