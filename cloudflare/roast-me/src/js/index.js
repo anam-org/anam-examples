@@ -3,7 +3,8 @@ console.log('main.js loaded');
 import { createClient } from "@anam-ai/js-sdk";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
-const API_URL = 'http://localhost:8787';
+// const API_URL = 'http://localhost:8787';
+const API_URL = 'https://api-server.ben-3b4.workers.dev';
 
 async function getSessionToken() {
   try {
