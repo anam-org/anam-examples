@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const interviewerImage = document.getElementById('interviewer-image');
 
   let client;
+  let messageHistory = [];
 
   if (startInterviewButton) {
     startInterviewButton.addEventListener('click', async (e) => {
@@ -103,6 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
           loadingSpinner.style.display = 'none';
         });
 
+        client.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
+          messageHistory = messages;
+          console.log('Updated Messages: ', messages);
+        });
+
         streamControls.style.display = 'block';
         interviewerImage.style.display = 'none';
         interviewSetup.style.display = 'none';
@@ -128,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     endInterviewButton.addEventListener('click', () => {
       if (client) {
         client.stopStreaming();
+        console.log('Final message history:', messageHistory);
         client = null;
       }
       videoContainer.style.display = 'none';
