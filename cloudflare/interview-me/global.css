@@ -90,6 +90,12 @@ h1 {
   animation: spin 2s linear infinite;
 }
 
+#interviewer-image img {
+  width: 960px;
+  height: 540px;
+  margin-bottom: 40px;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

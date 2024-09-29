@@ -30,12 +30,12 @@ async function createNewPersona(interviewSetup) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: "Professional Interviewer",
-        description: "An AI interviewer for job practice",
+        name: "Interviewer",
+        description: "An interviewer for job practice",
         personaPreset: "leo_desk",
-        systemPrompt: `You are an AI interviewer conducting a job interview. The interview setup is as follows: ${interviewSetup}. Ask relevant questions and provide constructive feedback.`,
-        personality: "You are a professional and attentive interviewer, focused on assessing the candidate's skills and experience.",
-        fillerPhrases: ["hmm", "I see", "interesting", "okay", "alright"],
+        systemPrompt: `You are an interviewer conducting a job interview. The interview setup is as follows: ${interviewSetup}. Ask lots of questions. Keep responses brief.`,
+        personality: "You are interviewing the user.",
+        fillerPhrases: ["hmm", "I see", "interesting", "okay", "alright", "well", "thank you"],
         userInput: interviewSetup
       })
     });
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const streamControls = document.getElementById('stream-controls');
   const loadingSpinner = document.getElementById('loading-spinner');
   const endInterviewButton = document.getElementById('end-interview');
+  const interviewerImage = document.getElementById('interviewer-image');
 
   let client;
 
@@ -103,14 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         streamControls.style.display = 'block';
+        interviewerImage.style.display = 'none';
         interviewSetup.style.display = 'none';
         startInterviewButton.style.display = 'none';
         endInterviewButton.disabled = false;
+
       } catch (error) {
         console.error('Detailed error:', error);
         alert('Failed to start interview: ' + error.message);
         videoContainer.style.display = 'none';
         loadingSpinner.style.display = 'none';
+        interviewerImage.style.display = 'block';
       } finally {
         startInterviewButton.disabled = false;
         startInterviewButton.textContent = 'Start Interview';
@@ -131,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
       interviewSetup.style.display = 'block';
       startInterviewButton.style.display = 'block';
       endInterviewButton.disabled = true;
+      interviewerImage.style.display = 'block';
     });
   } else {
     console.error('End interview button not found');
