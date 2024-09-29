@@ -2,6 +2,14 @@ export interface Env {
   ANAM_API_KEY: string;
 }
 
+function corsHeaders(origin: string) {
+  return {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+}
+
 async function createPersona(
   env: Env,
   clientIp: string,
@@ -54,14 +62,23 @@ async function createPersona(
 
     const data = await response.json();
     console.log("Successfully created new persona");
-    return new Response(JSON.stringify({ persona_id: data.id }), {
-      headers: { 'Content-Type': 'application/json' }
+	console.log("Persona ID:", data.id);
+    const responseBody = JSON.stringify({ persona_id: data.id });
+    console.log("Response being sent to client:", responseBody);
+    return new Response(responseBody, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Ensure CORS is properly set
+      }
     });
   } catch (error) {
     console.error('Error creating persona:', error);
     return new Response(JSON.stringify({ error: `Error creating persona: ${error.message}` }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Ensure CORS is properly set
+      }
     });
   }
 }
@@ -96,39 +113,121 @@ async function getSessionToken(env: Env): Promise<Response> {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+    const origin = request.headers.get('Origin') || 'http://localhost:3000';
+
+    console.log(`Received ${request.method} request for ${url.pathname}`);
+
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      console.log('Handling CORS preflight request');
+      return new Response(null, {
+        headers: corsHeaders(origin),
+      });
+    }
 
     if (request.method === 'GET' && url.pathname === '/') {
-      return new Response('Welcome to the anam demo app API');
+      console.log('Handling root path request');
+      return new Response('Welcome to the anam demo app API', {
+        headers: corsHeaders(origin),
+      });
     }
 
-	if (request.method === 'POST' && url.pathname === '/create_persona') {
-	  const {
-		name,
-		description,
-		personaPreset,
-		systemPrompt,
-		personality,
-		fillerPhrases,
-		userInput
-	  } = await request.json();
+    if (request.method === 'POST' && url.pathname === '/create_persona') {
+      console.log('Handling create_persona request');
+      try {
+        const body = await request.json();
+        console.log('Request body:', JSON.stringify(body));
 
-	  const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const {
+          name,
+          description,
+          personaPreset,
+          systemPrompt,
+          personality,
+          fillerPhrases,
+          userInput
+        } = body;
 
-	  return createPersona(env, clientIp, {
-		name,
-		description,
-		personaPreset,
-		systemPrompt,
-		personality,
-		fillerPhrases,
-		userInput
-	  });
-	}
+        const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+        console.log('Client IP:', clientIp);
+
+        console.log('Calling createPersona with:', {
+          name, description, personaPreset, systemPrompt,
+          personality, fillerPhrases, userInput, clientIp
+        });
+
+        const result = await createPersona(env, clientIp, {
+          name,
+          description,
+          personaPreset,
+          systemPrompt,
+          personality,
+          fillerPhrases,
+          userInput
+        });
+
+        console.log('createPersona result:', result);
+
+        if (result instanceof Response) {
+          const resultBody = await result.text();
+          console.log('Result body:', resultBody);
+          return new Response(resultBody, {
+            headers: {
+              ...corsHeaders(origin),
+              'Content-Type': 'application/json'
+            }
+          });
+        } else {
+          console.error('createPersona did not return a Response object');
+          throw new Error('Internal server error');
+        }
+      } catch (error) {
+        console.error('Error in create_persona:', error);
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+          headers: {
+            ...corsHeaders(origin),
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    }
 
     if (request.method === 'GET' && url.pathname === '/get_session_token') {
-      return getSessionToken(env);
+      console.log('Handling get_session_token request');
+      try {
+        const result = await getSessionToken(env);
+        console.log('getSessionToken result:', result);
+
+        if (result instanceof Response) {
+          const resultBody = await result.text();
+          console.log('Session token result body:', resultBody);
+          return new Response(resultBody, {
+            headers: {
+              ...corsHeaders(origin),
+              'Content-Type': 'application/json'
+            }
+          });
+        } else {
+          console.error('getSessionToken did not return a Response object');
+          throw new Error('Internal server error');
+        }
+      } catch (error) {
+        console.error('Error in get_session_token:', error);
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+          headers: {
+            ...corsHeaders(origin),
+            'Content-Type': 'application/json'
+          }
+        });
+      }
     }
 
-    return new Response('Not Found', { status: 404 });
+    console.log(`No matching route for ${request.method} ${url.pathname}`);
+    return new Response('Not Found', {
+      status: 404,
+      headers: corsHeaders(origin)
+    });
   },
 };
