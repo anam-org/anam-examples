@@ -23,8 +23,8 @@ enabled = true
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
 [vars]
-ANAM_API_KEY = "M2Y1M2MxYWItYWVhZi00OWIyLTk0M2MtODAwODM1NTBiMGUzOlFadWtQVVFGdlA1WWtJN0tCUVdQTlVSR3pxNjJxc2NZT2plQnBVRDJ0aW89"
-AZURE_GPT_API_KEY = "2b3947f46ed4435391757ee024559c58"
+ANAM_API_KEY = "..."
+AZURE_GPT_API_KEY = "..."
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
