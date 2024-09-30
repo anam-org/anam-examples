@@ -3,12 +3,9 @@ console.log('main.js loaded');
 import { createClient } from "@anam-ai/js-sdk";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
-// const API_URL = 'http://localhost:8787';
-const API_URL = 'https://api-server.ben-3b4.workers.dev';
-
 async function getSessionToken() {
   try {
-    const response = await fetch(`${API_URL}/get_session_token`);
+    const response = await fetch('/getSessionToken');
     if (!response.ok) {
       throw new Error(`Failed to get session token: ${response.status}`);
     }
@@ -24,7 +21,7 @@ async function createNewPersona(userInput) {
   try {
     console.log('Sending request to create new persona');
     console.log('User input:', userInput);
-    const response = await fetch(`${API_URL}/create_persona`, {
+    const response = await fetch('/createPersona', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
