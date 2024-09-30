@@ -142,17 +142,33 @@ document.addEventListener('DOMContentLoaded', () => {
       endInterviewButton.disabled = true;
       interviewerImage.style.display = 'block';
 
-      // Call the Cloudflare Function after ending the interview
+      // Call the Cloudflare GPT Function after ending the interview
       try {
-        const response = await fetch('/helloworld');
+        const systemPrompt = "Please provide feedback on this interview based on the following conversation log:";
+        const parsedMessageHistory = messageHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+        
+        const response = await fetch('/callGPT', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: parsedMessageHistory }
+            ]
+          }),
+        });
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.text();
-        console.log("Response from Cloudflare Function:", data);
-        // You can add code here to handle the response, e.g., update the UI
+
+        const data = await response.json();
+        console.log("Interview feedback from GPT:", data.response);
+        // You can add code here to handle the response, e.g., update the UI to display the feedback
       } catch (error) {
-        console.error("Error calling Cloudflare Function:", error);
+        console.error("Error calling GPT Function:", error);
       }
 
     });
