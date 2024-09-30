@@ -1,2 +1,3 @@
-export * from "./RenderView";
 export * from "./Sidebar";
+export * from './PermissionsModal';
+export * from './LessonsSidebar';

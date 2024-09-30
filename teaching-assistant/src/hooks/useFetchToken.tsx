@@ -1,85 +1,66 @@
 "use client";
 
-import { errorHandler, FetchError, logger } from "@/utils";
-import useSWR, { Revalidator, SWRConfiguration, SWRResponse } from "swr";
+import useSWR from "swr";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
 
-/**
- * Interface representing the response structure of the session token.
- */
 interface SessionTokenResponse {
   sessionToken: string;
 }
 
+interface DecodedToken {
+  exp: number;
+}
+
 /**
- * Custom hook to fetch the session token using SWR with error handling and retry logic.
- *
- * @returns {SWRResponse<string, FetchError>} - Returns the session token wrapped in SWR response object,
- * including data, error, isLoading, and mutate functionalities.
+ * Helper function to check if the token is expired.
  */
-export const useFetchToken = (): SWRResponse<string, FetchError> => {
-  /**
-   * Function to fetch the session token from the server.
-   *
-   * @returns {Promise<string>} - The session token as a string.
-   * @throws {FetchError} - Throws an error if the fetch fails.
-   */
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  } catch {
+    return true;
+  }
+};
+
+/**
+ * Custom hook to fetch and manage the session token using SWR.
+ */
+export const useFetchToken = () => {
   const fetchSessionToken = async (): Promise<string> => {
-    try {
-      const response = await fetch("/api/session-token", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-cache",
-      });
+    const response = await fetch("/api/session-token", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (!response.ok) {
-        throw new FetchError("Failed to fetch session token", response.status);
-      }
-
-      const data: SessionTokenResponse = await response.json();
-      return data.sessionToken;
-    } catch (error) {
-      errorHandler(error as FetchError, "Fetching Session Token", null);
-      throw error;
+    if (!response.ok) {
+      throw new Error("Failed to fetch session token");
     }
+
+    const data: SessionTokenResponse = await response.json();
+    return data.sessionToken;
   };
 
-  return useSWR<string, FetchError>("/session-token", fetchSessionToken, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    shouldRetryOnError: false,
-    dedupingInterval: 60000,
-    /**
-     * Retry logic to attempt fetching the session token a maximum of 3 times with a delay of 2 seconds.
-     * Logs each retry attempt and stops after the maximum retries.
-     *
-     * @param {FetchError} error - The error thrown during fetch, typed as FetchError.
-     * @param {string} _key - The SWR key used for caching.
-     * @param {SWRConfiguration} _config - SWR configuration object.
-     * @param {Revalidator} revalidate - Revalidation function provided by SWR.
-     * @param {object} retryOptions - Contains the retry count.
-     */
-    onErrorRetry: (
-      error: FetchError,
-      _key: string,
-      _config: SWRConfiguration,
-      revalidate: Revalidator,
-      { retryCount }: { retryCount: number },
-    ) => {
-      logger.info(
-        `Retrying to fetch session token, attempt: ${retryCount + 1}`,
-      );
+  const { data: sessionToken, error, mutate, isValidating } = useSWR<string, Error>(
+    "/session-token",
+    fetchSessionToken,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
+      dedupingInterval: 60000,
+    }
+  );
 
-      if (retryCount >= 3) {
-        logger.warn(
-          "Maximum retry attempts reached for fetching session token.",
-        );
-        return;
-      }
+  useEffect(() => {
+    if (sessionToken && isTokenExpired(sessionToken)) {
+      mutate();
+    }
+  }, [sessionToken, mutate]);
 
-      errorHandler(error, "Retrying Session Token Fetch");
-      setTimeout(() => revalidate({ retryCount }), 2000);
-    },
-  });
+  return { sessionToken, error, refreshToken: mutate, isValidating };
 };

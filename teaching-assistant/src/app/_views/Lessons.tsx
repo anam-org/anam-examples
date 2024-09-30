@@ -1,10 +1,10 @@
-import { Flex, Heading, Text, Box, IconButton, Progress } from "@radix-ui/themes";
+import { useState, useEffect, useRef } from "react";
+import { Flex, Text, IconButton, Box, Heading, Progress } from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { LessonsSidebar } from "@/components/LessonsSidebar";
-import { errorHandler, logger } from "@/utils";
 import { useAnamContext } from "@/contexts";
+import { errorHandler, logger } from "@/utils";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
+import { LessonsSidebar } from "@/components/LessonsSidebar";
 
 export function LessonsView() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -13,6 +13,7 @@ export function LessonsView() {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [loadingText, setLoadingText] = useState("Connecting...");
+  const [streamError, setStreamError] = useState<string | null>(null);
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -40,11 +41,13 @@ export function LessonsView() {
 
   const onConnectionEstablished = () => {
     setLoadingText("Connected to a Persona. Starting video stream...");
+    setStreamError(null);
     logger.info("Connection established");
   };
 
   const onVideoStartedStreaming = () => {
     setLoadingText("");
+    setStreamError(null);
     logger.info("Video started streaming");
   };
 
@@ -54,22 +57,35 @@ export function LessonsView() {
 
   useEffect(() => {
     const startStreaming = async () => {
-      if (isClientInitialized && anamClient && videoRef.current && audioRef.current) {
-        try {
-          anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
-          anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
-          anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      if (!isClientInitialized || !anamClient || !videoRef.current || !audioRef.current) {
+        return;
+      }
 
-          await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
-        } catch (error) {
-          errorHandler(error);
-        }
+      try {
+        anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
+        anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+        anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+
+        await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
+      } catch (error) {
+        errorHandler(error);
+        setStreamError("Failed to start streaming: Unauthorized or invalid session");
       }
     };
 
     startStreaming();
 
+    const stopStreaming = () => {
+      if (anamClient) {
+        anamClient.stopStreaming().catch(errorHandler);
+      }
+    };
+
+    window.addEventListener("beforeunload", stopStreaming);
+
     return () => {
+      stopStreaming();
+      window.removeEventListener("beforeunload", stopStreaming);
       if (anamClient) {
         anamClient.removeListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
         anamClient.removeListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
@@ -77,13 +93,11 @@ export function LessonsView() {
       }
     };
   }, [isClientInitialized, anamClient]);
-
+  
   return (
     <Flex className="h-screen overflow-hidden">
-      {/* Main Section */}
       <Flex direction="column" className="flex-1">
         <Flex gap="3" className="p-5 h-full">
-          {/* Avatar Video */}
           <Box className="w-3/4 h-full relative flex items-center justify-center bg-gray-200 rounded-lg">
             <video
               id="avatar-video"
@@ -94,17 +108,17 @@ export function LessonsView() {
               muted={isMuted}
             />
             <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
-            {loadingText && (
-              <Flex
-                justify="center"
-                align="center"
-                className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50"
-              >
-                <Text size="2" >{loadingText}</Text>
-              </Flex>
-            )}
-
-            {/* Controls - Bottom Center */}
+            <Flex
+              justify="center"
+              align="center"
+              className="w-full h-full absolute top-0 left-0"
+            >
+              {streamError ? (
+                <Text size="2" className="text-red-500">{streamError}</Text>
+              ) : (
+                loadingText && <Text size="2">{loadingText}</Text>
+              )}
+            </Flex>
             <Flex justify="center" align="center" className="absolute bottom-4 inset-x-0">
               <IconButton
                 variant="solid"
