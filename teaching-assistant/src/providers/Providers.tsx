@@ -8,7 +8,7 @@ import { toast, Toaster } from "sonner";
 import { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
-  const { sessionToken, error, isValidating } = useFetchToken();
+  const { data: sessionToken, error, isValidating } = useFetchToken();
 
   useEffect(() => {
     if (error) {
