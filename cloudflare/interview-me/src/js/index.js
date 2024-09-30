@@ -29,11 +29,11 @@ async function createNewPersona(interviewSetup) {
       },
       body: JSON.stringify({
         name: "Interviewer",
-        description: "An interviewer for job practice",
+        description: "An interviewer for job practice.",
         personaPreset: "leo_desk",
-        systemPrompt: `You are an interviewer conducting a job interview. The interview setup is as follows: ${interviewSetup}. Ask lots of questions. Keep responses brief.`,
+        systemPrompt: `You are an interviewer conducting a job interview. The interview setup is as follows: ${interviewSetup}. Always ask one question. Keep responses brief.`,
         personality: "You are interviewing the user.",
-        fillerPhrases: ["hmm", "I see", "interesting", "okay", "alright", "well", "thank you"],
+        fillerPhrases: ["Hmmm..", "I see..", "Interesting..", "Okay..", "Alright..", "Well..", "Thank you.."],
         userInput: interviewSetup
       })
     });
@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingSpinner = document.getElementById('loading-spinner');
   const endInterviewButton = document.getElementById('end-interview');
   const interviewerImage = document.getElementById('interviewer-image');
+  const feedbackContainer = document.getElementById('feedback-container');
+
+  // Hide feedback container initially
+  feedbackContainer.style.display = 'none';
 
   let client;
   let messageHistory = [];
@@ -137,16 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       videoContainer.style.display = 'none';
       streamControls.style.display = 'none';
-      interviewSetup.style.display = 'block';
-      startInterviewButton.style.display = 'block';
-      endInterviewButton.disabled = true;
-      interviewerImage.style.display = 'block';
+      
+      // Show feedback container and loading spinner
+      const feedbackLoadingSpinner = document.getElementById('feedback-loading-spinner');
+      const feedbackContent = document.getElementById('feedback-content');
+      const feedbackText = document.getElementById('feedback-text');
+      
+      feedbackContainer.style.display = 'block';
+      feedbackLoadingSpinner.style.display = 'flex';
+      feedbackContent.style.display = 'none';
 
-      // Call the Cloudflare GPT Function after ending the interview
+      // Call the Cloudflare Function to get feedback
       try {
-        const systemPrompt = "Please provide feedback on this interview based on the following conversation log:";
+        const systemPrompt = "The user has just completed being interviewed by the AI interviewer and would like feedback. Please provide feedback " +
+          "on this interview directed at them. Use 'you' as if you're speaking directly to them. Keep it friendly and encouraging but make sure to give critical " +
+          " feedback. Base your response on the following conversation log (the AI interviewer is labelled with role of 'persona'):";
         const parsedMessageHistory = messageHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n');
-        
+
         const response = await fetch('/callGPT', {
           method: 'POST',
           headers: {
@@ -165,14 +176,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = await response.json();
-        console.log("Interview feedback from GPT:", data.response);
-        // You can add code here to handle the response, e.g., update the UI to display the feedback
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        // Display the feedback
+        feedbackLoadingSpinner.style.display = 'none';
+        feedbackContent.style.display = 'block';
+        feedbackText.innerHTML = DOMPurify.sanitize(marked.parse(data.response));
+        
       } catch (error) {
         console.error("Error calling GPT Function:", error);
+        feedbackLoadingSpinner.style.display = 'none';
+        feedbackContent.style.display = 'block';
+        feedbackText.textContent = "Sorry, we couldn't generate feedback at this time. Please try again later.";
       }
-
     });
   } else {
     console.error('End interview button not found');
+  }
+
+  const returnToStartButton = document.getElementById('return-to-start');
+
+  if (returnToStartButton) {
+    returnToStartButton.addEventListener('click', () => {
+      feedbackContainer.style.display = 'none';
+      interviewSetup.style.display = 'block';
+      startInterviewButton.style.display = 'block';
+      interviewerImage.style.display = 'block';
+    });
+  } else {
+    console.error('Return to start button not found');
   }
 });

@@ -28,7 +28,15 @@ export async function onRequestPost(context) {
     }
 
     const data = await response.json();
-    return new Response(JSON.stringify(data), {
+    
+    // Extract the actual message content from the API response
+    const gptResponse = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    
+    if (!gptResponse) {
+      throw new Error('No valid response from GPT');
+    }
+
+    return new Response(JSON.stringify({ response: gptResponse }), {
       headers: { 'Content-Type': 'application/json' },
     });
 
