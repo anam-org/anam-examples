@@ -1,7 +1,11 @@
 "use client";
 
 import { useFetchToken } from "@/hooks";
-import { AnamContextProvider, VideoAudioPermissionProvider, ViewContextProvider } from "@/contexts";
+import {
+  AnamContextProvider,
+  VideoAudioPermissionProvider,
+  ViewContextProvider,
+} from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";

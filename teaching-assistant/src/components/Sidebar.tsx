@@ -21,11 +21,39 @@ export const Sidebar = () => {
 
   const Menus: MenuItem[] = [
     { title: "Lessons", navigateTo: "Lessons", src: "Book", clickable: true },
-    { title: "Vocabulary", navigateTo: "Vocabulary", src: "Clipboard", clickable: false },
-    { title: "Practice", navigateTo: "Practice", src: "Pencil", clickable: false, gap: true },
-    { title: "Progress", navigateTo: "Progress", src: "BarChart", clickable: false },
-    { title: "Settings", navigateTo: "Settings", src: "Settings", clickable: false, gap: true },
-    { title: "Exit", navigateTo: "Initial", src: "X", clickable: true, gap: true },
+    {
+      title: "Vocabulary",
+      navigateTo: "Vocabulary",
+      src: "Clipboard",
+      clickable: false,
+    },
+    {
+      title: "Practice",
+      navigateTo: "Practice",
+      src: "Pencil",
+      clickable: false,
+      gap: true,
+    },
+    {
+      title: "Progress",
+      navigateTo: "Progress",
+      src: "BarChart",
+      clickable: false,
+    },
+    {
+      title: "Settings",
+      navigateTo: "Settings",
+      src: "Settings",
+      clickable: false,
+      gap: true,
+    },
+    {
+      title: "Exit",
+      navigateTo: "Initial",
+      src: "X",
+      clickable: true,
+      gap: true,
+    },
   ];
 
   return (
@@ -38,12 +66,17 @@ export const Sidebar = () => {
       >
         {open ? <ChevronLeft color="white" /> : <ChevronRight color="white" />}
       </div>
-      <div className="flex gap-x-4 items-center mb-6" onClick={() => changeView("initial")}>
+      <div
+        className="flex gap-x-4 items-center mb-6"
+        onClick={() => changeView("initial")}
+      >
         <img
           src="/icons/Brain.svg"
           className={`cursor-pointer duration-500 w-10 h-10 ${open && "rotate-[360deg]"}`}
         />
-        <Heading className={`origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}>
+        <Heading
+          className={`origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}
+        >
           Teacher
         </Heading>
       </div>
@@ -60,11 +93,19 @@ export const Sidebar = () => {
               }
             }}
             className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 text-sm ${gap ? "mt-9" : "mt-2"} ${
-              currentView === navigateTo ? "bg-gray-200" : clickable ? "hover:bg-gray-100" : "opacity-50"
+              currentView === navigateTo
+                ? "bg-gray-200"
+                : clickable
+                  ? "hover:bg-gray-100"
+                  : "opacity-50"
             } ${clickable ? "" : "pointer-events-none"}`}
           >
             <img src={`/icons/${src}.svg`} className="w-6 h-6" />
-            {open && <Text as="span" className="origin-left duration-200">{title}</Text>}
+            {open && (
+              <Text as="span" className="origin-left duration-200">
+                {title}
+              </Text>
+            )}
           </li>
         ))}
       </ul>

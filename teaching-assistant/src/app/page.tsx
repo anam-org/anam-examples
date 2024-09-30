@@ -27,9 +27,7 @@ function Content() {
   return (
     <div className="flex h-screen">
       {currentView === "Lessons" && <Sidebar />}
-      <main className="flex-grow overflow-hidden">
-        {renderView()}
-      </main>
+      <main className="flex-grow overflow-hidden">{renderView()}</main>
     </div>
   );
 }

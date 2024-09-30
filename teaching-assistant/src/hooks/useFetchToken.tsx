@@ -45,16 +45,17 @@ export const useFetchToken = () => {
     return data.sessionToken;
   };
 
-  const { data: sessionToken, error, mutate, isValidating } = useSWR<string, Error>(
-    "/session-token",
-    fetchSessionToken,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      shouldRetryOnError: false,
-      dedupingInterval: 60000,
-    }
-  );
+  const {
+    data: sessionToken,
+    error,
+    mutate,
+    isValidating,
+  } = useSWR<string, Error>("/session-token", fetchSessionToken, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    shouldRetryOnError: false,
+    dedupingInterval: 60000,
+  });
 
   useEffect(() => {
     if (sessionToken && isTokenExpired(sessionToken)) {

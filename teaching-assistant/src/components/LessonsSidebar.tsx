@@ -12,7 +12,9 @@ interface MenuItem {
 
 export const LessonsSidebar = () => {
   const [open, setOpen] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState<string>("Introduction to French");
+  const [selectedLesson, setSelectedLesson] = useState<string>(
+    "Introduction to French",
+  );
 
   const lessons: MenuItem[] = [
     {
@@ -82,16 +84,16 @@ export const LessonsSidebar = () => {
           lessons.map((lesson, index) => (
             <li
               key={index}
-              onClick={() => lesson.clickable && setSelectedLesson(lesson.title)}
+              onClick={() =>
+                lesson.clickable && setSelectedLesson(lesson.title)
+              }
             >
               <Box
                 className={`p-4 border border-gray-200 rounded-lg shadow transition duration-150 cursor-pointer ${
                   lesson.clickable
                     ? "hover:bg-gray-100"
                     : "opacity-50 pointer-events-none"
-                } ${
-                  selectedLesson === lesson.title ? "bg-gray-200" : ""
-                }`}
+                } ${selectedLesson === lesson.title ? "bg-gray-200" : ""}`}
               >
                 <Heading size="3">{lesson.title}</Heading>
                 <Text size="2" className="text-gray-500">

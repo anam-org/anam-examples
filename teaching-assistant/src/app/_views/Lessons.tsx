@@ -1,5 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Flex, Text, IconButton, Box, Heading, Progress } from "@radix-ui/themes";
+import {
+  Flex,
+  Text,
+  IconButton,
+  Box,
+  Heading,
+  Progress,
+} from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
 import { useAnamContext } from "@/contexts";
 import { errorHandler, logger } from "@/utils";
@@ -57,19 +64,35 @@ export function LessonsView() {
 
   useEffect(() => {
     const startStreaming = async () => {
-      if (!isClientInitialized || !anamClient || !videoRef.current || !audioRef.current) {
+      if (
+        !isClientInitialized ||
+        !anamClient ||
+        !videoRef.current ||
+        !audioRef.current
+      ) {
         return;
       }
 
       try {
-        anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
-        anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
+        anamClient.addListener(
+          AnamEvent.CONNECTION_ESTABLISHED,
+          onConnectionEstablished,
+        );
+        anamClient.addListener(
+          AnamEvent.VIDEO_PLAY_STARTED,
+          onVideoStartedStreaming,
+        );
         anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
 
-        await anamClient.streamToVideoAndAudioElements(videoRef.current.id, audioRef.current.id);
+        await anamClient.streamToVideoAndAudioElements(
+          videoRef.current.id,
+          audioRef.current.id,
+        );
       } catch (error) {
         errorHandler(error);
-        setStreamError("Failed to start streaming: Unauthorized or invalid session");
+        setStreamError(
+          "Failed to start streaming: Unauthorized or invalid session",
+        );
       }
     };
 
@@ -87,13 +110,22 @@ export function LessonsView() {
       stopStreaming();
       window.removeEventListener("beforeunload", stopStreaming);
       if (anamClient) {
-        anamClient.removeListener(AnamEvent.CONNECTION_ESTABLISHED, onConnectionEstablished);
-        anamClient.removeListener(AnamEvent.VIDEO_PLAY_STARTED, onVideoStartedStreaming);
-        anamClient.removeListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+        anamClient.removeListener(
+          AnamEvent.CONNECTION_ESTABLISHED,
+          onConnectionEstablished,
+        );
+        anamClient.removeListener(
+          AnamEvent.VIDEO_PLAY_STARTED,
+          onVideoStartedStreaming,
+        );
+        anamClient.removeListener(
+          AnamEvent.CONNECTION_CLOSED,
+          onConnectionClosed,
+        );
       }
     };
   }, [isClientInitialized, anamClient]);
-  
+
   return (
     <Flex className="h-screen overflow-hidden">
       <Flex direction="column" className="flex-1">
@@ -114,12 +146,18 @@ export function LessonsView() {
               className="w-full h-full absolute top-0 left-0"
             >
               {streamError ? (
-                <Text size="2" className="text-red-500">{streamError}</Text>
+                <Text size="2" className="text-red-500">
+                  {streamError}
+                </Text>
               ) : (
                 loadingText && <Text size="2">{loadingText}</Text>
               )}
             </Flex>
-            <Flex justify="center" align="center" className="absolute bottom-4 inset-x-0">
+            <Flex
+              justify="center"
+              align="center"
+              className="absolute bottom-4 inset-x-0"
+            >
               <IconButton
                 variant="solid"
                 onClick={handlePlayPauseToggle}
@@ -145,7 +183,10 @@ export function LessonsView() {
           </Box>
 
           {/* Conversation Tracker + Text Input */}
-          <Flex direction="column" className="w-1/4 h-full p-4 bg-gray-100 rounded-lg">
+          <Flex
+            direction="column"
+            className="w-1/4 h-full p-4 bg-gray-100 rounded-lg"
+          >
             <Heading size="4" className="text-center mb-4">
               Conversation
             </Heading>
@@ -164,7 +205,9 @@ export function LessonsView() {
                 </Flex>
                 <Flex justify="start">
                   <Box className="bg-gray-300 text-gray-800 p-3 rounded-t-lg rounded-br-lg max-w-xs">
-                    <Text size="2">AI: C'est super! Prêt à commencer la leçon?</Text>
+                    <Text size="2">
+                      AI: C'est super! Prêt à commencer la leçon?
+                    </Text>
                   </Box>
                 </Flex>
               </Flex>
@@ -184,7 +227,9 @@ export function LessonsView() {
         {/* Progress Bar Section */}
         <Flex direction="column" align="center" className="p-4">
           <Progress value={50} max={100} className="w-full" />
-          <Text size="2" align="center" className="mt-2">Lesson Progress: 50%</Text>
+          <Text size="2" align="center" className="mt-2">
+            Lesson Progress: 50%
+          </Text>
         </Flex>
       </Flex>
 

@@ -23,7 +23,9 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
         disableBrains: DISABLE_BRAINS,
         disableFillerPhrases: DISABLE_FILLER_PHRASES,
       });
-      logger.info(`Anam client initialized with session token: ${sessionToken}`);
+      logger.info(
+        `Anam client initialized with session token: ${sessionToken}`,
+      );
     } catch (err) {
       errorHandler(err as FetchError, "Initializing Anam Client");
       anamClientRef.current = createClient("dummy", {
@@ -34,7 +36,10 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
     }
   }
 
-  return { anamClient: anamClientRef.current, isClientInitialized: !!sessionToken };
+  return {
+    anamClient: anamClientRef.current,
+    isClientInitialized: !!sessionToken,
+  };
 };
 
 export const [AnamContextProvider, useAnamContext] = constate(useAnam);
