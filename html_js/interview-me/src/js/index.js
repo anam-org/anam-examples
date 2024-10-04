@@ -1,5 +1,3 @@
-console.log('main.js loaded');
-
 import { createClient } from "@anam-ai/js-sdk";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
@@ -54,8 +52,6 @@ async function createNewPersona(interviewSetup) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed');
-
   const interviewSetup = document.getElementById('interview-setup');
   const startInterviewButton = document.getElementById('start-interview');
   const videoContainer = document.getElementById('video-container');
@@ -74,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (startInterviewButton) {
     startInterviewButton.addEventListener('click', async (e) => {
       e.preventDefault();
-      console.log('Start Interview button clicked');
       const interviewSetupText = interviewSetup.value;
       console.log('Interview setup:', interviewSetupText);
 

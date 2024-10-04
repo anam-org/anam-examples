@@ -1,5 +1,3 @@
-console.log('main.js loaded');
-
 import { createClient } from "@anam-ai/js-sdk";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
@@ -64,8 +62,6 @@ async function createNewPersona(userInput) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed');
-
   const userInput = document.getElementById('user-input');
   const submitRoastButton = document.getElementById('submit-roast');
   const videoContainer = document.getElementById('video-container');
@@ -78,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (submitRoastButton) {
     submitRoastButton.addEventListener('click', async (e) => {
       e.preventDefault();
-      console.log('Button clicked');
       const userInputText = userInput.value;
       console.log('User input:', userInputText);
 
