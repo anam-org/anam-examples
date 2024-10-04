@@ -1,3 +1,3 @@
 export * from "./AnamContext";
-export * from "./VideoAudioPermissionContext";
+export * from "./AudioPermissionContext";
 export * from "./ViewContext";

@@ -3,24 +3,24 @@
 import { useFetchToken } from "@/hooks";
 import {
   AnamContextProvider,
-  VideoAudioPermissionProvider,
+  AudioPermissionProvider,
   ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
-import { toast, Toaster } from "sonner";
 import { ReactNode } from "react";
+import { logger } from "@/utils";
 
 export function Providers({ children }: { children: ReactNode }) {
-  const { sessionToken, error, isValidating } = useFetchToken();
+  const { sessionToken, error } = useFetchToken();
 
   useEffect(() => {
     if (error) {
-      toast.error(`Error: ${error?.message || "Unknown error occurred"}`);
+      logger.error(`Error: ${error?.message || "Unknown error occurred"}`);
     }
   }, [error]);
 
-  if (isValidating) {
+  if (!sessionToken) {
     return (
       <Flex align="center" justify="center" height="100vh" width="100vw">
         <Spinner size="3" />
@@ -30,13 +30,10 @@ export function Providers({ children }: { children: ReactNode }) {
   }
 
   return (
-    <VideoAudioPermissionProvider>
+    <AudioPermissionProvider>
       <AnamContextProvider sessionToken={sessionToken}>
-        <ViewContextProvider>
-          {children}
-          <Toaster />
-        </ViewContextProvider>
+        <ViewContextProvider>{children}</ViewContextProvider>
       </AnamContextProvider>
-    </VideoAudioPermissionProvider>
+    </AudioPermissionProvider>
   );
 }

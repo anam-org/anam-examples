@@ -2,7 +2,7 @@
 
 import { ViewContextProvider, useViewContext } from "@/contexts";
 import { InitialView, LessonsView } from "./_views";
-import { Sidebar } from "@/components";
+import { NavigationSidebar } from "@/components";
 
 export default function HomePage() {
   return (
@@ -26,7 +26,7 @@ function Content() {
 
   return (
     <div className="flex h-screen">
-      {currentView === "Lessons" && <Sidebar />}
+      {currentView === "Lessons" && <NavigationSidebar />}
       <main className="flex-grow overflow-hidden">{renderView()}</main>
     </div>
   );

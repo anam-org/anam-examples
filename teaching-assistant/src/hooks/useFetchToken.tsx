@@ -2,7 +2,8 @@
 
 import useSWR from "swr";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import { logger } from "@/utils";
 
 interface SessionTokenResponse {
   sessionToken: string;
@@ -10,31 +11,19 @@ interface SessionTokenResponse {
 
 interface DecodedToken {
   exp: number;
+  iat: number;
 }
 
-/**
- * Helper function to check if the token is expired.
- */
-const isTokenExpired = (token: string): boolean => {
-  try {
-    const decoded = jwtDecode<DecodedToken>(token);
-    const currentTime = Date.now() / 1000;
-    return decoded.exp < currentTime;
-  } catch {
-    return true;
-  }
-};
+const formatTimestamp = (timestamp: number) =>
+  new Date(timestamp * 1000).toLocaleString();
 
-/**
- * Custom hook to fetch and manage the session token using SWR.
- */
 export const useFetchToken = () => {
+  const tokenRefreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const fetchSessionToken = async (): Promise<string> => {
     const response = await fetch("/api/session-token", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
@@ -49,7 +38,6 @@ export const useFetchToken = () => {
     data: sessionToken,
     error,
     mutate,
-    isValidating,
   } = useSWR<string, Error>("/session-token", fetchSessionToken, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -57,11 +45,40 @@ export const useFetchToken = () => {
     dedupingInterval: 60000,
   });
 
-  useEffect(() => {
-    if (sessionToken && isTokenExpired(sessionToken)) {
-      mutate();
+  const refreshToken = useCallback(() => {
+    if (sessionToken) {
+      try {
+        const { exp, iat } = jwtDecode<DecodedToken>(sessionToken);
+        const currentTime = Date.now() / 1000;
+        const expiresIn = exp - currentTime;
+
+        logger.info(
+          `Issued At: ${formatTimestamp(iat)}, Expires At: ${formatTimestamp(exp)}, Expires In: ${expiresIn} seconds`,
+        );
+
+        if (expiresIn > 60) {
+          tokenRefreshTimeoutRef.current = setTimeout(
+            mutate,
+            (expiresIn - 60) * 1000,
+          );
+        } else {
+          mutate();
+        }
+      } catch (error) {
+        logger.error("Failed to decode token:", error);
+        mutate();
+      }
     }
   }, [sessionToken, mutate]);
 
-  return { sessionToken, error, refreshToken: mutate, isValidating };
+  useEffect(() => {
+    refreshToken();
+    return () => {
+      if (tokenRefreshTimeoutRef.current) {
+        clearTimeout(tokenRefreshTimeoutRef.current);
+      }
+    };
+  }, [sessionToken, refreshToken]);
+
+  return { sessionToken, error, refreshToken };
 };

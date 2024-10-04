@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
 import { Play } from "lucide-react";
-import { PermissionsModal } from "@/components/PermissionsModal";
 import { useViewContext } from "@/contexts";
+import { AudioPermissionsModal } from "@/components";
 
 export const InitialView = () => {
   const { changeView } = useViewContext();
@@ -35,7 +35,7 @@ export const InitialView = () => {
       </Flex>
 
       {isModalVisible && (
-        <PermissionsModal
+        <AudioPermissionsModal
           onClose={handleCloseModal}
           onPermissionGranted={handlePermissionsGranted}
         />

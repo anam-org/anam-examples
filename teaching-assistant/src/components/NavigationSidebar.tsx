@@ -4,7 +4,6 @@ import { Heading, Text } from "@radix-ui/themes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useViewContext, useAnamContext } from "@/contexts";
 import { useState } from "react";
-import Link from "next/link";
 
 interface MenuItem {
   title: string;
@@ -14,7 +13,7 @@ interface MenuItem {
   clickable: boolean;
 }
 
-export const Sidebar = () => {
+export const NavigationSidebar = () => {
   const [open, setOpen] = useState(false);
   const { currentView, changeView } = useViewContext();
   const { anamClient } = useAnamContext();
