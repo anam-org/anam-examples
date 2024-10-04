@@ -214,7 +214,9 @@ export function LessonsView() {
                 loadingText && (
                   <>
                     <Spinner size="3" />
-                    <Text size="2">{loadingText}</Text>
+                    <Text size="2" className="dark:text-black">
+                      {loadingText}
+                    </Text>
                   </>
                 )
               )}

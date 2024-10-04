@@ -130,8 +130,8 @@ export const NavigationSidebar = () => {
               currentView === navigateTo
                 ? "bg-gray-200 dark:bg-gray-700"
                 : clickable
-                ? "hover:bg-gray-100 dark:hover:bg-gray-800"
-                : "opacity-50"
+                  ? "hover:bg-gray-100 dark:hover:bg-gray-800"
+                  : "opacity-50"
             } ${clickable ? "" : "pointer-events-none"} ${
               open ? "" : "justify-center"
             }`}

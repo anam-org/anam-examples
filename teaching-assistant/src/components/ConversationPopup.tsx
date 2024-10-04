@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";
 import { IconButton, Flex, Box, Popover, Text } from "@radix-ui/themes";
 import { MessageCircle, X } from "lucide-react";
@@ -13,7 +13,7 @@ export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -63,7 +63,9 @@ export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
                       : "bg-blue-500 text-white rounded-t-lg rounded-bl-lg"
                   } shadow-md`}
                 >
-                  <Text wrap="pretty" size="1">{message.text}</Text>
+                  <Text wrap="pretty" size="1">
+                    {message.text}
+                  </Text>
                 </Box>
               </Flex>
             );

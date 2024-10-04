@@ -136,9 +136,7 @@ export const LessonsSidebar = ({ selectedLanguage }: LessonsSidebarProps) => {
           </Heading>
         )}
         <BookOpen
-          className={`cursor-pointer duration-500 ${
-            open && "rotate-[360deg]"
-          }`}
+          className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
           stroke="white"
           size={open ? 40 : 30} // Adjust size based on open state
         />

@@ -34,9 +34,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <AnamContextProvider sessionToken={sessionToken}>
       <SettingsContextProvider>
         <AudioPermissionProvider>
-            <ViewContextProvider>
-              {children}
-            </ViewContextProvider>
+          <ViewContextProvider>{children}</ViewContextProvider>
         </AudioPermissionProvider>
       </SettingsContextProvider>
     </AnamContextProvider>
