@@ -24,7 +24,15 @@ async function createNewPersona(userInput) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userInput })
+      body: JSON.stringify({
+        name: `persona_unknown`, 
+        description: "Roast-master",
+        personaPreset: "leo_desk",
+        systemPrompt: "You are a roast master, here to roast the user. Don't hold back, the user loves being roasted.",
+        personality: "You are a roast master, here to roast the user with the given user input.",
+        fillerPhrases: ["Ummm..", "Well..", "Ermm..", "So..", "Ok.."],
+        userInput: userInput
+      })
     });
 
     console.log('Response status:', response.status);

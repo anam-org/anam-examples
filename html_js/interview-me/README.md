@@ -39,6 +39,7 @@ You'll also need:
    ```toml
    [vars]
    ANAM_API_KEY = "your-anam-api-key-here"
+   AZURE_GPT_API_KEY = "your-azure-gpt-api-key-here"
    ```
 
 4. Build the JavaScript bundle:
@@ -48,7 +49,7 @@ You'll also need:
 
 5. Run the project locally using Wrangler:
    ```bash
-   wrangler pages dev
+   wrangler pages dev .
    ```
 
    This command will start a local development server, typically at `http://localhost:8788`.
@@ -78,7 +79,7 @@ To deploy the Interview Me app to Cloudflare Pages:
 
 ## Configuration
 
-- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables or in the `wrangler.toml` file.
+- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables (production and preview) or in the `wrangler.toml` file. For local development, you can also add it to the `.dev.vars` file. 
 - Modify the `src/js/index.js` file to customize the interview logic or adjust the Anam SDK integration.
 - You can update the `index.html` file to change the layout or add additional UI elements.
 
