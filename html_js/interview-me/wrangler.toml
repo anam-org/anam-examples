@@ -1,15 +1,14 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "interview-me"
-#main = "src/index.js"
+main = "src/index.js"
 compatibility_date = "2024-09-25"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "/dist"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
-#[observability]
-#enabled = true
+[observability]
+enabled = true
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
@@ -23,9 +22,9 @@ pages_build_output_dir = "/dist"
 # - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
-[vars]
-ANAM_API_KEY = "your_api_key_here"
-AZURE_GPT_API_KEY = "your_azure_gpt_api_key_here"
+# [vars]
+# ANAM_API_KEY = "..."
+# AZURE_GPT_API_KEY = "..."
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
