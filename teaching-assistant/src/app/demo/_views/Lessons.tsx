@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
 import {
   Flex,
@@ -9,18 +11,20 @@ import {
 } from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
 import { LessonsSidebar, ConversationPopup } from "@/components";
-import { useAnamContext, useViewContext } from "@/contexts";
+import { useAnamContext, useSettingsContext } from "@/contexts";
 import { errorHandler, logger } from "@/utils";
 import {
   AnamEvent,
   Message,
   MessageRole,
 } from "@anam-ai/js-sdk/dist/module/types";
+import { useRouter } from "next/navigation";
 
 export function LessonsView() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { anamClient, isClientInitialized } = useAnamContext();
+  const { selectedLanguage } = useSettingsContext();
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [loadingText, setLoadingText] = useState("Connecting...");
@@ -28,9 +32,8 @@ export function LessonsView() {
   const [conversation, setConversation] = useState<
     { sender: string; text: string }[]
   >([]);
-
   const [timeLeft, setTimeLeft] = useState(120);
-  const { changeView } = useViewContext();
+  const router = useRouter();
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -53,6 +56,12 @@ export function LessonsView() {
   const handleFullScreen = () => {
     if (videoRef.current) {
       videoRef.current.requestFullscreen();
+    }
+  };
+
+  const stopStreaming = () => {
+    if (anamClient) {
+      anamClient.stopStreaming().catch(errorHandler);
     }
   };
 
@@ -94,7 +103,8 @@ export function LessonsView() {
 
     if (timeLeft === 0 && timer) {
       clearInterval(timer);
-      changeView("Initial");
+      stopStreaming();
+      router.push("/");
     }
 
     return () => {
@@ -102,7 +112,7 @@ export function LessonsView() {
         clearInterval(timer);
       }
     };
-  }, [isPlaying, timeLeft, changeView]);
+  }, [isPlaying, timeLeft, router]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -110,7 +120,7 @@ export function LessonsView() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  const progressValue = ((120 - timeLeft) / 120) * 100; // Calculate progress percentage
+  const progressValue = ((120 - timeLeft) / 120) * 100;
 
   useEffect(() => {
     const startStreaming = async () => {
@@ -151,12 +161,6 @@ export function LessonsView() {
 
     startStreaming();
 
-    const stopStreaming = () => {
-      if (anamClient) {
-        anamClient.stopStreaming().catch(errorHandler);
-      }
-    };
-
     window.addEventListener("beforeunload", stopStreaming);
 
     return () => {
@@ -186,8 +190,8 @@ export function LessonsView() {
   return (
     <Flex>
       <Flex direction="column" className="flex-1">
-        <Flex gap="3" className="p-5 h-full">
-          <Box className="w-[825px] h-[825px] mx-auto relative flex justify-center bg-gray-200 rounded-lg">
+        <Flex direction="column" align="center" className="p-5 h-full">
+          <Box className="bg-gray-200 w-auto h-[85vh] aspect-square mx-auto relative flex justify-center">
             <video
               id="avatar-video"
               ref={videoRef}
@@ -247,27 +251,25 @@ export function LessonsView() {
               align="center"
               className="absolute bottom-4 right-4"
             >
-              <ConversationPopup conversation={conversation} />{" "}
+              <ConversationPopup conversation={conversation} />
             </Flex>
           </Box>
-        </Flex>
-
-        {/* Progress Bar Section */}
-        <Flex direction="column" align="center" className="p-4">
-          <Progress
-            color="mint"
-            value={progressValue}
-            max={100}
-            className="w-[825px]"
-          />
-          <Text size="2" align="center" className="mt-2">
-            Time Left: {formatTime(timeLeft)}
-          </Text>
+          {/* Progress Bar Section */}
+          <Flex direction="column" align="center" className="p-4">
+            <Progress
+              color="mint"
+              value={progressValue}
+              max={100}
+              className="w-[45vw]"
+            />
+            <Text size="2" align="center" className="mt-2">
+              Time Left: {formatTime(timeLeft)}
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
-
       {/* Sidebar with Lessons */}
-      <LessonsSidebar />
+      <LessonsSidebar selectedLanguage={selectedLanguage} />
     </Flex>
   );
 }

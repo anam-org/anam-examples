@@ -2,20 +2,16 @@
 
 import { createClient, AnamClient } from "@anam-ai/js-sdk";
 import constate from "constate";
-import { FetchError, errorHandler, logger, env } from "@/utils";
 import { useRef } from "react";
+import { FetchError, errorHandler, logger, env } from "@/utils";
 
 const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_ID!;
 const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
 const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 
-/**
- * Hook to initialize the Anam client using a session token.
- */
 const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   const anamClientRef = useRef<AnamClient | null>(null);
 
-  // Ensure the Anam client is only initialized once
   if (!anamClientRef.current && sessionToken) {
     try {
       anamClientRef.current = createClient(sessionToken, {
@@ -36,9 +32,23 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
     }
   }
 
+  const setPersonaConfig = (config: {
+    personaId: string;
+    disableFillerPhrases?: boolean;
+    disableBrains?: boolean;
+  }) => {
+    if (anamClientRef.current) {
+      anamClientRef.current.setPersonaConfig(config);
+      logger.info("Persona config updated", config);
+    } else {
+      logger.error("Anam client is not initialized");
+    }
+  };
+
   return {
     anamClient: anamClientRef.current,
     isClientInitialized: !!sessionToken,
+    setPersonaConfig,
   };
 };
 

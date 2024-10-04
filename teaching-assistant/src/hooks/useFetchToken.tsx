@@ -23,7 +23,10 @@ export const useFetchToken = () => {
   const fetchSessionToken = async (): Promise<string> => {
     const response = await fetch("/api/session-token", {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+      },
     });
 
     if (!response.ok) {
@@ -41,8 +44,10 @@ export const useFetchToken = () => {
   } = useSWR<string, Error>("/session-token", fetchSessionToken, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    shouldRetryOnError: false,
+    shouldRetryOnError: true,
     dedupingInterval: 60000,
+    errorRetryCount: 3,
+    errorRetryInterval: 5000,
   });
 
   const refreshToken = useCallback(() => {
@@ -56,10 +61,10 @@ export const useFetchToken = () => {
           `Issued At: ${formatTimestamp(iat)}, Expires At: ${formatTimestamp(exp)}, Expires In: ${expiresIn} seconds`,
         );
 
-        if (expiresIn > 60) {
+        if (expiresIn > 300) {
           tokenRefreshTimeoutRef.current = setTimeout(
             mutate,
-            (expiresIn - 60) * 1000,
+            (expiresIn - 300) * 1000,
           );
         } else {
           mutate();

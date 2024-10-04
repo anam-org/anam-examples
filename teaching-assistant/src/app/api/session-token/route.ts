@@ -22,7 +22,7 @@ export async function GET() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
-        cache: 'no-cache',
+        cache: "no-store",
       },
     });
 
