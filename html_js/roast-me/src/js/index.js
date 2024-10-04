@@ -99,14 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
     submitRoastButton.addEventListener('click', async (e) => {
       e.preventDefault();
 
-      console.log('Submit button clicked, checking rate limit...');
       const rateLimitError = checkRateLimit();
       if (rateLimitError) {
         console.log('Rate limit error:', rateLimitError);
         alert(rateLimitError);
         return;
       }
-      console.log('Rate limit passed, proceeding with roast...');
 
       const userInputText = userInput.value;
       console.log('User input:', userInputText);

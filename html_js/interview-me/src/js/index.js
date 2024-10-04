@@ -85,14 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
     startInterviewButton.addEventListener('click', async (e) => {
       e.preventDefault();
 
-      console.log('Start button clicked, checking rate limit...');
       const rateLimitError = checkRateLimit();
       if (rateLimitError) {
         console.log('Rate limit error:', rateLimitError);
         alert(rateLimitError);
         return;
       }
-      console.log('Rate limit passed, proceeding with interview...');
 
       const interviewSetupText = interviewSetup.value;
       console.log('Interview setup:', interviewSetupText);
