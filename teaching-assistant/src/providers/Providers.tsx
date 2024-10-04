@@ -8,8 +8,7 @@ import {
   ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
-import { useEffect } from "react";
-import { ReactNode } from "react";
+import { useEffect, ReactNode } from "react";
 import { logger } from "@/utils";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -21,20 +20,20 @@ export function Providers({ children }: { children: ReactNode }) {
     }
   }, [error]);
 
-  if (!sessionToken) {
-    return (
-      <Flex align="center" justify="center" height="100vh" width="100vw">
-        <Spinner size="3" />
-        <Text>Loading...</Text>
-      </Flex>
-    );
-  }
-
   return (
-    <AnamContextProvider sessionToken={sessionToken}>
+    <AnamContextProvider sessionToken={sessionToken || ""}>
       <SettingsContextProvider>
         <AudioPermissionProvider>
-          <ViewContextProvider>{children}</ViewContextProvider>
+          <ViewContextProvider>
+            {!sessionToken ? (
+              <Flex align="center" justify="center" height="100vh" width="100vw">
+                <Spinner size="3" />
+                <Text>Loading...</Text>
+              </Flex>
+            ) : (
+              children
+            )}
+          </ViewContextProvider>
         </AudioPermissionProvider>
       </SettingsContextProvider>
     </AnamContextProvider>

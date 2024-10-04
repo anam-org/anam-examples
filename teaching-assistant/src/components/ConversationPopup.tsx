@@ -38,7 +38,7 @@ export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
       >
         {/* Chat Header */}
         <Flex justify="between" className="p-1 border-b">
-          <Text>Chat</Text>
+          <Text className="dark:text-black">Chat</Text>
           <Popover.Close>
             <IconButton variant="ghost">
               <X size={18} />

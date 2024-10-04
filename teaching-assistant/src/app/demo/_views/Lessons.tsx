@@ -97,20 +97,20 @@ export function LessonsView() {
 
     if (isPlaying && timeLeft > 0) {
       timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
+        setTimeLeft((prevTime) => {
+          if (prevTime > 0) return prevTime - 1;
+          return prevTime;
+        });
       }, 1000);
     }
 
-    if (timeLeft === 0 && timer) {
-      clearInterval(timer);
+    if (timeLeft === 0) {
       stopStreaming();
       router.push("/");
     }
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      if (timer) clearInterval(timer);
     };
   }, [isPlaying, timeLeft, router]);
 
