@@ -1,0 +1,96 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  color: #333;
+}
+
+#roast-form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#user-input {
+  width: 350px;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  resize: vertical;
+}
+
+#submit-roast {
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+#video-container {
+  width: 720px;
+  height: 720px;
+  margin: 0 0 20px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#video-stream {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+}
+
+#audio-stream {
+  display: none;
+}
+
+#loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#loading-spinner img {
+  width: 100px;
+  height: 100px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#stop-roast {
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#stop-roast:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
