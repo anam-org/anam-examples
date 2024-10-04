@@ -6,6 +6,8 @@ export async function onRequestPost(context) {
   const env = context.env;
   const request = context.request;
 
+  console.log("ANAM_API_KEY:", env.ANAM_API_KEY);
+
   try {
     const { name, description, personaPreset, systemPrompt, personality, fillerPhrases, userInput } = await request.json();
 

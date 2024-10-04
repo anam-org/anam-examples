@@ -22,9 +22,9 @@ enabled = true
 # - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
-# [vars]
-# ANAM_API_KEY = "..."
-# AZURE_GPT_API_KEY = "..."
+[vars]
+ANAM_API_KEY = "your_api_key_here"
+AZURE_GPT_API_KEY = "your_azure_gpt_api_key_here"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
@@ -113,3 +113,11 @@ enabled = true
 # [[vectorize]]
 # binding = "MY_INDEX"
 # index_name = "my-index"
+
+[build]
+command = "npm run build:js"
+pages_build_output_dir = "dist"
+
+[site]
+bucket = "./"
+entry-point = "src/index.js"
