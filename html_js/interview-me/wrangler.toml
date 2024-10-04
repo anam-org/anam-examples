@@ -3,6 +3,7 @@ name = "interview-me"
 main = "src/index.js"
 compatibility_date = "2024-09-25"
 compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
@@ -113,11 +114,3 @@ AZURE_GPT_API_KEY = "your_azure_gpt_api_key_here"
 # [[vectorize]]
 # binding = "MY_INDEX"
 # index_name = "my-index"
-
-[build]
-command = "npm run build:js"
-pages_build_output_dir = "dist"
-
-[site]
-bucket = "./"
-entry-point = "src/index.js"
