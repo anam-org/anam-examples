@@ -1,15 +1,26 @@
 "use client";
 
 import { Heading, Text } from "@radix-ui/themes";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Book,
+  Clipboard,
+  Pencil,
+  BarChart,
+  Settings,
+  X,
+  BrainCircuit,
+} from "lucide-react";
 import { useViewContext, useAnamContext } from "@/contexts";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 
 interface MenuItem {
   title: string;
   navigateTo: string;
-  src: string;
+  Icon: React.ComponentType<any>;
   gap?: boolean;
   clickable: boolean;
 }
@@ -19,39 +30,40 @@ export const NavigationSidebar = () => {
   const { currentView, changeView } = useViewContext();
   const { anamClient } = useAnamContext();
   const router = useRouter();
+  const { theme } = useTheme();
 
   const Menus: MenuItem[] = [
-    { title: "Lessons", navigateTo: "Lessons", src: "Book", clickable: true },
+    { title: "Lessons", navigateTo: "Lessons", Icon: Book, clickable: true },
     {
       title: "Vocabulary",
       navigateTo: "Vocabulary",
-      src: "Clipboard",
+      Icon: Clipboard,
       clickable: false,
     },
     {
       title: "Practice",
       navigateTo: "Practice",
-      src: "Pencil",
+      Icon: Pencil,
       clickable: false,
       gap: true,
     },
     {
       title: "Progress",
       navigateTo: "Progress",
-      src: "BarChart",
+      Icon: BarChart,
       clickable: false,
     },
     {
       title: "Settings",
       navigateTo: "Settings",
-      src: "Settings",
+      Icon: Settings,
       clickable: true,
       gap: true,
     },
     {
       title: "Exit",
       navigateTo: "Initial",
-      src: "X",
+      Icon: X,
       clickable: true,
       gap: true,
     },
@@ -71,32 +83,36 @@ export const NavigationSidebar = () => {
         open
           ? "w-[20vw] min-w-[200px] max-w-[400px]"
           : "w-[5vw] min-w-[50px] max-w-[80px]"
-      } bg-dark-purple h-screen p-5 pt-8 fixed top-0 left-0 z-50 transition-all duration-300 border-r border-gray-200 shadow-lg`}
+      } h-screen p-5 pt-8 fixed top-0 left-0 z-50 transition-all duration-300 border-r border-gray-200 dark:border-gray-500 shadow-lg`}
     >
       {/* Toggle Button */}
       <div
-        className="absolute cursor-pointer -right-3 top-9 w-7 bg-black border-gray-200 border-2 rounded-full"
+        className="absolute cursor-pointer -right-3 top-9 w-7 h-7 bg-black dark:bg-white border border-gray-200 dark:border-gray-700 rounded-full flex items-center justify-center"
         onClick={() => setOpen(!open)}
       >
-        {open ? <ChevronLeft color="white" /> : <ChevronRight color="white" />}
+        {open ? (
+          <ChevronLeft stroke={theme === "dark" ? "black" : "white"} />
+        ) : (
+          <ChevronRight stroke={theme === "dark" ? "black" : "white"} />
+        )}
       </div>
       {/* Heading and Icon */}
       <div className="flex gap-x-4 items-center mb-6">
-        <img
-          src="/icons/Brain.svg"
+        <BrainCircuit
           className={`cursor-pointer duration-500 w-10 h-10 ${
             open && "rotate-[360deg]"
           }`}
+          stroke={theme === "dark" ? "white" : "black"}
         />
         {open && (
-          <Heading className="origin-left font-medium text-xl duration-200">
+          <Heading className="origin-left font-medium text-xl duration-200 text-gray-900 dark:text-white">
             Teacher
           </Heading>
         )}
       </div>
       {/* Menu Items */}
       <ul className="pt-6">
-        {Menus.map(({ title, navigateTo, src, gap, clickable }) => (
+        {Menus.map(({ title, navigateTo, Icon, gap, clickable }) => (
           <li
             key={title}
             onClick={() => {
@@ -112,18 +128,24 @@ export const NavigationSidebar = () => {
               gap ? "mt-9" : "mt-2"
             } ${
               currentView === navigateTo
-                ? "bg-gray-200"
+                ? "bg-gray-200 dark:bg-gray-700"
                 : clickable
-                  ? "hover:bg-gray-100"
-                  : "opacity-50"
-            } ${clickable ? "" : "pointer-events-none"}`}
+                ? "hover:bg-gray-100 dark:hover:bg-gray-800"
+                : "opacity-50"
+            } ${clickable ? "" : "pointer-events-none"} ${
+              open ? "" : "justify-center"
+            }`}
           >
-            <img
-              src={`/icons/${src}.svg`}
-              className={`w-[4vw] min-w-[20px] max-w-[30px] h-auto`}
+            <Icon
+              width={open ? 24 : 20}
+              height={open ? 24 : 20}
+              stroke={theme === "dark" ? "white" : "black"}
             />
             {open && (
-              <Text as="span" className="origin-left duration-200">
+              <Text
+                as="span"
+                className="origin-left duration-200 text-gray-900 dark:text-white"
+              >
                 {title}
               </Text>
             )}

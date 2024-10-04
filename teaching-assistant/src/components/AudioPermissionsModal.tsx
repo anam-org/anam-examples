@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { Mic, MicOff, X } from "lucide-react";
 import { useAudioPermissionContext } from "@/contexts";
+import { useTheme } from "next-themes";
 
 interface AudioPermissionsModalProps {
   onClose: () => void;
@@ -34,6 +35,8 @@ export function AudioPermissionsModal({
   } = useAudioPermissionContext();
 
   const [isMicOn, setIsMicOn] = useState(true);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     requestAudioPermissions();
@@ -57,7 +60,7 @@ export function AudioPermissionsModal({
       {/* Overlay */}
       <Box className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
       {/* Modal */}
-      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-9 w-[clamp(300px,90vw,600px)] h-[clamp(300px,60vh,400px)] grid-cols-1">
+      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-85 dark:bg-opacity-95 border border-gray-300 dark:border-gray-600 rounded-lg z-[1000] p-9 w-[clamp(300px,90vw,600px)] h-[clamp(300px,60vh,400px)] grid-cols-1">
         <IconButton
           variant="ghost"
           className="absolute top-2 right-2"
@@ -65,10 +68,14 @@ export function AudioPermissionsModal({
         >
           <X />
         </IconButton>
-        <Heading as="h2" size="3" className="text-center">
+        <Heading
+          as="h2"
+          size="3"
+          className="text-center text-gray-900 dark:text-white"
+        >
           Ready to Start?
         </Heading>
-        <Text className="text-center">
+        <Text className="text-center text-gray-700 dark:text-gray-300">
           Before proceeding, we need to check your microphone.
         </Text>
         {audioErrorMessage && (

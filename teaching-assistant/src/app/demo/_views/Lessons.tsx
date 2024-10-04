@@ -191,7 +191,7 @@ export function LessonsView() {
     <Flex>
       <Flex direction="column" className="flex-1">
         <Flex direction="column" align="center" className="p-5 h-full">
-          <Box className="bg-gray-200 w-auto h-[85vh] aspect-square mx-auto relative flex justify-center">
+          <Box className="border-lg bg-gray-200 w-auto h-[85vh] aspect-square mx-auto relative flex justify-center">
             <video
               id="avatar-video"
               ref={videoRef}

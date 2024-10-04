@@ -3,6 +3,7 @@
 import constate from "constate";
 import { useState } from "react";
 import { useAnamContext } from "@/contexts";
+import { useTheme } from 'next-themes';
 
 export type PersonaType = "friendly" | "professional" | "formal";
 export type LanguageType = "french" | "spanish" | "german";
@@ -13,12 +14,13 @@ interface PersonaConfig {
 
 const useSettings = () => {
   const { setPersonaConfig } = useAnamContext();
+  const { theme } = useTheme();
 
   const [selectedLanguage, setSelectedLanguage] =
     useState<LanguageType>("french");
   const [selectedPersona, setSelectedPersona] =
     useState<PersonaType>("friendly");
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(theme === 'light');
 
   const personaConfigurations: Record<
     LanguageType,

@@ -4,6 +4,7 @@ import { useFetchToken } from "@/hooks";
 import {
   AnamContextProvider,
   AudioPermissionProvider,
+  SettingsContextProvider,
   ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
@@ -30,10 +31,14 @@ export function Providers({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AudioPermissionProvider>
-      <AnamContextProvider sessionToken={sessionToken}>
-        <ViewContextProvider>{children}</ViewContextProvider>
-      </AnamContextProvider>
-    </AudioPermissionProvider>
+    <AnamContextProvider sessionToken={sessionToken}>
+      <SettingsContextProvider>
+        <AudioPermissionProvider>
+            <ViewContextProvider>
+              {children}
+            </ViewContextProvider>
+        </AudioPermissionProvider>
+      </SettingsContextProvider>
+    </AnamContextProvider>
   );
 }

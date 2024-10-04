@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Theme } from "@radix-ui/themes";
 import { Providers } from "@/providers";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "ANAM AI",
@@ -19,14 +20,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={GeistSans.className}>
         <Providers>
-          <Theme
-            accentColor="gray"
-            grayColor="slate"
-            scaling="110%"
-            radius="large"
-          >
-            {children}
-          </Theme>
+          <ThemeProvider attribute="class">
+            <Theme
+              accentColor="gray"
+              grayColor="slate"
+              scaling="110%"
+              radius="large"
+            >
+              {children}
+            </Theme>
+          </ThemeProvider>
         </Providers>
       </body>
     </html>
