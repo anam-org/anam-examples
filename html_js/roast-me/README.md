@@ -77,7 +77,7 @@ To deploy the Roast Me app to Cloudflare Pages:
 
 ## Configuration
 
-- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables or in the `wrangler.toml` file.
+- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables (production and preview) or in the `wrangler.toml` file. For local development, you can also add it to the `.dev.vars` file.
 - Modify the `src/js/index.js` file to customize the roast generation logic or adjust the Anam SDK integration.
 
 ## Troubleshooting

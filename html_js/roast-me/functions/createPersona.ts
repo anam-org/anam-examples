@@ -21,7 +21,6 @@ export async function onRequestPost(context) {
         fillerPhrases: fillerPhrases || ["ummm", "well", "ermm", "so", "ok"]
       }
     };
-
     console.log("Payload being sent to Anam API:", JSON.stringify(payload, null, 2));
 
     const response = await fetch('https://api.anam.ai/v1/personas', {
