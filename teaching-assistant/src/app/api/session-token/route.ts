@@ -13,7 +13,6 @@ export async function GET() {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 
-  logger.info(`API Key found: ${apiKey.slice(0, 4)}...****`);
   logger.info("Fetching session token...");
 
   try {

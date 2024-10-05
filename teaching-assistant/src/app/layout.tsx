@@ -19,18 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-          <ThemeProvider attribute="class">
-            <Theme
-              accentColor="gray"
-              grayColor="slate"
-              scaling="110%"
-              radius="large"
-            >
-              <Providers>
-                {children}
-              </Providers>
-            </Theme>
-          </ThemeProvider>
+        <ThemeProvider attribute="class">
+          <Theme
+            accentColor="gray"
+            grayColor="slate"
+            scaling="110%"
+            radius="large"
+          >
+            <Providers>{children}</Providers>
+          </Theme>
+        </ThemeProvider>
       </body>
     </html>
   );
