@@ -1,6 +1,20 @@
 import { createClient } from "@anam-ai/js-sdk";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 
+function checkRateLimit() {
+  const RATE_LIMIT_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
+  const lastRequestTime = localStorage.getItem('lastInterviewRequestTime');
+  const currentTime = Date.now();
+
+  if (lastRequestTime && currentTime - parseInt(lastRequestTime) < RATE_LIMIT_DURATION) {
+    const remainingTime = Math.ceil((RATE_LIMIT_DURATION - (currentTime - parseInt(lastRequestTime))) / 1000 / 60);
+    return `Rate limit exceeded. Please try again in ${remainingTime} minutes.`;
+  }
+
+  localStorage.setItem('lastInterviewRequestTime', currentTime.toString());
+  return null;
+}
+
 async function getSessionToken() {
   try {
     const response = await fetch(`/getSessionToken`);
@@ -29,10 +43,10 @@ async function createNewPersona(interviewSetup) {
         name: "Interviewer",
         description: "An interviewer for job practice.",
         personaPreset: "leo_desk",
-        systemPrompt: `You are an interviewer conducting a job interview. The interview setup is as follows: ${interviewSetup}. Always ask one question. Keep responses brief.`,
+        systemPrompt: `You are an interviewer conducting a job interview. The interview setup as given from the user is as follows: ${interviewSetup}. Always ask one question. Keep responses brief.`,
         personality: "You are interviewing the user.",
         fillerPhrases: ["Hmmm..", "I see..", "Interesting..", "Okay..", "Alright..", "Well..", "Thank you.."],
-        userInput: interviewSetup
+        userInput: undefined  // No user input needed as it's already provided in the interview setup
       })
     });
 
@@ -70,6 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (startInterviewButton) {
     startInterviewButton.addEventListener('click', async (e) => {
       e.preventDefault();
+
+      const rateLimitError = checkRateLimit();
+      if (rateLimitError) {
+        console.log('Rate limit error:', rateLimitError);
+        alert(rateLimitError);
+        return;
+      }
+
       const interviewSetupText = interviewSetup.value;
       console.log('Interview setup:', interviewSetupText);
 

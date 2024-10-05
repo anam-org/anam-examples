@@ -15,6 +15,7 @@ async function getSessionToken() {
     throw error;
   }
 }
+
 async function createNewPersona(userInput) {
   try {
     console.log('Sending request to create new persona');
@@ -24,7 +25,15 @@ async function createNewPersona(userInput) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userInput })
+      body: JSON.stringify({
+        name: `persona_unknown`, 
+        description: "Roast-master",
+        personaPreset: "leo_desk",
+        systemPrompt: "You are a roast master, here to roast the user. Don't hold back, the user loves being roasted.",
+        personality: "You are a roast master, here to roast the user with the given user input.",
+        fillerPhrases: ["Ummm..", "Well..", "Ermm..", "So..", "Ok.."],
+        userInput: userInput
+      })
     });
 
     console.log('Response status:', response.status);
@@ -61,6 +70,21 @@ async function createNewPersona(userInput) {
   }
 }
 
+// Add this function to call the rateLimit worker
+function checkRateLimit() {
+  const RATE_LIMIT_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
+  const lastRequestTime = localStorage.getItem('lastRoastRequestTime');
+  const currentTime = Date.now();
+
+  if (lastRequestTime && currentTime - parseInt(lastRequestTime) < RATE_LIMIT_DURATION) {
+    const remainingTime = Math.ceil((RATE_LIMIT_DURATION - (currentTime - parseInt(lastRequestTime))) / 1000 / 60);
+    return `Rate limit exceeded. Please try again in ${remainingTime} minutes.`;
+  }
+
+  localStorage.setItem('lastRoastRequestTime', currentTime.toString());
+  return null;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const submitRoastButton = document.getElementById('submit-roast');
@@ -74,6 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (submitRoastButton) {
     submitRoastButton.addEventListener('click', async (e) => {
       e.preventDefault();
+
+      const rateLimitError = checkRateLimit();
+      if (rateLimitError) {
+        console.log('Rate limit error:', rateLimitError);
+        alert(rateLimitError);
+        return;
+      }
+
       const userInputText = userInput.value;
       console.log('User input:', userInputText);
 
