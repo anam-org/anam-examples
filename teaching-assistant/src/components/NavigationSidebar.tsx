@@ -16,6 +16,7 @@ import { useViewContext, useAnamContext } from "@/contexts";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import { logger } from "@/utils";
 
 interface MenuItem {
   title: string;
@@ -69,9 +70,28 @@ export const NavigationSidebar = () => {
     },
   ];
 
+  const handleMenuClick = async (navigateTo: string, clickable: boolean) => {
+    if (!clickable) return;
+
+    if (navigateTo === "Initial") {
+      await handleExitClick();
+    } else {
+      if (currentView === "Lessons" && navigateTo !== "Lessons") {
+        if (anamClient) {
+          await anamClient.stopStreaming().catch((error) => {
+            logger.error("Failed to stop streaming:", error);
+          });
+        }
+      }
+      changeView(navigateTo);
+      logger.info("stopped streaming");
+    }
+  };
+
   const handleExitClick = async () => {
     if (anamClient) {
       await anamClient.stopStreaming().catch(console.error);
+      logger.info("stopped streaming");
     }
     router.push("/");
     changeView("Settings");
@@ -115,15 +135,7 @@ export const NavigationSidebar = () => {
         {Menus.map(({ title, navigateTo, Icon, gap, clickable }) => (
           <li
             key={title}
-            onClick={() => {
-              if (clickable) {
-                if (navigateTo === "Initial") {
-                  handleExitClick();
-                } else {
-                  changeView(navigateTo);
-                }
-              }
-            }}
+            onClick={() => handleMenuClick(navigateTo, clickable)}
             className={`flex rounded-md p-2 cursor-pointer items-center gap-x-4 text-sm ${
               gap ? "mt-9" : "mt-2"
             } ${

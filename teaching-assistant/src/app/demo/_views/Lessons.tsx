@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Flex,
   Text,
@@ -25,6 +25,9 @@ export function LessonsView() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { anamClient, isClientInitialized } = useAnamContext();
   const { selectedLanguage } = useSettingsContext();
+  const router = useRouter();
+
+  const INITIAL_TIME_LEFT = 120;
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [loadingText, setLoadingText] = useState("Connecting...");
@@ -32,52 +35,52 @@ export function LessonsView() {
   const [conversation, setConversation] = useState<
     { sender: string; text: string }[]
   >([]);
-  const [timeLeft, setTimeLeft] = useState(120);
-  const router = useRouter();
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME_LEFT);
 
-  const handleMuteToggle = () => {
+  const streamingStartedRef = useRef(false);
+  const listenersAddedRef = useRef(false);
+
+  const handlePlayPauseToggle = useCallback(() => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
+      isPlaying ? videoRef.current.pause() : videoRef.current.play();
     }
-    setIsMuted(!isMuted);
-  };
+  }, [isPlaying]);
 
-  const handlePlayPauseToggle = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
+  const requestFullscreen = useCallback(() => {
+    const video = videoRef.current;
+    if (video) {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
       }
     }
-    setIsPlaying(!isPlaying);
-  };
+  }, []);
 
-  const handleFullScreen = () => {
-    if (videoRef.current) {
-      videoRef.current.requestFullscreen();
-    }
-  };
-
-  const stopStreaming = () => {
+  const stopStreaming = useCallback(() => {
     if (anamClient) {
-      anamClient.stopStreaming().catch(errorHandler);
+      anamClient.stopStreaming().catch((error) => {
+        errorHandler(error);
+        console.error("Failed to stop streaming:", error);
+      });
     }
-  };
+  }, [anamClient]);
 
-  const onConnectionEstablished = () => {
+  const onConnectionEstablished = useCallback(() => {
     setLoadingText("Connected to a Persona. Starting video stream...");
     setStreamError(null);
     logger.info("Connection established");
-  };
+  }, []);
 
-  const onVideoStartedStreaming = () => {
+  const onVideoStartedStreaming = useCallback(() => {
     setLoadingText("");
     setStreamError(null);
     logger.info("Video started streaming");
-  };
+  }, []);
 
-  const updateConversation = (updatedMessages: Message[]) => {
+  const onConnectionClosed = useCallback((reason: string) => {
+    logger.info("Connection closed", reason);
+  }, []);
+
+  const updateConversation = useCallback((updatedMessages: Message[]) => {
     const mappedMessages = updatedMessages.map((message) => ({
       sender:
         message.role === MessageRole.PERSONA
@@ -86,87 +89,49 @@ export function LessonsView() {
       text: message.content,
     }));
     setConversation(mappedMessages);
-  };
+  }, []);
 
-  const onConnectionClosed = (reason: string) => {
-    logger.info("Connection closed", reason);
-  };
+  const formatTime = (time: number) =>
+    `${Math.floor(time / 60)}:${String(time % 60).padStart(2, "0")}`;
 
+  // Handle the timer
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-
-    if (isPlaying && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime > 0) return prevTime - 1;
-          return prevTime;
-        });
-      }, 1000);
-    }
-
     if (timeLeft === 0) {
-      stopStreaming();
+      if (streamingStartedRef.current) {
+        stopStreaming();
+        streamingStartedRef.current = false;
+      }
       router.push("/");
     }
-
+    const timer =
+      isPlaying && timeLeft > 0
+        ? setInterval(() => setTimeLeft((prev) => prev - 1), 1000)
+        : undefined;
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isPlaying, timeLeft, router]);
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-
-  const progressValue = ((120 - timeLeft) / 120) * 100;
+  }, [isPlaying, timeLeft, stopStreaming, router]);
 
   useEffect(() => {
-    const startStreaming = async () => {
-      if (
-        !isClientInitialized ||
-        !anamClient ||
-        !videoRef.current ||
-        !audioRef.current
-      ) {
-        return;
-      }
-
-      try {
-        anamClient.addListener(
-          AnamEvent.CONNECTION_ESTABLISHED,
-          onConnectionEstablished,
-        );
-        anamClient.addListener(
-          AnamEvent.VIDEO_PLAY_STARTED,
-          onVideoStartedStreaming,
-        );
-        anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
-        await anamClient.streamToVideoAndAudioElements(
-          videoRef.current.id,
-          audioRef.current.id,
-        );
-        anamClient.addListener(
-          AnamEvent.MESSAGE_HISTORY_UPDATED,
-          updateConversation,
-        );
-      } catch (error) {
-        errorHandler(error);
-        setStreamError(
-          "Failed to start streaming: Unauthorized or invalid session",
-        );
-      }
-    };
-
-    startStreaming();
-
-    window.addEventListener("beforeunload", stopStreaming);
+    if (anamClient && !listenersAddedRef.current) {
+      anamClient.addListener(
+        AnamEvent.CONNECTION_ESTABLISHED,
+        onConnectionEstablished,
+      );
+      anamClient.addListener(
+        AnamEvent.VIDEO_PLAY_STARTED,
+        onVideoStartedStreaming,
+      );
+      anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
+      anamClient.addListener(
+        AnamEvent.MESSAGE_HISTORY_UPDATED,
+        updateConversation,
+      );
+      listenersAddedRef.current = true;
+    }
 
     return () => {
-      stopStreaming();
-      window.removeEventListener("beforeunload", stopStreaming);
-      if (anamClient) {
+      if (anamClient && listenersAddedRef.current) {
         anamClient.removeListener(
           AnamEvent.CONNECTION_ESTABLISHED,
           onConnectionEstablished,
@@ -183,9 +148,56 @@ export function LessonsView() {
           AnamEvent.MESSAGE_HISTORY_UPDATED,
           updateConversation,
         );
+        setConversation([]);
+        listenersAddedRef.current = false;
       }
     };
-  }, [isClientInitialized, anamClient]);
+  }, [
+    anamClient,
+    onConnectionEstablished,
+    onVideoStartedStreaming,
+    onConnectionClosed,
+    updateConversation,
+  ]);
+
+  useEffect(() => {
+    const startStreaming = async () => {
+      if (
+        !isClientInitialized ||
+        !anamClient ||
+        !videoRef.current ||
+        !audioRef.current ||
+        streamingStartedRef.current
+      )
+        return;
+
+      try {
+        await anamClient.streamToVideoAndAudioElements(
+          videoRef.current.id,
+          audioRef.current.id,
+        );
+        streamingStartedRef.current = true;
+      } catch (error) {
+        streamingStartedRef.current = false;
+        errorHandler(error);
+        const message =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        setStreamError(message);
+      }
+    };
+
+    startStreaming();
+
+    return () => {
+      if (streamingStartedRef.current) {
+        stopStreaming();
+        streamingStartedRef.current = false;
+      }
+    };
+  }, [isClientInitialized, anamClient, videoRef, audioRef, stopStreaming]);
+
+  const progressValue =
+    ((INITIAL_TIME_LEFT - timeLeft) / INITIAL_TIME_LEFT) * 100;
 
   return (
     <Flex>
@@ -199,6 +211,8 @@ export function LessonsView() {
               playsInline
               className="w-full h-full object-cover rounded-lg"
               muted={isMuted}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
             />
             <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
             <Flex
@@ -210,16 +224,14 @@ export function LessonsView() {
                 <Text size="2" className="text-red-500">
                   {streamError}
                 </Text>
-              ) : (
-                loadingText && (
-                  <>
-                    <Spinner size="3" />
-                    <Text size="2" className="dark:text-black">
-                      {loadingText}
-                    </Text>
-                  </>
-                )
-              )}
+              ) : loadingText ? (
+                <>
+                  <Spinner size="3" />
+                  <Text size="2" className="dark:text-black">
+                    {loadingText}
+                  </Text>
+                </>
+              ) : null}
             </Flex>
             <Flex
               justify="center"
@@ -235,14 +247,14 @@ export function LessonsView() {
               </IconButton>
               <IconButton
                 variant="solid"
-                onClick={handleMuteToggle}
+                onClick={() => setIsMuted((prev) => !prev)}
                 className="p-2 rounded-full mx-1"
               >
                 {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </IconButton>
               <IconButton
                 variant="solid"
-                onClick={handleFullScreen}
+                onClick={requestFullscreen}
                 className="p-2 rounded-full mx-1"
               >
                 <Maximize2 size={24} />
@@ -256,7 +268,6 @@ export function LessonsView() {
               <ConversationPopup conversation={conversation} />
             </Flex>
           </Box>
-          {/* Progress Bar Section */}
           <Flex direction="column" align="center" className="p-4">
             <Progress
               color="mint"
@@ -270,7 +281,6 @@ export function LessonsView() {
           </Flex>
         </Flex>
       </Flex>
-      {/* Sidebar with Lessons */}
       <LessonsSidebar selectedLanguage={selectedLanguage} />
     </Flex>
   );
