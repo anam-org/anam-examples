@@ -1,3 +1,4 @@
 # Anam SDK Integration Examples
-This repository displays various SDK integration patterns for using the Anam SDK. 
-Each example folder includes it's own README file with instructions for running the specific example. 
+
+This repository demonstrates integration patterns for the Anam JavaScript SDK with various web development frameworks.
+Each example folder includes it's own README file with instructions for running the specific example.

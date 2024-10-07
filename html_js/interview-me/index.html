@@ -1,0 +1,41 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Interview Me</title>
+        <link rel="stylesheet" href="/global.css">
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.8/purify.min.js"></script>
+    </head>
+    <body>
+        <div id="interviewer-image">
+            <img src="/interviewer.jpg" alt="Interviewer">
+        </div>
+        <div id="interview-form">
+            <textarea id="interview-setup" rows="5" placeholder="Describe who's interviewing you and what the job is..."></textarea>
+            <button id="start-interview">Interview Me</button>
+        </div>
+        <div id="video-container" style="display: none;">
+            <div id="loading-spinner">
+                <img src="/loading_spinner.png" alt="Loading">
+            </div>
+            <video id="video-stream" autoplay playsinline></video>
+        </div>
+        <audio id="audio-stream" autoplay></audio>
+        <div id="stream-controls" style="display: none;">
+            <button id="end-interview" disabled>Stop Interview</button>
+        </div>
+        <div id="feedback-container" style="display: none;">
+            <div id="feedback-loading-spinner">
+                <img src="/loading_spinner.png" alt="Loading">
+            </div>
+            <div id="feedback-content" style="display: none;">
+                <h2>You got the job!</h2>
+                <div id="feedback-text"></div>
+                <button id="return-to-start">Start New Interview</button>
+            </div>
+        </div>
+        <script src="/dist/bundle.js"></script>
+    </body>
+    </html>

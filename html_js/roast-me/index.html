@@ -1,0 +1,27 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Roast Me</title>
+        <link rel="stylesheet" href="/global.css">
+    </head>
+    <body>
+        <h1>Roast Me</h1>
+        <div id="roast-form">
+            <textarea id="user-input" rows="5" placeholder="Enter some information about yourself..."></textarea>
+            <button id="submit-roast">Roast Me</button>
+        </div>
+        <div id="video-container" style="display: none;">
+            <div id="loading-spinner">
+                <img src="/chicken.png" alt="Loading">
+            </div>
+            <video id="video-stream" autoplay playsinline></video>
+        </div>
+        <audio id="audio-stream" autoplay></audio>
+        <div id="stream-controls" style="display: none;">
+            <button id="stop-roast" disabled>Stop Roast</button>
+        </div>
+        <script src="/dist/bundle.js"></script>
+    </body>
+    </html>
