@@ -72,7 +72,7 @@ export function SettingsView() {
             <Card
               key={key}
               className={`cursor-pointer p-4 bg-white dark:bg-gray-700 shadow-lg transition transform hover:scale-105 ${
-                selectedScenario === key ? "ring-4 ring-blue-500" : ""
+                selectedScenario === key ? "ring-4 ring-[#86EAD4]" : ""
               }`}
               onClick={() => handleScenarioSelect(key)}
             >
