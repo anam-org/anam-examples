@@ -411,15 +411,12 @@ const RightPanel = ({
         <Heading as="h2" size="3" mb="3" weight="medium">
           Key Steps for Support Agent
         </Heading>
-        <ul>
+        <ul className="list-disc list-inside pl-2">
           {scenario.instructions.map((instruction, index) => (
-            <li key={index}>
-              <Flex align="center" mb="1">
-                <Dot size="30" />
-                <Text as="span" className="ml-2">
-                  {instruction}
-                </Text>
-              </Flex>
+            <li key={index} className="mb-1">
+              <Text as="span" size="2">
+                {instruction}
+              </Text>
             </li>
           ))}
         </ul>
