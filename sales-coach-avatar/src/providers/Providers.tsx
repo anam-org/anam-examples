@@ -1,22 +1,41 @@
 "use client";
 
-import { useFetchToken } from "@/hooks";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
-import { useEffect } from "react";
-import { toast, Toaster } from "sonner";
+import { useEffect, useState } from "react";
 import { ReactNode } from "react";
-import { AnamContextProvider, VideoAudioPermissionProvider } from "@/contexts";
+import {
+  AnamContextProvider,
+  SettingsContextProvider,
+  VideoAudioPermissionProvider,
+  ViewContextProvider,
+} from "@/contexts";
+import { fetchSessionToken } from "@/utils/fetchSessionToken";
+import { logger } from "@/utils";
 
 export function Providers({ children }: { children: ReactNode }) {
-  const { data: sessionToken, error, isValidating } = useFetchToken();
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (error) {
-      toast.error(`Error: ${error?.message || "Unknown error occurred"}`);
-    }
-  }, [error]);
+    const initializeClient = async () => {
+      try {
+        const token = await fetchSessionToken();
+        setSessionToken(token);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error("Unknown error occurred"),
+        );
+        logger.error("Failed to fetch session token", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (isValidating) {
+    initializeClient();
+  }, []);
+
+  if (loading) {
     return (
       <Flex align="center" justify="center" height="100vh" width="100vw">
         <Spinner size="3" />
@@ -25,11 +44,20 @@ export function Providers({ children }: { children: ReactNode }) {
     );
   }
 
+  if (error) {
+    return (
+      <Flex align="center" justify="center" height="100vh" width="100vw">
+        <Text>Error: {error.message}</Text>
+      </Flex>
+    );
+  }
+
   return (
     <VideoAudioPermissionProvider>
-      <AnamContextProvider sessionToken={sessionToken}>
-        {children}
-        <Toaster />
+      <AnamContextProvider sessionToken={sessionToken || ""}>
+        <ViewContextProvider>
+          <SettingsContextProvider>{children}</SettingsContextProvider>
+        </ViewContextProvider>
       </AnamContextProvider>
     </VideoAudioPermissionProvider>
   );

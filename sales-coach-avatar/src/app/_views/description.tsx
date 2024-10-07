@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Box,
@@ -10,8 +12,93 @@ import {
   Strong,
 } from "@radix-ui/themes";
 import { VolumeOff, X } from "lucide-react";
-import { useViewContext } from "@/contexts";
+import { useViewContext, useSettingsContext, ScenarioType } from "@/contexts";
 import { PermissionsModal } from "@/components";
+
+const scenarioDetails: Record<
+  ScenarioType,
+  {
+    scenarioTitle: string;
+    instructions: string;
+    fullDescription: string;
+    briefDescription: string;
+    roleTitle: string;
+    customerName: string;
+    customerDescription: string;
+  }
+> = {
+  product_demo: {
+    scenarioTitle: "Product Demo",
+    instructions: "Demonstrate the product to a potential customer.",
+    fullDescription:
+      "In this scenario, you will present the product to a customer, emphasizing key features and addressing any questions they may have. The goal is to highlight the product's value and encourage the customer to proceed to the next stage of the sales process.",
+    briefDescription:
+      "In this scenario, you will present the product to a customer...",
+    roleTitle: "Sales Representative",
+    customerName: "Jordan",
+    customerDescription:
+      "Potential customer interested in learning more about your product.",
+  },
+  negotiation: {
+    scenarioTitle: "Negotiation",
+    instructions: "Negotiate pricing and terms with the customer.",
+    fullDescription:
+      "In this scenario, you will negotiate with the customer, discussing pricing and terms to come to a mutual agreement. It’s important to balance customer satisfaction with maintaining company profitability.",
+    briefDescription:
+      "In this scenario, you will negotiate with the customer...",
+    roleTitle: "Sales Negotiator",
+    customerName: "Taylor",
+    customerDescription:
+      "A customer who is interested but wants a better deal on the price.",
+  },
+  objection_handling: {
+    scenarioTitle: "Objection Handling",
+    instructions: "Handle customer objections effectively.",
+    fullDescription:
+      "In this scenario, you will handle customer objections regarding your product or service. It’s important to listen carefully, address concerns, and offer solutions that can help the customer move forward.",
+    briefDescription:
+      "In this scenario, you will handle customer objections...",
+    roleTitle: "Customer Support Representative",
+    customerName: "Alex",
+    customerDescription:
+      "A customer who has concerns or objections about your product or service.",
+  },
+  closing_deal: {
+    scenarioTitle: "Closing Deal",
+    instructions: "Close the deal with the customer.",
+    fullDescription:
+      "In this scenario, you will finalize the deal with the customer. You need to ensure that the customer is ready to commit and address any final concerns they may have before sealing the agreement.",
+    briefDescription:
+      "In this scenario, you will finalize the deal with the customer...",
+    roleTitle: "Sales Closer",
+    customerName: "Jamie",
+    customerDescription:
+      "A customer who is ready to finalize the deal but may need a final push.",
+  },
+  follow_up: {
+    scenarioTitle: "Follow Up",
+    instructions: "Follow up with the customer after the initial engagement.",
+    fullDescription:
+      "In this scenario, you will follow up with the customer after the initial engagement. The goal is to maintain rapport and address any ongoing needs or concerns the customer may have.",
+    briefDescription:
+      "In this scenario, you will follow up with the customer...",
+    roleTitle: "Customer Success Representative",
+    customerName: "Sam",
+    customerDescription:
+      "A customer who you have previously engaged with and now need to follow up with.",
+  },
+  customer_support: {
+    scenarioTitle: "Customer Support",
+    instructions: "Provide post-sale support to the customer.",
+    fullDescription:
+      "In this scenario, you will provide customer support after the sale. The customer may have questions or issues with the product or service that you need to resolve.",
+    briefDescription: "In this scenario, you will provide customer support...",
+    roleTitle: "Customer Support Specialist",
+    customerName: "Morgan",
+    customerDescription:
+      "A customer who needs help resolving a problem or question after the sale.",
+  },
+};
 
 const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
   <Flex justify="start" align="start" className="pt-6">
@@ -23,6 +110,7 @@ const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
 
 export function DescriptionView() {
   const { changeView } = useViewContext();
+  const { selectedScenario } = useSettingsContext(); // Get selected scenario
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
 
@@ -43,6 +131,8 @@ export function DescriptionView() {
     setShowFullText((prevState) => !prevState);
   };
 
+  const scenario = scenarioDetails[selectedScenario];
+
   return (
     <Box className="appcontainer">
       <BackButton changeView={changeView} />
@@ -57,13 +147,11 @@ export function DescriptionView() {
             Instructions
           </Heading>
           <Text as="p" mb="2" size="2">
-            During the simulation you will be conversing with an{" "}
-            <Strong>advanced AI system</Strong>, designed to mimic real-life
-            customer scenarios.
+            {scenario.instructions}
           </Text>
           <Text as="p" mb="3" size="2">
-            Your conversation will be scored and you will get actionable
-            feedback on your performance.
+            Your performance will be evaluated, and feedback will be provided on
+            how you handled the scenario.
           </Text>
           <Flex
             align="center"
@@ -71,7 +159,7 @@ export function DescriptionView() {
           >
             <VolumeOff />
             <Text as="p" size="2" className="ml-4">
-              Find a quiet space to focus on the conversation
+              Find a quiet space to focus on the conversation.
             </Text>
           </Flex>
         </Flex>
@@ -88,12 +176,12 @@ export function DescriptionView() {
             The Scenario
           </Heading>
           <Heading mb="2" as="h1" size="4">
-            Remove someone from my plan
+            {scenario.scenarioTitle}
           </Heading>
           <Text as="p" mb="3" size="2">
             {showFullText
-              ? "In this scenario, the support agent works for a major Telecommunications company. The customer, Patrick Bateman, is an existing subscriber of their services who recently experienced a significant personal loss — the death of a loved one. With this difficult transition, Patrick contacts the customer support team to remove the deceased from their joint account. Patrick has two main objectives: he wants to ensure that the removal happens in the next billing period and wishes to verify that the changes won’t disrupt any of his or the loved one’s services during the current billing period or result in unexpected charges. As part of this training exercise, it's crucial for the representative to display empathy towards Patrick's grief while efficiently handling the request by following the necessary protocols and procedures."
-              : "In this scenario, the support agent works for a major Telecommunications company. The customer, Patrick Bateman, is an existing subscriber of their services who recently experienced a significant personal loss — the death of a loved one... "}
+              ? scenario.fullDescription
+              : scenario.briefDescription}
             <Text
               size="2"
               onClick={toggleTextVisibility}
@@ -104,20 +192,22 @@ export function DescriptionView() {
               {showFullText ? "Show Less" : "Show More"}
             </Text>
           </Text>
+
           <Flex
             direction="column"
             className="mb-3 p-3 bg-white rounded-lg border border-gray-300"
           >
             <Heading mb="2" as="h2" size="2" weight="light">
-              Your role
+              Your Role
             </Heading>
             <Heading mb="2" as="h1" size="2">
-              Customer Support Rep
+              {scenario.roleTitle}
             </Heading>
             <Text as="p" size="1">
-              Customer Support
+              You will be acting as the {scenario.roleTitle} in this scenario.
             </Text>
           </Flex>
+
           <Flex
             direction="row"
             className="p-3 bg-white rounded-lg border border-gray-300"
@@ -127,11 +217,10 @@ export function DescriptionView() {
                 Customer
               </Heading>
               <Heading mb="2" as="h1" size="2">
-                Patrick Bateman
+                {scenario.customerName}
               </Heading>
               <Text as="p" size="1">
-                Mourning customer, recently lost a loved one, looking to remove
-                them from their account
+                {scenario.customerDescription}
               </Text>
             </Flex>
           </Flex>

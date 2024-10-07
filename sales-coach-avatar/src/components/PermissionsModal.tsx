@@ -78,19 +78,19 @@ export function PermissionsModal({
       {/* Overlay */}
       <Box className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
       {/* Modal */}
-      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-4 w-[clamp(300px,90vw,1200px)] h-[clamp(300px,80vh,700px)] grid-cols-[2fr_1fr]">
+      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-4 w-[clamp(300px,90vw,1000px)] h-[clamp(300px,80vh,600px)] grid-cols-[2fr_1fr]">
         <Flex className="h-full flex-col justify-center items-center gap-4">
-          <Box className="relative w-full h-full">
+          <Box className="relative w-full h-full max-h-[400px] max-w-full">
             {mediaStream ? (
               <video
                 ref={videoRef}
                 autoPlay
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-md"
               />
             ) : (
-              <Skeleton className="w-full h-full" />
+              <Skeleton className="w-full h-full rounded-md" />
             )}
             {/* Updated the positioning and color */}
             <Flex className="justify-center items-center gap-4 p-2 rounded-full absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[50]">
