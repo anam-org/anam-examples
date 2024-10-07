@@ -320,7 +320,7 @@ const VideoSection = () => {
       autoPlay
       muted
       playsInline
-      className="absolute w-[250px] h-[250px] rounded-[15px_0px_15px_0px] object-cover bottom-0 right-0"
+      className="absolute w-[200px] h-[200px] rounded-[15px_0px_0px_0px] object-cover bottom-0 right-0"
     />
   );
 };
