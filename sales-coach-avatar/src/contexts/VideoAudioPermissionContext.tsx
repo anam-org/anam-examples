@@ -16,8 +16,6 @@ const useVideoAudioPermission = () => {
   const [selectedMicrophone, setSelectedMicrophone] = useState<string>("");
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-
-  // New states to track the mic and video toggle across views
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
 
@@ -25,19 +23,26 @@ const useVideoAudioPermission = () => {
   const enumerateDevices = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter((device) => device.kind === "videoinput");
-      const audioDevices = devices.filter((device) => device.kind === "audioinput");
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput",
+      );
+      const audioDevices = devices.filter(
+        (device) => device.kind === "audioinput",
+      );
 
       setCameras(videoDevices);
       setMicrophones(audioDevices);
 
-      if (videoDevices.length > 0 && !selectedCamera) setSelectedCamera(videoDevices[0].deviceId);
-      if (audioDevices.length > 0 && !selectedMicrophone) setSelectedMicrophone(audioDevices[0].deviceId);
+      if (videoDevices.length > 0 && !selectedCamera)
+        setSelectedCamera(videoDevices[0].deviceId);
+      if (audioDevices.length > 0 && !selectedMicrophone)
+        setSelectedMicrophone(audioDevices[0].deviceId);
     } catch (error) {
       errorHandler(error, "Error enumerating devices");
     }
   };
 
+  // Helper function to request video & audio permissions
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -75,7 +80,10 @@ const useVideoAudioPermission = () => {
   useEffect(() => {
     navigator.mediaDevices.addEventListener("devicechange", enumerateDevices);
     return () => {
-      navigator.mediaDevices.removeEventListener("devicechange", enumerateDevices);
+      navigator.mediaDevices.removeEventListener(
+        "devicechange",
+        enumerateDevices,
+      );
     };
   }, []);
 
@@ -88,7 +96,7 @@ const useVideoAudioPermission = () => {
     errorMessage,
     mediaStream,
     isVideoOn,
-    isMicOn, // New state for mic toggle
+    isMicOn,
     setSelectedCamera,
     setSelectedMicrophone,
     requestPermissions,
@@ -96,8 +104,5 @@ const useVideoAudioPermission = () => {
   };
 };
 
-/**
- * Provider and hook for accessing the video/audio permission state within React context.
- */
 export const [VideoAudioPermissionProvider, useVideoAudioPermissionContext] =
   constate(useVideoAudioPermission);

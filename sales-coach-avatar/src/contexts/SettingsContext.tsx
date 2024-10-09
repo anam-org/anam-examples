@@ -12,6 +12,10 @@ export type ScenarioType =
   | "follow_up"
   | "customer_support";
 
+/**
+ * A mapping of scenario types to their corresponding scenario IDs.
+ * This is used to map user-selected scenarios to persona configurations.
+ */
 export const scenarioIds: Record<ScenarioType, string> = {
   product_demo: "8c4af0ac-fbc1-4663-be3b-1fd6c7bf4f1f",
   negotiation: "db3e3034-b7d3-49a3-bc17-97750ba3f303",
@@ -21,6 +25,10 @@ export const scenarioIds: Record<ScenarioType, string> = {
   customer_support: "5580786e-e277-4d3d-a8aa-fc675ee6b7a6",
 };
 
+/**
+ * Custom hook to manage the application settings, including scenario selection and persona configuration.
+ * and a function to apply the scenario's persona configuration.
+ */
 const useSettings = () => {
   const { setPersonaConfig } = useAnamContext();
 

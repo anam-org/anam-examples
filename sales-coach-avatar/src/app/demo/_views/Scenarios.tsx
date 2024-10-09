@@ -60,6 +60,7 @@ export function ScenariosView() {
   };
   const { selectedScenario, setSelectedScenario, applyScenarioConfig } =
     useSettingsContext();
+
   const { changeView } = useViewContext();
 
   const handleScenarioSelect = (scenario: string) => {

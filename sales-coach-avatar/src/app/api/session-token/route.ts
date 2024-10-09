@@ -9,7 +9,7 @@ export async function GET() {
 
   if (!apiKey) {
     const errorMessage = "API Key not found";
-    logger.error(errorMessage);
+    errorHandler(errorMessage, "GET session token request");
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 
@@ -28,8 +28,10 @@ export async function GET() {
     if (!response.ok) {
       const errorMessage = `Failed to fetch session token. Status: ${response.status}`;
       const responseBody = await response.text();
-      logger.error(`${errorMessage}. Response body: ${responseBody}`);
-
+      errorHandler(
+        `${errorMessage}. Response body: ${responseBody}`,
+        "GET session token request",
+      );
       return NextResponse.json(
         { error: errorMessage },
         { status: response.status },
@@ -40,11 +42,10 @@ export async function GET() {
     logger.info(`Session token fetched successfully: ${data.sessionToken}`);
     return NextResponse.json({ sessionToken: data.sessionToken });
   } catch (error) {
-    logger.error(
-      "An error occurred during the session token fetch request:",
-      error,
+    errorHandler(
+      `An error occurred during the session token fetch request: ${error}`,
+      "GET session token request",
     );
-    errorHandler(error, "GET session token request");
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

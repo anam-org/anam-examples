@@ -36,6 +36,7 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
     }
   }
 
+  // Helper function for updating selected persona
   const setPersonaConfig = (config: {
     personaId: string;
     disableFillerPhrases?: boolean;

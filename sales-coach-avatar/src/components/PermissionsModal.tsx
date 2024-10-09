@@ -9,7 +9,7 @@ import {
   Skeleton,
   Text,
 } from "@radix-ui/themes";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, X } from "lucide-react";
 import { useVideoAudioPermissionContext } from "@/contexts";
 
@@ -17,6 +17,50 @@ interface PermissionsModalProps {
   onClose: () => void;
   onPermissionGranted: () => void;
 }
+
+interface DeviceSelectorProps {
+  devices: Array<{ deviceId: string; label: string | null }>;
+  selectedDevice: string;
+  onDeviceChange: (deviceId: string) => void;
+  icon: ReactNode;
+  placeholderLabel: string;
+}
+
+/**
+ * DeviceSelector component to select a video or audio input device.
+ */
+export const DeviceSelector = ({
+  devices,
+  selectedDevice,
+  onDeviceChange,
+  icon,
+  placeholderLabel,
+}: DeviceSelectorProps) => {
+  return (
+    <Flex className="items-center w-full">
+      <Select.Root
+        value={selectedDevice}
+        onValueChange={onDeviceChange}
+        size="3"
+      >
+        <Select.Trigger className="w-full">
+          <Flex as="span" className="items-center gap-2">
+            {icon}
+            {devices.find((device) => device.deviceId === selectedDevice)
+              ?.label || placeholderLabel}
+          </Flex>
+        </Select.Trigger>
+        <Select.Content>
+          {devices.map((device) => (
+            <Select.Item key={device.deviceId} value={device.deviceId}>
+              {device.label || `Device ${device.deviceId}`}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+    </Flex>
+  );
+};
 
 export function PermissionsModal({
   onClose,
@@ -54,14 +98,6 @@ export function PermissionsModal({
     }
   };
 
-  const handleToggleVideo = () => {
-    toggleTrack("video");
-  };
-
-  const handleToggleMic = () => {
-    toggleTrack("audio");
-  };
-
   const data = {
     camera: { label: "Camera", icon: <Video /> },
     microphone: { label: "Microphone", icon: <Mic /> },
@@ -89,6 +125,7 @@ export function PermissionsModal({
 
         {/* Left Section */}
         <Flex direction="column" className="gap-3">
+          {/* Video Stream */}
           <Box mt="4" className="relative">
             {mediaStream ? (
               <video
@@ -102,64 +139,44 @@ export function PermissionsModal({
               <Skeleton className="aspect-square rounded-md w-full h-full" />
             )}
 
+            {/* Mic/Video Controls */}
             <Flex className="gap-3 absolute bottom-2 left-1/2 transform -translate-x-1/2 z-[50]">
-              <IconButton size="3" radius="full" onClick={() => toggleTrack("audio")}>
+              <IconButton
+                size="3"
+                radius="full"
+                onClick={() => toggleTrack("audio")}
+              >
                 {isMicOn ? <Mic /> : <MicOff />}
               </IconButton>
-              <IconButton size="3" radius="full" onClick={() => toggleTrack("video")}>
+              <IconButton
+                size="3"
+                radius="full"
+                onClick={() => toggleTrack("video")}
+              >
                 {isVideoOn ? <Video /> : <VideoOff />}
               </IconButton>
             </Flex>
           </Box>
 
+          {/* Device Selection */}
           <Grid columns={{ xs: "1", md: "2" }} className="gap-2 w-full">
-            <Flex className="items-center w-full">
-              <Select.Root
-                value={selectedCamera}
-                onValueChange={setSelectedCamera}
-                size="3"
-              >
-                <Select.Trigger className="w-full">
-                  <Flex as="span" className="items-center gap-2">
-                    {data.camera.icon}
-                    {cameras.find(
-                      (camera) => camera.deviceId === selectedCamera,
-                    )?.label || data.camera.label}
-                  </Flex>
-                </Select.Trigger>
-                <Select.Content>
-                  {cameras.map((camera) => (
-                    <Select.Item key={camera.deviceId} value={camera.deviceId}>
-                      {camera.label || `Camera ${camera.deviceId}`}
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Root>
-            </Flex>
+            {/* Camera Selection */}
+            <DeviceSelector
+              devices={cameras}
+              selectedDevice={selectedCamera}
+              onDeviceChange={setSelectedCamera}
+              icon={<Video />}
+              placeholderLabel="Camera"
+            />
 
-            <Flex className="items-center gap-2 w-full">
-              <Select.Root
-                value={selectedMicrophone}
-                onValueChange={setSelectedMicrophone}
-                size="3"
-              >
-                <Select.Trigger className="w-full">
-                  <Flex className="gap-2">
-                    {data.microphone.icon}
-                    {microphones.find(
-                      (mic) => mic.deviceId === selectedMicrophone,
-                    )?.label || data.microphone.label}
-                  </Flex>
-                </Select.Trigger>
-                <Select.Content>
-                  {microphones.map((mic) => (
-                    <Select.Item key={mic.deviceId} value={mic.deviceId}>
-                      {mic.label || `Microphone ${mic.deviceId}`}
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Root>
-            </Flex>
+            {/* Microphone Selection */}
+            <DeviceSelector
+              devices={microphones}
+              selectedDevice={selectedMicrophone}
+              onDeviceChange={setSelectedMicrophone}
+              icon={<Mic />}
+              placeholderLabel="Microphone"
+            />
           </Grid>
         </Flex>
 
@@ -181,11 +198,7 @@ export function PermissionsModal({
           )}
 
           {!permissionsGranted ? (
-            <Button
-              size="4"
-              className="w-[90%]"
-              onClick={requestPermissions}
-            >
+            <Button size="4" className="w-[90%]" onClick={requestPermissions}>
               Request Permissions
             </Button>
           ) : (

@@ -21,16 +21,16 @@ export default function HomePage() {
         <Text>
           Practice customer conversations and get personalized feedback
         </Text>
-        <VideoWithPlayButton onPlayClick={handlePlayClick} />
+        <VideoWithPlayButton onPlay={handlePlayClick} />
       </Flex>
     </Box>
   );
 }
 
 const VideoWithPlayButton = ({
-  onPlayClick,
+  onPlay,
 }: {
-  onPlayClick: (view: string) => void;
+  onPlay: (view: string) => void;
 }) => {
   return (
     <Box className="relative inline-block">
@@ -47,7 +47,7 @@ const VideoWithPlayButton = ({
         size="4"
         variant="solid"
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
-        onClick={() => onPlayClick("scenarios")}
+        onClick={() => onPlay("scenarios")}
       >
         <Play width="30" height="30" />
       </IconButton>

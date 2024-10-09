@@ -6,6 +6,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { DemoControls } from "./DemoControls";
 import { UserVideoContainer } from "./UserVideoContainer";
 
+/**
+ * Component to handle the Avatar video and audio streaming. It uses the Anam SDK
+ * to stream to the provided video and audio elements and manages the connection state.
+ */
 export const AvatarContainer = ({
   audioRef,
 }: {
@@ -25,14 +29,12 @@ export const AvatarContainer = ({
     setLoading(false);
   }, []);
 
-  const onConnectionClosed = useCallback(
-    (reason: string) => {
-      setLoading(false);
-    },
-    [],
-  );
+  const onConnectionClosed = useCallback(() => {
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
+    // Initializes video and audio streaming using the Anam client.
     const startStreaming = async () => {
       if (
         isClientInitialized &&
@@ -90,6 +92,7 @@ export const AvatarContainer = ({
   ]);
 
   useEffect(() => {
+    // Updates the elapsed seconds every second.
     const interval = setInterval(
       () => setSecondsElapsed((prev) => prev + 1),
       1000,
