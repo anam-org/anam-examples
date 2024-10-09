@@ -21,17 +21,11 @@ export const DemoControls = ({
   setSecondsElapsed: Dispatch<SetStateAction<number>>;
   audioRef: RefObject<HTMLAudioElement>;
 }) => {
-  const [isVideoOn, setIsVideoOn] = useState(true);
+  const { toggleTrack, isVideoOn } = useVideoAudioPermissionContext();
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(100);
   const [previousVolume, setPreviousVolume] = useState(100);
-  const { toggleTrack } = useVideoAudioPermissionContext();
   const { anamClient, isClientInitialized } = useAnamContext();
-
-  const handleToggleVideo = () => {
-    toggleTrack("video");
-    setIsVideoOn((prev) => !prev);
-  };
 
   const handleToggleMute = () => {
     if (audioRef.current) {
@@ -110,7 +104,7 @@ export const DemoControls = ({
         size="1"
         variant="ghost"
         className="text-gray-200"
-        onClick={handleToggleVideo}
+        onClick={() => toggleTrack("video")}
       >
         {isVideoOn ? <Video size="18" /> : <VideoOff size="18" />}
       </IconButton>

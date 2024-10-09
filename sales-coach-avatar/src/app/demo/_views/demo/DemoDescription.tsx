@@ -92,66 +92,65 @@ const DemoText: Record<
 };
 
 export const DemoDescription = ({
-    showFullText,
-    toggleTextVisibility,
-    changeView,
-  }: {
-    showFullText: boolean;
-    toggleTextVisibility: () => void;
-    changeView: (view: string) => void;
-  }) => {
-    const { selectedScenario } = useSettingsContext();
-    const scenario = DemoText[selectedScenario];
-  
-    return (
-      <Flex
-        direction="column"
-        p="4"
-        className="border-t border-gray-300 md:border-l md:border-r md:border-t-0"
-      >
-        <Flex mb="3">
-          <Phone size="18" />
-          <Text as="p" size="2" className="ml-2">
-            Phone
-          </Text>
-        </Flex>
-        <Heading as="h2" size="4" mb="2" weight="light">
-          {scenario.title}
-        </Heading>
-        <Heading as="h2" size="3" mb="1" weight="medium">
-          Scenario
-        </Heading>
-        <Text as="p" mb="3" size="2">
-          {showFullText ? scenario.fullDescription : scenario.briefDescription}
-          <Text
-            color="gray"
-            size="2"
-            onClick={toggleTextVisibility}
-            className="cursor-pointer transition-colors duration-200 ease-in"
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#b0b0b0")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "gray")}
-          >
-            {showFullText ? "Show Less" : "Show More"}
-          </Text>
+  showFullText,
+  toggleTextVisibility,
+  changeView,
+}: {
+  showFullText: boolean;
+  toggleTextVisibility: () => void;
+  changeView: (view: string) => void;
+}) => {
+  const { selectedScenario } = useSettingsContext();
+  const scenario = DemoText[selectedScenario];
+
+  return (
+    <Flex
+      direction="column"
+      p="4"
+      className="border-t border-gray-300 md:border-l md:border-r md:border-t-0"
+    >
+      <Flex mb="3">
+        <Phone size="18" />
+        <Text as="p" size="2" className="ml-2">
+          Phone
         </Text>
-        <Heading as="h2" size="3" mb="3" weight="medium">
-          Key Steps for Support Agent
-        </Heading>
-        <ul className="list-disc list-inside pl-1">
-          {scenario.instructions.map((instruction, index) => (
-            <li key={index}>
-              <Text as="span" size="2">
-                {instruction}
-              </Text>
-            </li>
-          ))}
-        </ul>
-        <Flex justify="end">
-          <Button size="4" onClick={() => changeView("initial")}>
-            End Demo
-          </Button>
-        </Flex>
       </Flex>
-    );
-  };
-  
+      <Heading as="h2" size="4" mb="2" weight="light">
+        {scenario.title}
+      </Heading>
+      <Heading as="h2" size="3" mb="1" weight="medium">
+        Scenario
+      </Heading>
+      <Text as="p" mb="3" size="2">
+        {showFullText ? scenario.fullDescription : scenario.briefDescription}
+        <Text
+          color="gray"
+          size="2"
+          onClick={toggleTextVisibility}
+          className="cursor-pointer transition-colors duration-200 ease-in"
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#b0b0b0")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "gray")}
+        >
+          {showFullText ? "Show Less" : "Show More"}
+        </Text>
+      </Text>
+      <Heading as="h2" size="3" mb="3" weight="medium">
+        Key Steps for Support Agent
+      </Heading>
+      <ul className="list-disc list-inside pl-1">
+        {scenario.instructions.map((instruction, index) => (
+          <li key={index}>
+            <Text as="span" size="2">
+              {instruction}
+            </Text>
+          </li>
+        ))}
+      </ul>
+      <Flex justify="end">
+        <Button size="4" onClick={() => changeView("initial")}>
+          End Demo
+        </Button>
+      </Flex>
+    </Flex>
+  );
+};

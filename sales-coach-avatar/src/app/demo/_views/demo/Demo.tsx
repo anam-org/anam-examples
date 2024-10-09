@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Grid} from "@radix-ui/themes";
+import { Grid } from "@radix-ui/themes";
 import { useViewContext } from "@/contexts";
 import { AvatarContainer } from "./AvatarContainer";
 import { DemoDescription } from "./DemoDescription";

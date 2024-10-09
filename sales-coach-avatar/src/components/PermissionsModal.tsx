@@ -9,10 +9,9 @@ import {
   Skeleton,
   Text,
 } from "@radix-ui/themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, X } from "lucide-react";
 import { useVideoAudioPermissionContext } from "@/contexts";
-import { logger } from "@/utils";
 
 interface PermissionsModalProps {
   onClose: () => void;
@@ -31,6 +30,8 @@ export function PermissionsModal({
     permissionsGranted,
     errorMessage,
     mediaStream,
+    isVideoOn,
+    isMicOn,
     setSelectedCamera,
     setSelectedMicrophone,
     requestPermissions,
@@ -38,35 +39,6 @@ export function PermissionsModal({
   } = useVideoAudioPermissionContext();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const checkMobile = () => {
-    const mobileCheck = window.innerWidth <= 760;
-    setIsMobile(mobileCheck);
-    logger.info(`isMobile set to: ${mobileCheck}`);
-  };
-
-  useEffect(() => {
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isMobile) {
-      logger.info("Not a mobile device, requesting permissions...");
-      requestPermissions();
-    }
-  }, [isMobile]);
-
-  const handleRequestPermissions = () => {
-    requestPermissions();
-  };
 
   useEffect(() => {
     if (mediaStream && videoRef.current) {
@@ -84,12 +56,10 @@ export function PermissionsModal({
 
   const handleToggleVideo = () => {
     toggleTrack("video");
-    setIsVideoOn((prev) => !prev);
   };
 
   const handleToggleMic = () => {
     toggleTrack("audio");
-    setIsMicOn((prev) => !prev);
   };
 
   const data = {
@@ -101,6 +71,7 @@ export function PermissionsModal({
     <>
       {/* Overlay */}
       <Box className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
+
       {/* Modal */}
       <Grid
         width={{ initial: "90vw", sm: "70vw", md: "80vw", xl: "70vw" }}
@@ -108,7 +79,6 @@ export function PermissionsModal({
         columns={{ sm: "1", md: "2" }}
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-3"
       >
-        {/* Close Button */}
         <IconButton
           variant="ghost"
           className="absolute top-1 right-1"
@@ -131,15 +101,17 @@ export function PermissionsModal({
             ) : (
               <Skeleton className="aspect-square rounded-md w-full h-full" />
             )}
+
             <Flex className="gap-3 absolute bottom-2 left-1/2 transform -translate-x-1/2 z-[50]">
-              <IconButton size="3" radius="full" onClick={handleToggleMic}>
+              <IconButton size="3" radius="full" onClick={() => toggleTrack("audio")}>
                 {isMicOn ? <Mic /> : <MicOff />}
               </IconButton>
-              <IconButton size="3" radius="full" onClick={handleToggleVideo}>
+              <IconButton size="3" radius="full" onClick={() => toggleTrack("video")}>
                 {isVideoOn ? <Video /> : <VideoOff />}
               </IconButton>
             </Flex>
           </Box>
+
           <Grid columns={{ xs: "1", md: "2" }} className="gap-2 w-full">
             <Flex className="items-center w-full">
               <Select.Root
@@ -164,6 +136,7 @@ export function PermissionsModal({
                 </Select.Content>
               </Select.Root>
             </Flex>
+
             <Flex className="items-center gap-2 w-full">
               <Select.Root
                 value={selectedMicrophone}
@@ -191,7 +164,10 @@ export function PermissionsModal({
         </Flex>
 
         {/* Right Section */}
-        <Flex direction="column" className="justify-center items-center p-3">
+        <Flex
+          direction="column"
+          className="justify-center items-center p-3 w-[80%] mx-auto"
+        >
           <Heading as="h2" size="3" mb="1">
             Ready to Start?
           </Heading>
@@ -204,12 +180,11 @@ export function PermissionsModal({
             </Text>
           )}
 
-          {/* Conditional rendering for the button */}
-          {isMobile && !permissionsGranted ? (
+          {!permissionsGranted ? (
             <Button
               size="4"
               className="w-[90%]"
-              onClick={handleRequestPermissions}
+              onClick={requestPermissions}
             >
               Request Permissions
             </Button>

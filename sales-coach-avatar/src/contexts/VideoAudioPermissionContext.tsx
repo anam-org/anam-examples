@@ -17,32 +17,27 @@ const useVideoAudioPermission = () => {
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  // New states to track the mic and video toggle across views
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
+
   // Helper function to enumerate devices
   const enumerateDevices = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(
-        (device) => device.kind === "videoinput",
-      );
-      const audioDevices = devices.filter(
-        (device) => device.kind === "audioinput",
-      );
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      const audioDevices = devices.filter((device) => device.kind === "audioinput");
+
       setCameras(videoDevices);
       setMicrophones(audioDevices);
 
-      if (videoDevices.length > 0) setSelectedCamera(videoDevices[0].deviceId);
-      if (audioDevices.length > 0)
-        setSelectedMicrophone(audioDevices[0].deviceId);
+      if (videoDevices.length > 0 && !selectedCamera) setSelectedCamera(videoDevices[0].deviceId);
+      if (audioDevices.length > 0 && !selectedMicrophone) setSelectedMicrophone(audioDevices[0].deviceId);
     } catch (error) {
       errorHandler(error, "Error enumerating devices");
     }
   };
 
-  /**
-   * Requests permissions for accessing the user's camera and microphone. On success,
-   * it sets the available video and audio devices, the selected camera and microphone,
-   * and the media stream. If permissions are denied, an error message is set.
-   */
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -60,36 +55,27 @@ const useVideoAudioPermission = () => {
     }
   };
 
-  /**
-   * Toggles the enabled/disabled state of video or audio tracks in the media stream.
-   */
+  // Toggle functions that persist the state
   const toggleTrack = (type: "audio" | "video") => {
     mediaStream?.getTracks().forEach((track) => {
       if (track.kind === type) {
         track.enabled = !track.enabled;
       }
     });
+    if (type === "audio") setIsMicOn((prev) => !prev);
+    if (type === "video") setIsVideoOn((prev) => !prev);
   };
 
-  /**
-   * Clean up media stream resources when the component unmounts.
-   */
   useEffect(() => {
     return () => {
       mediaStream?.getTracks().forEach((track) => track.stop());
     };
   }, [mediaStream]);
 
-  /**
-   * Re-enumerate devices when devices change (e.g., plugging in a new mic).
-   */
   useEffect(() => {
     navigator.mediaDevices.addEventListener("devicechange", enumerateDevices);
     return () => {
-      navigator.mediaDevices.removeEventListener(
-        "devicechange",
-        enumerateDevices,
-      );
+      navigator.mediaDevices.removeEventListener("devicechange", enumerateDevices);
     };
   }, []);
 
@@ -101,6 +87,8 @@ const useVideoAudioPermission = () => {
     permissionsGranted,
     errorMessage,
     mediaStream,
+    isVideoOn,
+    isMicOn, // New state for mic toggle
     setSelectedCamera,
     setSelectedMicrophone,
     requestPermissions,
