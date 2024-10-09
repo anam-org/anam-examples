@@ -7,7 +7,6 @@ import {
   AnamContextProvider,
   SettingsContextProvider,
   VideoAudioPermissionProvider,
-  ViewContextProvider,
 } from "@/contexts";
 import { fetchSessionToken } from "@/utils/fetchSessionToken";
 import { logger } from "@/utils";
@@ -53,12 +52,10 @@ export function Providers({ children }: { children: ReactNode }) {
   }
 
   return (
-    <VideoAudioPermissionProvider>
-      <AnamContextProvider sessionToken={sessionToken || ""}>
-        <ViewContextProvider>
-          <SettingsContextProvider>{children}</SettingsContextProvider>
-        </ViewContextProvider>
-      </AnamContextProvider>
-    </VideoAudioPermissionProvider>
+    <AnamContextProvider sessionToken={sessionToken || ""}>
+      <VideoAudioPermissionProvider>
+        <SettingsContextProvider>{children}</SettingsContextProvider>
+      </VideoAudioPermissionProvider>
+    </AnamContextProvider>
   );
 }

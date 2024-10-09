@@ -1,48 +1,63 @@
 "use client";
 
-import { Box, Card, Text, Flex, Heading, Button } from "@radix-ui/themes";
+import {
+  Box,
+  Card,
+  Text,
+  Flex,
+  Heading,
+  Button,
+  IconButton,
+} from "@radix-ui/themes";
 import { useSettingsContext, useViewContext } from "@/contexts";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const scenarioDetails = {
   product_demo: {
     title: "Product Demo",
     description:
-      "Presenting the product to the customer and highlighting key features.",
+      "Demonstrate the product to a customer, highlighting features and addressing questions.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
   negotiation: {
     title: "Negotiation",
     description:
-      "Discussing pricing and terms with the customer to reach an agreement.",
+      "Discuss pricing and terms with the customer to reach an agreement.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
   objection_handling: {
     title: "Objection Handling",
     description:
-      "Addressing customer concerns and resolving any objections they may have.",
+      "Address customer concerns and resolve any objections they may have.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
   closing_deal: {
     title: "Closing Deal",
     description:
-      "Finalizing the sale and securing the customer's commitment to the deal.",
+      "Finalize the sale and secure the customer's commitment to the deal.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
   follow_up: {
     title: "Follow Up",
     description:
-      "Re-engaging with the customer to gather feedback and build rapport.",
+      "Re-engage with the customer to gather feedback and build rapport.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
   customer_support: {
     title: "Customer Support",
     description:
-      "Providing assistance and support to the customer after the purchase.",
+      "Provide assistance and support to the customer after the purchase.",
     imageUrl: "leo_gen_1_poster.jpg",
   },
 };
 
-export function SettingsView() {
+export function ScenariosView() {
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    router.push("/");
+  };
   const { selectedScenario, setSelectedScenario, applyScenarioConfig } =
     useSettingsContext();
   const { changeView } = useViewContext();
@@ -57,21 +72,27 @@ export function SettingsView() {
   };
 
   return (
-    <Box className="flex items-center justify-center h-screen">
-      <Box className="p-8 max-w-5xl w-full mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+    <Flex className="appcontainer flex-col justify-center min-h-[90vh] px-4 sm:px-8 md:px-12 lg:px-20">
+      <Flex justify="start" align="start" className="mb-5 pt-6">
+        <IconButton variant="ghost" size="3" onClick={() => handleNavigation()}>
+          <X className="w-7 h-7" />
+        </IconButton>
+      </Flex>
+
+      <Box className="p-4 sm:p-8 w-full mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg">
         <Heading
           size="8"
-          className="mb-6 text-center text-gray-900 dark:text-white"
+          className="mb-5 text-center text-gray-900 dark:text-white text-2xl md:text-3xl lg:text-4xl"
         >
           Scenarios
         </Heading>
 
         {/* Grid of Scenario Cards */}
-        <Box className="grid grid-cols-3 gap-6">
+        <Box className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {Object.entries(scenarioDetails).map(([key, scenario]) => (
             <Card
               key={key}
-              className={`cursor-pointer p-4 bg-white dark:bg-gray-700 shadow-lg transition transform hover:scale-105 ${
+              className={` cursor-pointer p-4 w-full h-auto sm:w-full md:min-w-[200px] lg:min-w-[250px] shadow-md transition transform hover:scale-105 ${
                 selectedScenario === key ? "ring-4 ring-[#86EAD4]" : ""
               }`}
               onClick={() => handleScenarioSelect(key)}
@@ -80,14 +101,13 @@ export function SettingsView() {
                 <img
                   src={scenario.imageUrl}
                   alt={scenario.title}
-                  className="w-16 h-16 rounded-full object-cover"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
                 />
                 <Box>
                   <Text
-                    as="div"
-                    size="2"
+                    size="1"
                     weight="bold"
-                    className="text-gray-800 dark:text-gray-200"
+                    className="text-gray-800 dark:text-gray-200 text-sm"
                   >
                     {scenario.title}
                   </Text>
@@ -95,7 +115,7 @@ export function SettingsView() {
                     as="div"
                     size="2"
                     color="gray"
-                    className="text-gray-600 dark:text-gray-400"
+                    className="text-gray-600 dark:text-gray-400 text-xs md:text-sm"
                   >
                     {scenario.description}
                   </Text>
@@ -106,9 +126,11 @@ export function SettingsView() {
         </Box>
 
         <Flex justify="end" className="mt-6">
-          <Button onClick={handleSaveSettings}>Save Settings</Button>
+          <Button className="w-full sm:w-auto" onClick={handleSaveSettings}>
+            Continue
+          </Button>
         </Flex>
       </Box>
-    </Box>
+    </Flex>
   );
 }

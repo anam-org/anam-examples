@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Video, VideoOff, X } from "lucide-react";
 import { useVideoAudioPermissionContext } from "@/contexts";
+import { logger } from "@/utils";
 
 interface PermissionsModalProps {
   onClose: () => void;
@@ -39,10 +40,33 @@ export function PermissionsModal({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkMobile = () => {
+    const mobileCheck = window.innerWidth <= 760;
+    setIsMobile(mobileCheck);
+    logger.info(`isMobile set to: ${mobileCheck}`);
+  };
 
   useEffect(() => {
-    requestPermissions();
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      logger.info("Not a mobile device, requesting permissions...");
+      requestPermissions();
+    }
+  }, [isMobile]);
+
+  const handleRequestPermissions = () => {
+    requestPermissions();
+  };
 
   useEffect(() => {
     if (mediaStream && videoRef.current) {
@@ -78,22 +102,36 @@ export function PermissionsModal({
       {/* Overlay */}
       <Box className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
       {/* Modal */}
-      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-4 w-[clamp(300px,90vw,1000px)] h-[clamp(300px,80vh,550px)] grid-cols-[2fr_1fr]">
-        <Flex className="h-full flex-col justify-center items-center gap-4">
-          <Box className="relative w-full h-full max-h-[400px] max-w-full">
+      <Grid
+        width={{ initial: "90vw", sm: "70vw", md: "80vw", xl: "70vw" }}
+        maxWidth="1400px"
+        columns={{ sm: "1", md: "2" }}
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-3"
+      >
+        {/* Close Button */}
+        <IconButton
+          variant="ghost"
+          className="absolute top-1 right-1"
+          onClick={onClose}
+        >
+          <X />
+        </IconButton>
+
+        {/* Left Section */}
+        <Flex direction="column" className="gap-3">
+          <Box mt="4" className="relative">
             {mediaStream ? (
               <video
                 ref={videoRef}
                 autoPlay
                 muted
                 playsInline
-                className="w-full h-full object-cover rounded-md"
+                className="aspect-square object-cover rounded-md w-full h-full"
               />
             ) : (
-              <Skeleton className="w-full h-full rounded-md" />
+              <Skeleton className="aspect-square rounded-md w-full h-full" />
             )}
-            {/* Updated the positioning and color */}
-            <Flex className="justify-center items-center gap-4 p-2 rounded-full absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[50]">
+            <Flex className="gap-3 absolute bottom-2 left-1/2 transform -translate-x-1/2 z-[50]">
               <IconButton size="3" radius="full" onClick={handleToggleMic}>
                 {isMicOn ? <Mic /> : <MicOff />}
               </IconButton>
@@ -102,8 +140,8 @@ export function PermissionsModal({
               </IconButton>
             </Flex>
           </Box>
-          <Grid className="grid grid-cols-2 gap-4 w-full">
-            <Flex className="items-center gap-2 w-full">
+          <Grid columns={{ xs: "1", md: "2" }} className="gap-2 w-full">
+            <Flex className="items-center w-full">
               <Select.Root
                 value={selectedCamera}
                 onValueChange={setSelectedCamera}
@@ -133,7 +171,7 @@ export function PermissionsModal({
                 size="3"
               >
                 <Select.Trigger className="w-full">
-                  <Flex as="span" className="items-center gap-2">
+                  <Flex className="gap-2">
                     {data.microphone.icon}
                     {microphones.find(
                       (mic) => mic.deviceId === selectedMicrophone,
@@ -151,18 +189,13 @@ export function PermissionsModal({
             </Flex>
           </Grid>
         </Flex>
-        <Flex className="flex-col justify-center items-center p-4 relative">
-          <IconButton
-            variant="ghost"
-            className="absolute top-2 right-2"
-            onClick={onClose}
-          >
-            <X />
-          </IconButton>
-          <Heading as="h2" size="3" className="mb-2">
+
+        {/* Right Section */}
+        <Flex direction="column" className="justify-center items-center p-3">
+          <Heading as="h2" size="3" mb="1">
             Ready to Start?
           </Heading>
-          <Text className="mb-2 text-center">
+          <Text align="center" mb="3">
             Before proceeding, we need to check your camera and microphone.
           </Text>
           {errorMessage && (
@@ -170,13 +203,25 @@ export function PermissionsModal({
               {errorMessage}
             </Text>
           )}
-          <Button
-            size="4"
-            className="rounded-full"
-            onClick={handlePermissionGranted}
-          >
-            Start Demo
-          </Button>
+
+          {/* Conditional rendering for the button */}
+          {isMobile && !permissionsGranted ? (
+            <Button
+              size="4"
+              className="w-[90%]"
+              onClick={handleRequestPermissions}
+            >
+              Request Permissions
+            </Button>
+          ) : (
+            <Button
+              size="4"
+              className="w-[90%]"
+              onClick={handlePermissionGranted}
+            >
+              Start Demo
+            </Button>
+          )}
         </Flex>
       </Grid>
     </>

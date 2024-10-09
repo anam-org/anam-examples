@@ -2,16 +2,14 @@
 
 import { useState } from "react";
 import {
-  Box,
   Button,
   Flex,
   Heading,
   IconButton,
   Separator,
   Text,
-  Strong,
 } from "@radix-ui/themes";
-import { VolumeOff, X } from "lucide-react";
+import { ArrowLeft, VolumeOff } from "lucide-react";
 import { useViewContext, useSettingsContext, ScenarioType } from "@/contexts";
 import { PermissionsModal } from "@/components";
 
@@ -31,86 +29,79 @@ const scenarioDetails: Record<
     scenarioTitle: "Product Demo",
     instructions: "Demonstrate the product to a potential customer.",
     fullDescription:
-      "In this scenario, you will present the product to a customer, emphasizing key features and addressing any questions they may have. The goal is to highlight the product's value and encourage the customer to proceed to the next stage of the sales process.",
+      "In this scenario, you are a Sales Representative working for a major Telecommunications company. The customer, Jordan, is an existing subscriber interested in learning more about a new product offering. Your goal is to effectively demonstrate the product's key features, address any questions Jordan may have, and encourage them to proceed to the next stage of the sales process.",
     briefDescription:
-      "In this scenario, you will present the product to a customer...",
+      "In this scenario, you are a Sales Representative working for a major Telecommunications company. The customer, Jordan, is an existing subscriber interested in learning more...",
     roleTitle: "Sales Representative",
     customerName: "Jordan",
     customerDescription:
-      "Potential customer interested in learning more about your product.",
+      "An existing subscriber interested in learning more about a new product offering.",
   },
   negotiation: {
     scenarioTitle: "Negotiation",
     instructions: "Negotiate pricing and terms with the customer.",
     fullDescription:
-      "In this scenario, you will negotiate with the customer, discussing pricing and terms to come to a mutual agreement. It’s important to balance customer satisfaction with maintaining company profitability.",
+      "In this scenario, you are a Sales Agent who must negotiate the pricing and terms of a deal with Taylor, a customer interested in purchasing a product but concerned about the pricing. You need to balance securing the sale with maintaining the company's profitability by finding a mutually beneficial agreement.",
     briefDescription:
-      "In this scenario, you will negotiate with the customer...",
-    roleTitle: "Sales Negotiator",
+      "In this scenario, you are a Sales Agent who must negotiate the pricing and terms of a deal with Taylor, a customer interested in purchasing a product but concerned about...",
+    roleTitle: "Sales Agent",
     customerName: "Taylor",
     customerDescription:
-      "A customer who is interested but wants a better deal on the price.",
+      "A customer interested in the product but seeking a better deal on the price.",
   },
   objection_handling: {
     scenarioTitle: "Objection Handling",
     instructions: "Handle customer objections effectively.",
     fullDescription:
-      "In this scenario, you will handle customer objections regarding your product or service. It’s important to listen carefully, address concerns, and offer solutions that can help the customer move forward.",
+      "In this scenario, you are a Customer Support Specialist facing Alex, a customer who has objections about the product's suitability for their needs. You must listen carefully, acknowledge Alex's concerns, and provide solutions or alternatives to overcome their objections, helping to move the sale forward.",
     briefDescription:
-      "In this scenario, you will handle customer objections...",
-    roleTitle: "Customer Support Representative",
+      "In this scenario, you are a Customer Support Specialist facing Alex, a customer who has objections about the product's suitability for their needs. You must listen carefully...",
+    roleTitle: "Customer Support Specialist",
     customerName: "Alex",
     customerDescription:
-      "A customer who has concerns or objections about your product or service.",
+      "A customer with concerns or objections about your product or service.",
   },
   closing_deal: {
     scenarioTitle: "Closing Deal",
     instructions: "Close the deal with the customer.",
     fullDescription:
-      "In this scenario, you will finalize the deal with the customer. You need to ensure that the customer is ready to commit and address any final concerns they may have before sealing the agreement.",
+      "In this scenario, you are a Sales Closer at the final stage of the sales process with Jamie. Jamie is ready to commit but may need reassurance or a final push. Your task is to address any last-minute concerns and secure Jamie's commitment to the purchase.",
     briefDescription:
-      "In this scenario, you will finalize the deal with the customer...",
+      "In this scenario, you are a Sales Closer at the final stage of the sales process with Jamie. Jamie is ready to commit but may need reassurance or a final push...",
     roleTitle: "Sales Closer",
     customerName: "Jamie",
     customerDescription:
-      "A customer who is ready to finalize the deal but may need a final push.",
+      "A customer ready to finalize the deal but may have final concerns.",
   },
   follow_up: {
     scenarioTitle: "Follow Up",
     instructions: "Follow up with the customer after the initial engagement.",
     fullDescription:
-      "In this scenario, you will follow up with the customer after the initial engagement. The goal is to maintain rapport and address any ongoing needs or concerns the customer may have.",
+      "In this scenario, you are a Customer Success Representative following up with Sam after a previous interaction. Your goal is to check in on Sam's experience with the product, gather feedback, and offer additional assistance or upsell opportunities to strengthen the relationship and encourage future engagement.",
     briefDescription:
-      "In this scenario, you will follow up with the customer...",
+      "In this scenario, you are a Customer Success Representative following up with Sam after a previous interaction. Your goal is to check in on Sam's experience with...",
     roleTitle: "Customer Success Representative",
     customerName: "Sam",
     customerDescription:
-      "A customer who you have previously engaged with and now need to follow up with.",
+      "A customer you've previously engaged with, now needing a follow-up.",
   },
   customer_support: {
     scenarioTitle: "Customer Support",
     instructions: "Provide post-sale support to the customer.",
     fullDescription:
-      "In this scenario, you will provide customer support after the sale. The customer may have questions or issues with the product or service that you need to resolve.",
-    briefDescription: "In this scenario, you will provide customer support...",
+      "In this scenario, you are a Customer Support Specialist assisting Morgan, who is experiencing issues with a recently purchased service. You must troubleshoot the issue, offer solutions, and ensure Morgan is satisfied with the resolution.",
+    briefDescription:
+      "In this scenario, you are a Customer Support Specialist assisting Morgan, who is experiencing issues with a recently purchased service. You must troubleshoot...",
     roleTitle: "Customer Support Specialist",
     customerName: "Morgan",
     customerDescription:
-      "A customer who needs help resolving a problem or question after the sale.",
+      "A customer needing help resolving a problem after the sale.",
   },
 };
 
-const BackButton = ({ changeView }: { changeView: (view: string) => void }) => (
-  <Flex justify="start" align="start" className="pt-6">
-    <IconButton variant="ghost" size="4" onClick={() => changeView("initial")}>
-      <X className="w-7 h-7" />
-    </IconButton>
-  </Flex>
-);
-
 export function DescriptionView() {
   const { changeView } = useViewContext();
-  const { selectedScenario } = useSettingsContext(); // Get selected scenario
+  const { selectedScenario } = useSettingsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
 
@@ -134,15 +125,23 @@ export function DescriptionView() {
   const scenario = scenarioDetails[selectedScenario];
 
   return (
-    <Box className="appcontainer">
-      <BackButton changeView={changeView} />
+    <Flex className="appcontainer flex-col justify-center px-4 sm:px-8 md:px-10 lg:px-20">
+      <Flex justify="start" align="start" className="mb-5 pt-6">
+        <IconButton
+          variant="ghost"
+          size="3"
+          onClick={() => changeView("scenarios")}
+        >
+          <ArrowLeft className="w-7 h-7" />
+        </IconButton>
+      </Flex>
 
       <Flex
         direction="row"
-        className="p-8 bg-[#f9f9f9] rounded-lg border border-gray-300 min-h-[400px]"
+        className="p-4 sm:p-6 md:p-8 lg:p-12 bg-[#f9f9f9] rounded-lg border border-gray-300 min-h-[400px] flex-col md:flex-row"
       >
         {/* Left Panel */}
-        <Flex direction="column" className="flex-1">
+        <Flex direction="column" className="flex-1 mb-6 md:mb-0">
           <Heading mb="3" as="h2" size="4" weight="light">
             Instructions
           </Heading>
@@ -167,7 +166,7 @@ export function DescriptionView() {
         <Separator
           orientation="vertical"
           size="4"
-          className="mx-5 h-auto self-stretch"
+          className="mx-0 md:mx-5 h-auto self-stretch hidden md:block"
         />
 
         {/* Right Panel */}
@@ -227,8 +226,10 @@ export function DescriptionView() {
         </Flex>
       </Flex>
 
-      <Flex justify="end" className="mt-6">
-        <Button onClick={handleOpenModal}>Start Conversation</Button>
+      <Flex justify="end" className="mt-5 mb-5">
+        <Button className="w-full sm:w-auto" onClick={handleOpenModal}>
+          Start Conversation
+        </Button>
       </Flex>
 
       {isModalOpen && (
@@ -237,6 +238,6 @@ export function DescriptionView() {
           onPermissionGranted={handlePermissionGranted}
         />
       )}
-    </Box>
+    </Flex>
   );
 }

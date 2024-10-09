@@ -7,54 +7,12 @@ a {
   text-decoration: none;
 }
 
-/* Responsive adjustments for larger screens */
-@media (max-width: 3840px) {
-  .appcontainer {
-    padding-left: 20em;
-    padding-right: 20em;
-  }
-}
-
-@media (max-width: 2560px) {
-  .appcontainer {
-    padding-left: 14em;
-    padding-right: 14em;
-  }
-}
-
-@media (max-width: 1920px) {
-  .appcontainer {
-    padding-left: 8em;
-    padding-right: 8em;
-  }
-}
-
-@media (max-width: 1280px) {
-  .appcontainer {
-    padding-left: 4em;
-    padding-right: 4em;
-  }
-}
-
-@media (max-width: 960px) {
-  .appcontainer {
-    padding-left: 3em;
-    padding-right: 3em;
-  }
-}
-
-@media (max-width: 600px) {
-  .appcontainer {
-    padding-left: 2em;
-    padding-right: 2em;
-  }
-}
-
-@media (max-width: 480px) {
-  .appcontainer {
-    padding-left: 1em;
-    padding-right: 1em;
-  }
+.appcontainer {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1em, 2vw, 4em);
+  padding-right: clamp(1em, 2vw, 4em);
 }
 
 @layer base {

@@ -4,7 +4,7 @@ import constate from "constate";
 import { useState } from "react";
 
 const useView = () => {
-  const [currentView, setCurrentView] = useState("Lessons");
+  const [currentView, setCurrentView] = useState("scenarios");
   const changeView = (view: string) => setCurrentView(view);
   return { currentView, changeView };
 };
