@@ -1,5 +1,4 @@
 import { useAnamContext } from "@/contexts";
-import { useToast } from "@/hooks";
 import { errorHandler } from "@/utils";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { Flex, Spinner } from "@radix-ui/themes";
@@ -17,33 +16,20 @@ export const AvatarContainer = ({
   const [loading, setLoading] = useState(true);
   const [loadingText, setLoadingText] = useState("Connecting...");
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const { toast } = useToast();
 
   const onConnectionEstablished = useCallback(() => {
     setLoadingText("Connected to a Persona.");
-    toast({
-      title: "Connection Established",
-      description: "The video stream is starting now.",
-    });
-  }, [toast]);
+  }, []);
 
   const onVideoStartedStreaming = useCallback(() => {
     setLoading(false);
-    toast({
-      title: "Video Started",
-      description: "Streaming successfully started.",
-    });
-  }, [toast]);
+  }, []);
 
   const onConnectionClosed = useCallback(
     (reason: string) => {
-      toast({
-        title: "Connection Closed",
-        description: reason,
-      });
       setLoading(false);
     },
-    [toast],
+    [],
   );
 
   useEffect(() => {

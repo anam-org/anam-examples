@@ -79,10 +79,10 @@ export function ScenariosView() {
         </IconButton>
       </Flex>
 
-      <Box className="p-4 sm:p-8 w-full mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+      <Box className="p-4 sm:p-8 w-full mx-auto bg-white shadow-lg rounded-lg">
         <Heading
           size="8"
-          className="mb-5 text-center text-gray-900 dark:text-white text-2xl md:text-3xl lg:text-4xl"
+          className="mb-5 text-center text-gray-900 text-2xl md:text-3xl lg:text-4xl"
         >
           Scenarios
         </Heading>
@@ -107,7 +107,7 @@ export function ScenariosView() {
                   <Text
                     size="1"
                     weight="bold"
-                    className="text-gray-800 dark:text-gray-200 text-sm"
+                    className="text-gray-800 text-sm"
                   >
                     {scenario.title}
                   </Text>
@@ -115,7 +115,7 @@ export function ScenariosView() {
                     as="div"
                     size="2"
                     color="gray"
-                    className="text-gray-600 dark:text-gray-400 text-xs md:text-sm"
+                    className="text-gray-600 text-xs md:text-sm"
                   >
                     {scenario.description}
                   </Text>
