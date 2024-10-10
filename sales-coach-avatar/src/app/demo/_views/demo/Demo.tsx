@@ -3,8 +3,7 @@
 import { useRef, useState } from "react";
 import { Grid } from "@radix-ui/themes";
 import { useViewContext } from "@/contexts";
-import { AvatarContainer } from "./AvatarContainer";
-import { DemoDescription } from "./DemoDescription";
+import { AvatarContainer, DemoDescription } from "./_components";
 
 export function DemoView() {
   const { changeView } = useViewContext();

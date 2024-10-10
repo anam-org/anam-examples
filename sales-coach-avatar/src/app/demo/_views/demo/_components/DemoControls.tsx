@@ -10,7 +10,7 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
-import { Timer } from "./Timer";
+import { Timer } from "./_components/Timer";
 
 export const DemoControls = ({
   secondsElapsed,
