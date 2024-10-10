@@ -3,8 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Theme } from "@radix-ui/themes";
-import { Providers } from "@/providers";
 import { ThemeProvider } from "next-themes";
+import { Providers } from "./_providers";
 
 export const metadata: Metadata = {
   title: "ANAM AI",
