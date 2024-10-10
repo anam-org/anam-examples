@@ -1,6 +1,8 @@
 import { env, errorHandler, logger } from "@/utils";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Handles the GET request to fetch a session token from the Anam API.
  */
@@ -9,7 +11,7 @@ export async function GET() {
 
   if (!apiKey) {
     const errorMessage = "API Key not found";
-    logger.error(errorMessage);
+    errorHandler(errorMessage, "GET session token request");
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 
@@ -28,26 +30,15 @@ export async function GET() {
     if (!response.ok) {
       const errorMessage = `Failed to fetch session token. Status: ${response.status}`;
       const responseBody = await response.text();
-      logger.error(`${errorMessage}. Response body: ${responseBody}`);
-
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: response.status },
-      );
+      errorHandler(`${errorMessage}. Response: ${responseBody}`, "GET session token request");
+      return NextResponse.json({ error: errorMessage }, { status: response.status });
     }
 
-    const data = await response.json();
-    logger.info(`Session token fetched successfully: ${data.sessionToken}`);
-    return NextResponse.json({ sessionToken: data.sessionToken });
+    const { sessionToken } = await response.json();
+    logger.info(`Session token fetched successfully: ${sessionToken}`);
+    return NextResponse.json({ sessionToken });
   } catch (error) {
-    logger.error(
-      "An error occurred during the session token fetch request:",
-      error,
-    );
-    errorHandler(error, "GET session token request");
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    errorHandler(`An error occurred: ${error}`, "GET session token request");
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

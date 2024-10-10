@@ -9,6 +9,9 @@ const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_ID!;
 const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
 const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 
+/**
+ * Hook to initialize the Anam client using a session token.
+ */
 const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   const anamClientRef = useRef<AnamClient | null>(null);
 
