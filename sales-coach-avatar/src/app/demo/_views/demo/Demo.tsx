@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Grid } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import { useViewContext } from "@/contexts";
 import { AvatarContainer, DemoDescription } from "./_components";
 
@@ -13,10 +13,9 @@ export function DemoView() {
   const toggleTextVisibility = () => setShowFullText(!showFullText);
 
   return (
-    <Grid
-      columns={{ sm: "1", md: "auto auto", lg: "auto auto" }}
-      gap="3"
-      className="appcontainer"
+    <Flex
+      gap="2"
+      className="appcontainer mx-auto flex flex-col md:flex-col lg:flex-row xl:flex-row"
     >
       <AvatarContainer audioRef={audioRef} />
       <DemoDescription
@@ -24,6 +23,7 @@ export function DemoView() {
         toggleTextVisibility={toggleTextVisibility}
         changeView={changeView}
       />
-    </Grid>
+    </Flex>
   );
 }
+

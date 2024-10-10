@@ -111,7 +111,7 @@ export const AvatarContainer = ({
       align="center"
       justify="center"
       mt="2"
-      className="relative sm:min-w-[80vw] md:min-w-[500px] lg:min-w-[600px] xl:min-w-[730px] 2xl:min-w-[900px] aspect-square bg-gray-100 rounded-lg border border-gray-300"
+      className="relative sm:min-w-[80vw] md:min-w-[500px] lg:min-h-[90vh] xl:min-h-[98vh] 2xl:min-h-[98vh] aspect-square bg-gray-100 rounded-lg border border-gray-300"
     >
       {loading && (
         <Flex className="absolute" align="center" justify="center">
@@ -126,7 +126,7 @@ export const AvatarContainer = ({
         ref={videoRef}
         autoPlay
         playsInline
-        className="w-full h-full object-cover rounded-lg"
+        className="w-auto h-full object-cover rounded-lg"
       />
       <audio id="audio" ref={audioRef} autoPlay hidden />
       <DemoControls

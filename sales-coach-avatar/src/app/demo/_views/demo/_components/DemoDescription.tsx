@@ -123,6 +123,7 @@ export const DemoDescription = ({
       direction="column"
       p="4"
       mt="2"
+      gap="3"
       className="border-t border-gray-300 md:border-l md:border-r md:border-t-0"
     >
       <Flex mb="3">
