@@ -114,7 +114,7 @@ export const AvatarContainer = ({
       className="relative sm:min-w-[80vw] md:min-w-[500px] lg:min-w-[600px] xl:min-w-[730px] aspect-square bg-gray-100 rounded-lg border border-gray-300"
     >
       {loading && (
-        <Flex className="absolute">
+        <Flex className="absolute" align="center" justify="center">
           <Spinner aria-label="Loading..." size="1" />
           <label className="ml-2 text-sm md:text-base lg:text-lg">
             {loadingText}
