@@ -28,27 +28,15 @@ export async function GET() {
     if (!response.ok) {
       const errorMessage = `Failed to fetch session token. Status: ${response.status}`;
       const responseBody = await response.text();
-      errorHandler(
-        `${errorMessage}. Response body: ${responseBody}`,
-        "GET session token request",
-      );
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: response.status },
-      );
+      errorHandler(`${errorMessage}. Response: ${responseBody}`, "GET session token request");
+      return NextResponse.json({ error: errorMessage }, { status: response.status });
     }
 
-    const data = await response.json();
-    logger.info(`Session token fetched successfully: ${data.sessionToken}`);
-    return NextResponse.json({ sessionToken: data.sessionToken });
+    const { sessionToken } = await response.json();
+    logger.info(`Session token fetched successfully: ${sessionToken}`);
+    return NextResponse.json({ sessionToken });
   } catch (error) {
-    errorHandler(
-      `An error occurred during the session token fetch request: ${error}`,
-      "GET session token request",
-    );
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    errorHandler(`An error occurred: ${error}`, "GET session token request");
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
