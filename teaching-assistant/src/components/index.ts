@@ -1,3 +1,4 @@
-export * from "./Sidebar";
-export * from "./PermissionsModal";
+export * from "./AudioPermissionsModal";
+export * from "./ConversationPopup";
 export * from "./LessonsSidebar";
+export * from "./NavigationSidebar";
