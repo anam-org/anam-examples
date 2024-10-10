@@ -13,6 +13,10 @@ import { ArrowLeft, VolumeOff } from "lucide-react";
 import { useViewContext, useSettingsContext, ScenarioType } from "@/contexts";
 import { PermissionsModal } from "@/components";
 
+/**
+ * Contains the scenario details, including instructions, descriptions, role, and customer information.
+ * These details are used to guide the user through each scenario during the demo.
+ */
 const scenarioDetails: Record<
   ScenarioType,
   {
@@ -99,6 +103,13 @@ const scenarioDetails: Record<
   },
 };
 
+/**
+ * DescriptionView component displays the selected scenario's instructions and descriptions,
+ * providing context for the user before starting the conversation. It also manages UI state for
+ * showing full or brief descriptions, and handles the opening of the permissions modal before starting the demo.
+ *
+ * @returns The rendered DescriptionView component.
+ */
 export function DescriptionView() {
   const { changeView } = useViewContext();
   const { selectedScenario } = useSettingsContext();

@@ -2,6 +2,10 @@ import { ScenarioType, useSettingsContext } from "@/contexts";
 import { Button, Flex, Heading, Text } from "@radix-ui/themes";
 import { Phone } from "lucide-react";
 
+/**
+ * Contains descriptions and instructions for different sales scenarios.
+ * This is used to provide context and guidance for the user during the demo.
+ */
 const DemoText: Record<
   ScenarioType,
   {
@@ -91,6 +95,17 @@ const DemoText: Record<
   },
 };
 
+/**
+ * DemoDescription component renders the selected scenario's details, including a
+ * brief/full description and a list of key instructions for the user to follow during the demo.
+ *
+ * @param props - The props for the DemoDescription component.
+ * @param props.showFullText - Boolean value determining whether the full or brief description is displayed.
+ * @param props.toggleTextVisibility - Function to toggle between showing the full and brief description.
+ * @param props.changeView - Function to switch views within the demo (e.g., ending the demo).
+ *
+ * @returns The rendered DemoDescription component.
+ */
 export const DemoDescription = ({
   showFullText,
   toggleTextVisibility,

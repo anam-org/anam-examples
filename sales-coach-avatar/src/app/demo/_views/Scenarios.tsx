@@ -9,11 +9,22 @@ import {
   Button,
   IconButton,
 } from "@radix-ui/themes";
-import { useSettingsContext, useViewContext } from "@/contexts";
+import { ScenarioType, useSettingsContext, useViewContext } from "@/contexts";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const scenarioDetails = {
+/**
+ * Contains the details for each sales scenario, including title, description, and image URL.
+ * These details are used to display each scenario option for the user to select.
+ */
+const scenarioDetails: Record<
+  ScenarioType,
+  {
+    title: string;
+    description: string;
+    imageUrl: string;
+  }
+> = {
   product_demo: {
     title: "Product Demo",
     description:
@@ -52,6 +63,11 @@ const scenarioDetails = {
   },
 };
 
+/**
+ * ScenariosView component renders the available sales scenarios as selectable cards.
+ * It allows the user to select a scenario, which updates the selected scenario context.
+ * The component also handles navigation and proceeding to the next step of the demo.
+ */
 export function ScenariosView() {
   const router = useRouter();
 

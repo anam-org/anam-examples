@@ -27,7 +27,15 @@ interface DeviceSelectorProps {
 }
 
 /**
- * DeviceSelector component to select a video or audio input device.
+ * DeviceSelector component allows the user to select an input device for video or audio.
+ *
+ * @param {Array} devices - List of available media devices (e.g., cameras or microphones).
+ * @param {string} selectedDevice - The currently selected device ID.
+ * @param {function} onDeviceChange - Function to handle device selection change.
+ * @param {ReactNode} icon - Icon to display next to the device label.
+ * @param {string} placeholderLabel - Placeholder text to show when no device is selected.
+ *
+ * @returns {JSX.Element} The rendered DeviceSelector component.
  */
 export const DeviceSelector = ({
   devices,
@@ -62,6 +70,15 @@ export const DeviceSelector = ({
   );
 };
 
+/**
+ * PermissionsModal component manages video and microphone permissions for the user.
+ * It allows users to preview their video feed, toggle audio/video controls, and select devices.
+ *
+ * @param {function} onClose - Function to close the modal.
+ * @param {function} onPermissionGranted - Function to proceed once permissions are granted.
+ *
+ * @returns {JSX.Element} The rendered PermissionsModal component.
+ */
 export function PermissionsModal({
   onClose,
   onPermissionGranted,

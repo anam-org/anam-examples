@@ -1,2 +1,2 @@
-export * from './AvatarContainer';
-export * from './DemoDescription';
+export * from "./AvatarContainer";
+export * from "./DemoDescription";

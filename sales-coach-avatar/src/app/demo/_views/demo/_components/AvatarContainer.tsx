@@ -7,8 +7,14 @@ import { DemoControls } from "./DemoControls";
 import { UserVideoContainer } from "./UserVideoContainer";
 
 /**
- * Component to handle the Avatar video and audio streaming. It uses the Anam SDK
- * to stream to the provided video and audio elements and manages the connection state.
+ * AvatarContainer component handles the streaming of video and audio for the Avatar
+ * using the Anam SDK. It listens to Anam client events for connection status and manages
+ * the UI state based on the connection lifecycle (loading, connected, or disconnected).
+ *
+ * @param props - The props for the AvatarContainer component.
+ * @param props.audioRef - Reference to the audio element used for streaming.
+ *
+ * @returns The rendered AvatarContainer component.
  */
 export const AvatarContainer = ({
   audioRef,

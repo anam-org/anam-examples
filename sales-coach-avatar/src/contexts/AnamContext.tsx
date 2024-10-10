@@ -10,8 +10,15 @@ const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
 const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 
 /**
- * Hook to initialize the Anam client. If a session token is provided, the client
- * is initialized with the provided token; otherwise, a dummy client is used.
+ * useAnam hook initializes the Anam client using the provided session token. If the token is not valid,
+ * a dummy client is initialized instead.
+ *
+ * @param {string} params.sessionToken - Session token for authenticating the Anam client.
+ *
+ * @returns {Object} An object containing:
+ * - `anamClient`: The initialized Anam client or a dummy client.
+ * - `isClientInitialized`: Boolean indicating whether the client is successfully initialized with a valid session token.
+ * - `setPersonaConfig`: Function to update the persona configuration for the Anam client.
  */
 const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   const anamClientRef = useRef<AnamClient | null>(null);
@@ -36,7 +43,13 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
     }
   }
 
-  // Helper function for updating selected persona
+  /**
+   * Updates the persona configuration for the Anam client.
+   *
+   * @param {string} config.personaId - The ID of the persona to switch to.
+   * @param {boolean} [config.disableFillerPhrases] - Option to disable filler phrases for the persona.
+   * @param {boolean} [config.disableBrains] - Option to disable brain simulation for the persona.
+   */
   const setPersonaConfig = (config: {
     personaId: string;
     disableFillerPhrases?: boolean;

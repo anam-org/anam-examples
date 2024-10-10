@@ -12,6 +12,18 @@ import {
 import { GhostIconButton } from "./GhostButton";
 import { Timer } from "./Timer";
 
+/**
+ * DemoControls component provides controls for managing audio, video, and restarting
+ * the demo stream. It handles muting, adjusting volume, toggling video, and restarting
+ * the session using the Anam AI client.
+ *
+ * @param props - The props for the DemoControls component.
+ * @param props.secondsElapsed - The number of seconds elapsed during the demo session.
+ * @param props.setSecondsElapsed - Function to update the elapsed time.
+ * @param props.audioRef - Reference to the audio element used for the demo.
+ *
+ * @returns The rendered DemoControls component.
+ */
 export const DemoControls = ({
   secondsElapsed,
   setSecondsElapsed,

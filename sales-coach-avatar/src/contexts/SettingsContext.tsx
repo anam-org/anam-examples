@@ -14,7 +14,7 @@ export type ScenarioType =
 
 /**
  * A mapping of scenario types to their corresponding scenario IDs.
- * This is used to map user-selected scenarios to persona configurations.
+ * This is used to map user-selected scenarios to persona configurations in the Anam AI client.
  */
 export const scenarioIds: Record<ScenarioType, string> = {
   product_demo: "8c4af0ac-fbc1-4663-be3b-1fd6c7bf4f1f",
@@ -27,7 +27,14 @@ export const scenarioIds: Record<ScenarioType, string> = {
 
 /**
  * Custom hook to manage the application settings, including scenario selection and persona configuration.
- * and a function to apply the scenario's persona configuration.
+ * It allows updating the selected scenario and applying the associated persona configuration
+ * to the Anam AI client.
+ *
+ * @returns {Object} An object containing:
+ * - `selectedScenario`: The currently selected scenario type.
+ * - `setSelectedScenario`: Function to update the selected scenario.
+ * - `applyScenarioConfig`: Function to apply the selected scenario's persona configuration to the Anam client.
+ * - `scenarioIds`: A mapping of scenario types to persona IDs.
  */
 const useSettings = () => {
   const { setPersonaConfig } = useAnamContext();
@@ -35,13 +42,15 @@ const useSettings = () => {
   const [selectedScenario, setSelectedScenario] =
     useState<ScenarioType>("product_demo");
 
+  /**
+   * Applies the persona configuration based on the selected scenario.
+   * Updates the Anam AI client with the associated persona ID.
+   */
   const applyScenarioConfig = () => {
     const scenarioId = scenarioIds[selectedScenario];
 
     setPersonaConfig({
       personaId: scenarioId,
-      disableBrains: false,
-      disableFillerPhrases: true,
     });
   };
 

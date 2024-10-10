@@ -7,6 +7,21 @@ import { errorHandler } from "@/utils";
 /**
  * Custom hook for managing video and audio permissions, including access
  * to cameras and microphones, along with selected devices and permission states.
+ *
+ * @returns {Object} An object containing:
+ * - `cameras`: Array of available video input devices (cameras).
+ * - `microphones`: Array of available audio input devices (microphones).
+ * - `selectedCamera`: ID of the currently selected camera.
+ * - `selectedMicrophone`: ID of the currently selected microphone.
+ * - `permissionsGranted`: Boolean indicating whether video/audio permissions are granted.
+ * - `errorMessage`: Error message string in case of permission errors.
+ * - `mediaStream`: The current media stream object from the user's devices.
+ * - `isVideoOn`: Boolean indicating whether the video track is enabled.
+ * - `isMicOn`: Boolean indicating whether the audio track is enabled.
+ * - `setSelectedCamera`: Function to set the selected camera.
+ * - `setSelectedMicrophone`: Function to set the selected microphone.
+ * - `requestPermissions`: Function to request video/audio permissions from the user.
+ * - `toggleTrack`: Function to toggle the video/audio tracks on or off.
  */
 const useVideoAudioPermission = () => {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
@@ -19,7 +34,9 @@ const useVideoAudioPermission = () => {
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
 
-  // Helper function to enumerate devices
+  /**
+   * Enumerates available media devices (video and audio input devices) and updates the state.
+   */
   const enumerateDevices = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -42,7 +59,9 @@ const useVideoAudioPermission = () => {
     }
   };
 
-  // Helper function to request video & audio permissions
+  /**
+   * Requests video and audio permissions from the user and retrieves the media stream.
+   */
   const requestPermissions = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -60,7 +79,11 @@ const useVideoAudioPermission = () => {
     }
   };
 
-  // Toggle functions that persist the state
+  /**
+   * Toggles the video or audio track on or off based on the `type` parameter.
+   *
+   * @param {string} type - The type of track to toggle ("audio" or "video").
+   */
   const toggleTrack = (type: "audio" | "video") => {
     mediaStream?.getTracks().forEach((track) => {
       if (track.kind === type) {
@@ -71,12 +94,14 @@ const useVideoAudioPermission = () => {
     if (type === "video") setIsVideoOn((prev) => !prev);
   };
 
+  // Cleanup the media stream when the component is unmounted
   useEffect(() => {
     return () => {
       mediaStream?.getTracks().forEach((track) => track.stop());
     };
   }, [mediaStream]);
 
+  // Re-enumerate devices when there is a change in the connected devices
   useEffect(() => {
     navigator.mediaDevices.addEventListener("devicechange", enumerateDevices);
     return () => {

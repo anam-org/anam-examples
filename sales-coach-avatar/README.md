@@ -5,8 +5,8 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Navigating the Code](#navigating-the-code)
@@ -113,37 +113,42 @@ sales-coach-avatar/
 ### Key Directories and Files
 
 #### 1. **`app/`**
-   - **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, etc.) for global state management.
-   - **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. The token is used to initialize and authenticate the Anam AI client.
-   - **`demo/`**:
-     - **`page.tsx`**: The main entry point for the demo experience. It manages the lifecycle of different views (scenarios, descriptions, demo) using the `ViewContext`.
-     - **`_views/`**:
-       - **ScenariosView.tsx**: Displays a grid of selectable scenarios.
-       - **DescriptionView.tsx**: Provides details about the selected scenario and instructions.
-       - **DemoView.tsx**: Manages the interactive training session.
+
+- **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, etc.) for global state management.
+- **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. The token is used to initialize and authenticate the Anam AI client.
+- **`demo/`**:
+  - **`page.tsx`**: The main entry point for the demo experience. It manages the lifecycle of different views (scenarios, descriptions, demo) using the `ViewContext`.
+  - **`_views/`**:
+    - **ScenariosView.tsx**: Displays a grid of selectable scenarios.
+    - **DescriptionView.tsx**: Provides details about the selected scenario and instructions.
+    - **DemoView.tsx**: Manages the interactive training session.
 
 #### 2. **`components/`**
-   - **`PermissionsModal.tsx`**: Handles video/audio permissions, ensuring the required permissions are granted before starting a training session.
+
+- **`PermissionsModal.tsx`**: Handles video/audio permissions, ensuring the required permissions are granted before starting a training session.
 
 #### 3. **`contexts/`**
-   - **`AnamContext.tsx`**: Manages the initialization and integration with the Anam AI client, including handling session tokens and persona configurations.
-   - **`SettingsContext.tsx`**: Manages application settings such as the selected scenario and persona configuration.
-   - **`VideoAudioPermissionContext.tsx`**: Handles video/audio permissions and device management.
-   - **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the demo. 
+
+- **`AnamContext.tsx`**: Manages the initialization and integration with the Anam AI client, including handling session tokens and persona configurations.
+- **`SettingsContext.tsx`**: Manages application settings such as the selected scenario and persona configuration.
+- **`VideoAudioPermissionContext.tsx`**: Handles video/audio permissions and device management.
+- **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the demo.
 
 #### 5. **`utils/`**
-   - **`env.js`**: Handles environment variable loading and validation.
-   - **`errorHandler.ts`**: Centralized error handling utility.
-   - **`fetchSessionToken.ts`**: Simple function for fetching session tokens.
-   - **`logger.ts`**: Provides logging functionality.
-   - **`types.ts`**: Contains TypeScript types and interfaces for error handling.
+
+- **`env.js`**: Handles environment variable loading and validation.
+- **`errorHandler.ts`**: Centralized error handling utility.
+- **`fetchSessionToken.ts`**: Simple function for fetching session tokens.
+- **`logger.ts`**: Provides logging functionality.
+- **`types.ts`**: Contains TypeScript types and interfaces for error handling.
 
 ### Key Components in Action
 
 - **`_views/`**: The components here manage the user interface and control the flow of the demo. Each view (Scenarios, Description, Demo) is modular, making it easy to extend or modify.
-   - **ScenariosView**: Lists scenarios, updating the `SettingsContext` when a scenario is selected.
-   - **DescriptionView**: Displays instructions for the selected scenario, using the `ViewContext` for navigation.
-   - **DemoView**: The role-play session view, interacting with the Anam AI client through the `AnamContext`.
+
+  - **ScenariosView**: Lists scenarios, updating the `SettingsContext` when a scenario is selected.
+  - **DescriptionView**: Displays instructions for the selected scenario, using the `ViewContext` for navigation.
+  - **DemoView**: The role-play session view, interacting with the Anam AI client through the `AnamContext`.
 
 - **`AnamContext`**: Manages interaction with the Anam AI SDK, including initializing the client, updating personas, and handling client state.
 
