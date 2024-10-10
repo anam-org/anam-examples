@@ -1,7 +1,6 @@
 import { useAnamContext, useVideoAudioPermissionContext } from "@/contexts";
 import { Flex, IconButton, Separator, Slider } from "@radix-ui/themes";
 import { Dispatch, RefObject, SetStateAction, useState } from "react";
-import { GhostIconButton } from "./GhostButton";
 import {
   RotateCcw,
   Video,
@@ -10,7 +9,8 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
-import { Timer } from "./_components/Timer";
+import { GhostIconButton } from "./GhostButton";
+import { Timer } from "./Timer";
 
 export const DemoControls = ({
   secondsElapsed,
