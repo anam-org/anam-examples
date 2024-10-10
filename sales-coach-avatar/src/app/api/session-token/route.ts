@@ -1,6 +1,8 @@
 import { env, errorHandler, logger } from "@/utils";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Handles the GET request to fetch a session token from the Anam API.
  */
