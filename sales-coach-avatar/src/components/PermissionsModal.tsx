@@ -110,8 +110,8 @@ export function PermissionsModal({
 
       {/* Modal */}
       <Grid
-        width={{ initial: "90vw", sm: "70vw", md: "80vw", xl: "70vw" }}
-        maxWidth="1400px"
+        width={{ initial: "90vw", sm: "60vw", md: "80vw", xl: "70vw" }}
+        maxWidth="1024px"
         columns={{ sm: "1", md: "2" }}
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-85 border border-gray-300 rounded-lg z-[1000] p-3"
       >
@@ -133,10 +133,10 @@ export function PermissionsModal({
                 autoPlay
                 muted
                 playsInline
-                className="aspect-square object-cover rounded-md w-full h-full"
+                className="aspect-square object-cover rounded-md w-full h-auto"
               />
             ) : (
-              <Skeleton className="aspect-square rounded-md w-full h-full" />
+              <Skeleton className="aspect-square rounded-md w-full h-auto" />
             )}
 
             {/* Mic/Video Controls */}
@@ -199,7 +199,7 @@ export function PermissionsModal({
 
           {!permissionsGranted ? (
             <Button size="4" className="w-[90%]" onClick={requestPermissions}>
-              Request Permissions
+              Grant Access
             </Button>
           ) : (
             <Button

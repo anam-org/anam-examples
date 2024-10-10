@@ -15,7 +15,7 @@ export function DemoView() {
 
   return (
     <Grid
-      columns={{ md: "1", lg: "auto auto" }}
+      columns={{ sm: "1", md: "auto auto", lg: "auto auto" }}
       gap="3"
       className="appcontainer"
     >

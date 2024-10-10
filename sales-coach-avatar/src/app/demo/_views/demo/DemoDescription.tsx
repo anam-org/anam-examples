@@ -147,7 +147,13 @@ export const DemoDescription = ({
         ))}
       </ul>
       <Flex justify="end">
-        <Button size="4" onClick={() => changeView("initial")}>
+        <Button
+          mt="3"
+          mb="3"
+          size="4"
+          className="w-full sm:w-auto"
+          onClick={() => changeView("initial")}
+        >
           End Demo
         </Button>
       </Flex>

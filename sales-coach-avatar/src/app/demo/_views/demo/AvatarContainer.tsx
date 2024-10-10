@@ -102,11 +102,10 @@ export const AvatarContainer = ({
 
   return (
     <Flex
-      direction="column"
       align="center"
       justify="center"
       mt="2"
-      className="relative lg:min-w-[735px] aspect-square bg-gray-100 rounded-lg border border-gray-300"
+      className="relative sm:min-w-[80vw] md:min-w-[500px] lg:min-w-[600px] xl:min-w-[800px] aspect-square bg-gray-100 rounded-lg border border-gray-300"
     >
       {loading && (
         <Flex className="absolute">
