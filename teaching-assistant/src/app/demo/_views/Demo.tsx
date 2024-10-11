@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
 import {
   DemoSidebar,
   ConversationPopup,
@@ -29,29 +28,13 @@ export function DemoView() {
   const streamingStartedRef = useRef(false);
   const listenersAddedRef = useRef(false);
 
-  const [isMuted, setIsMuted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isVideoStreaming, setIsVideoStreaming] = useState(false);
   const [loadingText, setLoadingText] = useState("Connecting...");
   const [streamError, setStreamError] = useState<string | null>(null);
   const [conversation, setConversation] = useState<
     { sender: string; text: string }[]
   >([]);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME_LEFT);
-
-  const handlePlayPauseToggle = useCallback(() => {
-    if (videoRef.current) {
-      isPlaying ? videoRef.current.pause() : videoRef.current.play();
-    }
-  }, [isPlaying]);
-
-  const requestFullscreen = useCallback(() => {
-    const video = videoRef.current;
-    if (video) {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      }
-    }
-  }, []);
 
   const stopStreaming = useCallback(() => {
     if (anamClient) {
@@ -71,11 +54,13 @@ export function DemoView() {
   const onVideoStartedStreaming = useCallback(() => {
     setLoadingText("");
     setStreamError(null);
+    setIsVideoStreaming(true);
     logger.info("Video started streaming");
   }, []);
 
   const onConnectionClosed = useCallback((reason: string) => {
     logger.info("Connection closed", reason);
+    setIsVideoStreaming(false);
   }, []);
 
   const updateConversation = useCallback((updatedMessages: Message[]) => {
@@ -89,9 +74,6 @@ export function DemoView() {
     setConversation(mappedMessages);
   }, []);
 
-  const formatTime = (time: number) =>
-    `${Math.floor(time / 60)}:${String(time % 60).padStart(2, "0")}`;
-
   // Handle the timer
   useEffect(() => {
     if (timeLeft === 0) {
@@ -102,28 +84,28 @@ export function DemoView() {
       router.push("/");
     }
     const timer =
-      isPlaying && timeLeft > 0
+      isVideoStreaming && timeLeft > 0
         ? setInterval(() => setTimeLeft((prev) => prev - 1), 1000)
         : undefined;
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isPlaying, timeLeft, stopStreaming, router]);
+  }, [isVideoStreaming, timeLeft, stopStreaming, router]);
 
   useEffect(() => {
     if (anamClient && !listenersAddedRef.current) {
       anamClient.addListener(
         AnamEvent.CONNECTION_ESTABLISHED,
-        onConnectionEstablished,
+        onConnectionEstablished
       );
       anamClient.addListener(
         AnamEvent.VIDEO_PLAY_STARTED,
-        onVideoStartedStreaming,
+        onVideoStartedStreaming
       );
       anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
       anamClient.addListener(
         AnamEvent.MESSAGE_HISTORY_UPDATED,
-        updateConversation,
+        updateConversation
       );
       listenersAddedRef.current = true;
     }
@@ -132,19 +114,19 @@ export function DemoView() {
       if (anamClient && listenersAddedRef.current) {
         anamClient.removeListener(
           AnamEvent.CONNECTION_ESTABLISHED,
-          onConnectionEstablished,
+          onConnectionEstablished
         );
         anamClient.removeListener(
           AnamEvent.VIDEO_PLAY_STARTED,
-          onVideoStartedStreaming,
+          onVideoStartedStreaming
         );
         anamClient.removeListener(
           AnamEvent.CONNECTION_CLOSED,
-          onConnectionClosed,
+          onConnectionClosed
         );
         anamClient.removeListener(
           AnamEvent.MESSAGE_HISTORY_UPDATED,
-          updateConversation,
+          updateConversation
         );
         setConversation([]);
         listenersAddedRef.current = false;
@@ -172,7 +154,7 @@ export function DemoView() {
       try {
         await anamClient.streamToVideoAndAudioElements(
           videoRef.current.id,
-          audioRef.current.id,
+          audioRef.current.id
         );
         streamingStartedRef.current = true;
       } catch (error) {
@@ -203,16 +185,13 @@ export function DemoView() {
         {/* Main Content */}
         <div className="flex flex-col items-center p-5 flex-1">
           <div className="relative">
-            <div className="relative bg-white rounded-lg border border-gray-300 shadow-lg overflow-hidden">
+            <div className="relative rounded-lg overflow-hidden">
               <video
                 id="avatar-video"
                 ref={videoRef}
                 autoPlay
                 playsInline
                 className="rounded-lg object-cover w-[90vw] h-auto md:w-auto md:h-[90vh]"
-                muted={isMuted}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
               />
               <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
               <div className="flex justify-center items-center w-full h-full absolute top-0 left-0">
@@ -221,14 +200,15 @@ export function DemoView() {
                 ) : loadingText ? (
                   <div className="flex flex-col items-center">
                     <Spinner size="3" />
-                    <p className="text-gray-700 text-base">{loadingText}</p>
                   </div>
                 ) : null}
               </div>
               {/* Conversation Popup */}
-              <div className="absolute bottom-4 right-4 hidden md:flex">
-                <ConversationPopup conversation={conversation} />
-              </div>
+              {isVideoStreaming && (
+                <div className="absolute bottom-4 right-4 hidden md:flex">
+                  <ConversationPopup conversation={conversation} />
+                </div>
+              )}
             </div>
           </div>
           {/* Progress Bar */}
