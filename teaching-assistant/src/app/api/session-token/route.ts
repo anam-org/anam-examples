@@ -25,6 +25,7 @@ export async function GET() {
         Authorization: `Bearer ${apiKey}`,
         cache: "no-store",
       },
+      cache: "no-store",
     });
 
     if (!response.ok) {
