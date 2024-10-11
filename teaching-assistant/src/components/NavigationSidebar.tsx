@@ -150,7 +150,7 @@ export const NavigationSidebar = () => {
     <>
       {/* Button to toggle sidebar on smaller screens */}
       {!open && (
-        <Box className="lg:hidden fixed top-8 left-5 z-50">
+        <Box className="lg:hidden fixed top-6 left-5 z-50">
           <IconButton
             onClick={() => setOpen(true)}
             className="p-2 rounded-full bg-black dark:bg-white border border-gray-200 dark:border-gray-700"
@@ -162,7 +162,7 @@ export const NavigationSidebar = () => {
 
       {/* Sidebar always rendered, with transition applied */}
       <Box
-        className={`fixed top-0 left-0 h-screen p-5 pt-8 z-50 transition-all duration-300 border-r border-gray-200 dark:border-gray-500 shadow-lg ${
+        className={`fixed top-0 left-0 h-screen p-5 pt-8 z-50 bg-white dark:bg-black transition-all duration-300 border-r border-gray-200 dark:border-gray-500 shadow-lg ${
           open
             ? "w-[20vw] min-w-[200px] max-w-[400px]"
             : "w-0 lg:w-[8vw] xl:w-[6vw] 2xl:w-[3vw] min-w-[50px]"
