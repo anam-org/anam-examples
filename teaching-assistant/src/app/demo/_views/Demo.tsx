@@ -63,7 +63,7 @@ export function DemoView() {
   }, [anamClient]);
 
   const onConnectionEstablished = useCallback(() => {
-    setLoadingText("Connected to a Persona. Starting video stream...");
+    setLoadingText("Connected to a Persona...");
     setStreamError(null);
     logger.info("Connection established");
   }, []);
