@@ -3,6 +3,7 @@
 import {
   AnamContextProvider,
   AudioPermissionProvider,
+  SettingsContextProvider,
   ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
@@ -32,9 +33,12 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <AudioPermissionProvider>
       <AnamContextProvider sessionToken={sessionToken}>
+        <SettingsContextProvider>
+          
         <ViewContextProvider>
           {children}
         </ViewContextProvider>
+        </SettingsContextProvider>
       </AnamContextProvider>
     </AudioPermissionProvider>
   );

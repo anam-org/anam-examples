@@ -11,7 +11,6 @@ import {
   Settings,
   X,
   BrainCircuit,
-  Menu,
 } from "lucide-react";
 import { useViewContext, useAnamContext } from "@/contexts";
 import { useRouter } from "next/navigation";
@@ -180,7 +179,7 @@ export const NavigationSidebar = () => {
       logger.info("stopped streaming");
     }
     router.push("/");
-    changeView("Settings");
+    changeView("Demo");
     setOpen(false);
   };
 
@@ -194,7 +193,7 @@ export const NavigationSidebar = () => {
             onClick={() => setOpen(true)}
             className="p-2 rounded-full bg-black dark:bg-white border border-gray-200 dark:border-gray-700"
           >
-            <Menu stroke={theme === "dark" ? "black" : "white"} />
+            <BrainCircuit stroke={theme === "dark" ? "black" : "white"} />
           </IconButton>
         </Box>
       )}

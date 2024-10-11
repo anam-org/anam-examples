@@ -10,6 +10,8 @@ import {
 } from "@anam-ai/js-sdk/dist/module/types";
 import { useRouter } from "next/navigation";
 import { AvatarContainer } from "@/components/AvatarContainer";
+import { errorHandler } from "@/utils";
+import { Box } from "@radix-ui/themes";
 
 // Initial time limit in seconds
 const INITIAL_TIME_LEFT = 120;
@@ -55,7 +57,7 @@ export function DemoView() {
   const stopStreaming = useCallback(() => {
     if (anamClient) {
       anamClient.stopStreaming().catch((error) => {
-        console.error("Failed to stop streaming:", error);
+        errorHandler(`Failed to stop streaming: ${error}`, "Demo.tsx");
       });
     }
   }, [anamClient]);
@@ -147,13 +149,13 @@ export function DemoView() {
       <div className="flex flex-col md:flex-row justify-center items-start max-w-screen-xl mx-auto">
         {/* Main Content Area */}
         <div className="flex flex-col items-center p-5 flex-1">
-          <div className="relative">
+          <Box mt={{initial: "8", sm: "0"}} className="relative">
             {/* Avatar Container to display conversation with streaming state */}
             <AvatarContainer
               conversation={conversation}
               onStreamingEnd={handleStreamingEnd}
             />
-          </div>
+          </Box>
           {/* Progress Bar */}
           <div className="w-full max-w-2xl mt-4">
             <div className="w-full bg-gray-200 rounded-full h-2">

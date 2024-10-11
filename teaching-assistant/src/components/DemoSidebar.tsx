@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading, Text, Box, IconButton } from "@radix-ui/themes";
-import { ChevronLeft, ChevronRight, BookOpen, Menu } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
@@ -194,7 +194,7 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
             onClick={() => setOpen(true)}
             className="p-2 rounded-full bg-black dark:bg-white border border-gray-200 dark:border-gray-700"
           >
-            <Menu stroke={theme === "dark" ? "black" : "white"} />
+            <BookOpen stroke={theme === "dark" ? "black" : "white"} />
           </IconButton>
         </Box>
       )}
