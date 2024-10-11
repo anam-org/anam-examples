@@ -34,6 +34,20 @@ const personaConfigurations: Record<
   },
 };
 
+/**
+ * Custom hook to manage the application settings, such as the selected language,
+ * persona type (friendly, professional, formal), and applying the persona configuration
+ * to the Anam AI client.
+ *
+ * @returns {Object} An object containing:
+ * - `selectedLanguage` {LanguageType}: The currently selected language (french, spanish, or german).
+ * - `setSelectedLanguage` {function}: Function to update the selected language.
+ * - `selectedPersona` {PersonaType}: The currently selected persona type (friendly, professional, or formal).
+ * - `setSelectedPersona` {function}: Function to update the selected persona type.
+ * - `isDarkMode` {boolean}: Boolean flag indicating whether the current theme is dark mode.
+ * - `applyPersonaConfig` {function}: Function that applies the current persona configuration
+ *   to the Anam AI client based on the selected language and persona type.
+ */
 const useSettings = () => {
   const { setPersonaConfig } = useAnamContext();
   const { theme } = useTheme();

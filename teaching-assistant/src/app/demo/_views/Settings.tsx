@@ -12,9 +12,23 @@ import {
 import { LanguageType, PersonaType, useSettingsContext } from "@/contexts";
 import { useTheme } from "next-themes";
 
+/**
+ * Capitalizes the first letter of the provided string.
+ *
+ * @param {string} string - The string to capitalize.
+ * @returns {string} - The string with the first letter capitalized.
+ */
 const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
+/**
+ * Renders the settings view for configuring language, persona, and display settings.
+ * It allows users to change the language, persona type (friendly, professional, formal),
+ * and toggle dark mode. The user can save their settings which will apply the persona
+ * configuration.
+ *
+ * @component
+ */
 export function SettingsView() {
   const {
     selectedLanguage,
@@ -27,10 +41,18 @@ export function SettingsView() {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === "dark";
 
+  /**
+   * Toggles the theme between light and dark mode.
+   *
+   * @param {boolean} checked - Whether dark mode is enabled.
+   */
   const toggleDarkMode = (checked: boolean) => {
     setTheme(checked ? "dark" : "light");
   };
 
+  /**
+   * Handles the saving of settings by applying the current persona configuration.
+   */
   const handleSaveSettings = () => {
     applyPersonaConfig();
   };

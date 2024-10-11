@@ -1,4 +1,4 @@
-# Anam AI Sales Coach Example
+# Anam AI Teaching Assistant Example
 
 This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive language teaching experience. The avatar can teach multiple languages and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
 
@@ -100,7 +100,7 @@ Key components are organized to facilitate quick navigation and extendibility.
 ### Project Structure
 
    ```
-   sales-coach-avatar/
+   teaching-assistant/
    ├── app/
    │   ├── api/
    │   │   └── session-token/
@@ -117,7 +117,7 @@ Key components are organized to facilitate quick navigation and extendibility.
    │   ├── AudioPermissionsModal.tsx
    │   ├── AvatarContainer.tsx
    │   ├── ConversationPopUp.tsx
-   │   ├── ConverstaionTracker.tsx
+   │   ├── ConversationTracker.tsx
    │   ├── DemoSidebar.tsx
    │   └── NavigationSidebar.tsx
    ├── contexts/
@@ -125,8 +125,8 @@ Key components are organized to facilitate quick navigation and extendibility.
    │   ├── AudioPermissionContext.tsx
    │   ├── SettingsContext.tsx
    │   └── ViewContext.tsx
-   ├── utils/
-   │   └── useFetchToken.js
+   ├── hooks/
+   │   └── useFetchToken.tsx
    ├── utils/
    │   ├── env.js
    │   ├── errorHandler.ts
@@ -136,7 +136,39 @@ Key components are organized to facilitate quick navigation and extendibility.
    └── ...
    ```
 
----
+### Key Directories and Files
+
+#### 1. **`app/`**
+
+- **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, etc.) for global state management.
+- **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. The token is used to initialize and authenticate the Anam AI client.
+- **`demo/`**:
+  - **`page.tsx`**: The main entry point for the teaching experience. It manages the lifecycle of different views (scenarios, settings, demo) using the `ViewContext`.
+  - **`_views/`**:
+    - **Demo.tsx**: Manages the interactive teaching session.
+    - **Settings.tsx**: Provides configuration options for different language teaching scenarios.
+
+#### 2. **`components/`**
+
+- **`AudioPermissionsModal.tsx`**: Handles audio permissions, ensuring the required permissions are granted before starting a session.
+
+#### 3. **`contexts/`**
+
+- **`AnamContext.tsx`**: Manages the initialization and integration with the Anam AI client, including handling session tokens and persona configurations.
+- **`SettingsContext.tsx`**: Manages application settings such as the selected language and persona configuration.
+- **`AudioPermissionContext.tsx`**: Handles audio permissions and device management.
+- **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the teaching assistant demo.
+
+#### 4. **`hooks/`**
+
+- **`useFetchToken.ts`**: Hook for fetching & refreshing session tokens.
+
+#### 5. **`utils/`**
+
+- **`env.js`**: Handles environment variable loading and validation.
+- **`errorHandler.ts`**: Centralized error handling utility.
+- **`logger.ts`**: Provides logging functionality.
+- **`types.ts`**: Contains TypeScript types and interfaces for error handling.
 
 ### Extending the Example
 
