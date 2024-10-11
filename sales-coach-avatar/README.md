@@ -110,10 +110,11 @@ Key components are organized to facilitate quick navigation and extendibility.
    │   ├── SettingsContext.tsx
    │   ├── VideoAudioPermissionContext.tsx
    │   └── ViewContext.tsx
+   ├── hooks/
+   │   └── useFetchToken.tsx
    ├── utils/
    │   ├── env.js
    │   ├── errorHandler.ts
-   │   ├── fetchSessionToken.ts
    │   ├── logger.ts
    │   └── types.ts
    └── ...
@@ -143,11 +144,13 @@ Key components are organized to facilitate quick navigation and extendibility.
 - **`VideoAudioPermissionContext.tsx`**: Handles video/audio permissions and device management.
 - **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the demo.
 
-#### 5. **`utils/`**
+#### 5. **`hooks/`**
+- **`useFetchToken.ts`**: Hook for fetching & refreshing session tokens.
+
+#### 6. **`utils/`**
 
 - **`env.js`**: Handles environment variable loading and validation.
 - **`errorHandler.ts`**: Centralized error handling utility.
-- **`fetchSessionToken.ts`**: Simple function for fetching session tokens.
 - **`logger.ts`**: Provides logging functionality.
 - **`types.ts`**: Contains TypeScript types and interfaces for error handling.
 
