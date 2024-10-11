@@ -32,6 +32,7 @@ export async function GET() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
+      cache: "no-store",
     });
 
     // If the response is not OK, log and return the error

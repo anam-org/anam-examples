@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SessionTokenResponse {
   sessionToken: string;
@@ -29,12 +29,18 @@ const isTokenExpired = (token: string): boolean => {
  * Custom hook to fetch and manage the session token using SWR.
  */
 export const useFetchToken = () => {
+  const [fetchKey, setFetchKey] = useState<string>(
+    `/session-token-${Date.now()}`,
+  );
+
   const fetchSessionToken = async (): Promise<string> => {
+    console.log("Fetching new session token...");
     const response = await fetch("/api/session-token", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -42,6 +48,7 @@ export const useFetchToken = () => {
     }
 
     const data: SessionTokenResponse = await response.json();
+    console.log("New session token received:", data.sessionToken);
     return data.sessionToken;
   };
 
@@ -50,18 +57,25 @@ export const useFetchToken = () => {
     error,
     mutate,
     isValidating,
-  } = useSWR<string, Error>("/session-token", fetchSessionToken, {
+  } = useSWR<string, Error>(fetchKey, fetchSessionToken, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     shouldRetryOnError: false,
-    dedupingInterval: 60000,
+    dedupingInterval: 0,
+    revalidateOnMount: true,
   });
 
   useEffect(() => {
     if (sessionToken && isTokenExpired(sessionToken)) {
-      mutate();
+      console.log("Token expired, refreshing...");
+      setFetchKey(`/session-token-${Date.now()}`);
     }
-  }, [sessionToken, mutate]);
+  }, [sessionToken]);
 
-  return { sessionToken, error, refreshToken: mutate, isValidating };
+  const refreshToken = () => {
+    console.log("Manually refreshing token...");
+    setFetchKey(`/session-token-${Date.now()}`);
+  };
+
+  return { sessionToken, error, refreshToken, isValidating };
 };
