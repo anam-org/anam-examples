@@ -1,6 +1,6 @@
 # Anam AI Sales Coach Example
 
-This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive sales training role-play experience. The application offers multiple scenarios and serves as a reference for engineers exploring the SDK's capabilities. For more in depth information on the anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
+This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive sales training role-play experience. The application offers multiple scenarios and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
 
 ## Table of Contents
 
@@ -37,25 +37,34 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
    yarn install
    ```
 
-3. **Set up environment variables:**
+3. **Generate personas and set up your .env file:**
 
-   Create a `.env` file in the root directory and add your Anam AI SDK credentials:
+   After installing dependencies, run the following command to generate personas:
+
+   ```bash
+   npm run generate-personas
+   # or
+   pnpm generate-personas
+   # or
+   yarn generate-personas
+   ```
+
+   This will generate the personas required for the different scenarios in the application.
+
+   Once the personas are generated, you will receive an output with persona IDs. Update your `.env` file with the generated persona IDs as shown below:
 
    ```env
    ANAM_API_KEY=your_api_key
-   NEXT_PUBLIC_PERSONA_ID=your_persona_id
-   NEXT_PUBLIC_DISABLE_BRAINS=false
-   NEXT_PUBLIC_DISABLE_FILLER_PHRASES=false
+   NEXT_PUBLIC_BASE_URL=https://api.anam.ai
+
+   # Persona IDs for each scenario
+   NEXT_PUBLIC_PERSONA_JORDAN=generated_persona_id_for_jordan
+   NEXT_PUBLIC_PERSONA_TAYLOR=generated_persona_id_for_taylor
+   NEXT_PUBLIC_PERSONA_ALEX=generated_persona_id_for_alex
+   NEXT_PUBLIC_PERSONA_JAMIE=generated_persona_id_for_jamie
+   NEXT_PUBLIC_PERSONA_SAM=generated_persona_id_for_sam
+   NEXT_PUBLIC_PERSONA_MORGAN=generated_persona_id_for_morgan
    ```
-
-## Configuration
-
-To configure the application, modify the `.env` file with your Anam AI SDK credentials:
-
-- **`ANAM_API_KEY`**: Your API key for authenticating with Anam AI services.
-- **`NEXT_PUBLIC_PERSONA_ID`**: The persona ID associated with the training scenario.
-- **`NEXT_PUBLIC_DISABLE_BRAINS`**: Set to `false` to enable brain simulation during the demo.
-- **`NEXT_PUBLIC_DISABLE_FILLER_PHRASES`**: Set to `false` to allow the use of filler phrases by the AI during conversations.
 
 ## Usage
 
@@ -63,13 +72,13 @@ To configure the application, modify the `.env` file with your Anam AI SDK crede
 
 To start the development server, use one of the following commands:
 
-```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
-```
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   # or
+   yarn dev
+   ```
 
 Access the application at [http://localhost:3000](http://localhost:3000).
 
@@ -79,36 +88,36 @@ Key components are organized to facilitate quick navigation and extendibility.
 
 ### Project Structure
 
-```
-sales-coach-avatar/
-├── app/
-│   ├── api/
-│   |   └── session-token/
-│   |       └── route.ts
-│   ├── demo/
-│   │   ├── _views/
-│   │   |   └── ScenariosView.tsx
-│   │   |   └── DescriptionView.tsx
-│   │   |   └── DemoView.tsx
-│   │   └── page.tsx
-│   ├── _providers.tsx
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   └── PermissionsModal.tsx
-├── contexts/
-│   ├── AnamContext.tsx
-│   ├── SettingsContext.tsx
-│   ├── VideoAudioPermissionContext.tsx
-│   └── ViewContext.tsx
-├── utils/
-│   ├── env.js
-│   ├── errorHandler.ts
-│   ├── fetchSessionToken.ts
-│   ├── logger.ts
-│   └── types.ts
-└── ...
-```
+   ```
+   sales-coach-avatar/
+   ├── app/
+   │   ├── api/
+   │   │   └── session-token/
+   │   │       └── route.ts
+   │   ├── demo/
+   │   │   ├── _views/
+   │   │   │   └── ScenariosView.tsx
+   │   │   │   └── DescriptionView.tsx
+   │   │   │   └── DemoView.tsx
+   │   │   └── page.tsx
+   │   ├── _providers.tsx
+   │   ├── layout.tsx
+   │   └── page.tsx
+   ├── components/
+   │   └── PermissionsModal.tsx
+   ├── contexts/
+   │   ├── AnamContext.tsx
+   │   ├── SettingsContext.tsx
+   │   ├── VideoAudioPermissionContext.tsx
+   │   └── ViewContext.tsx
+   ├── utils/
+   │   ├── env.js
+   │   ├── errorHandler.ts
+   │   ├── fetchSessionToken.ts
+   │   ├── logger.ts
+   │   └── types.ts
+   └── ...
+   ```
 
 ### Key Directories and Files
 

@@ -3,6 +3,7 @@
 import constate from "constate";
 import { useState } from "react";
 import { useAnamContext } from "@/contexts";
+import { env } from "@/utils";
 
 export type ScenarioType =
   | "product_demo"
@@ -13,16 +14,15 @@ export type ScenarioType =
   | "customer_support";
 
 /**
- * A mapping of scenario types to their corresponding scenario IDs.
- * This is used to map user-selected scenarios to persona configurations in the Anam AI client.
+ * A mapping of scenario types to their corresponding persona IDs from environment variables.
  */
 export const scenarioIds: Record<ScenarioType, string> = {
-  product_demo: "8c4af0ac-fbc1-4663-be3b-1fd6c7bf4f1f",
-  negotiation: "db3e3034-b7d3-49a3-bc17-97750ba3f303",
-  objection_handling: "a4788e42-46ab-4c1e-9d74-0245469c1f6a",
-  closing_deal: "da6a5ae5-4c93-4ae3-848d-80d182f86019",
-  follow_up: "c41b41f2-c8d8-437a-834b-c444974db4c7",
-  customer_support: "5580786e-e277-4d3d-a8aa-fc675ee6b7a6",
+  product_demo: env.NEXT_PUBLIC_PERSONA_JORDAN,
+  negotiation: env.NEXT_PUBLIC_PERSONA_TAYLOR,
+  objection_handling: env.NEXT_PUBLIC_PERSONA_ALEX,
+  closing_deal: env.NEXT_PUBLIC_PERSONA_JAMIE,
+  follow_up: env.NEXT_PUBLIC_PERSONA_SAM,
+  customer_support: env.NEXT_PUBLIC_PERSONA_MORGAN,
 };
 
 /**

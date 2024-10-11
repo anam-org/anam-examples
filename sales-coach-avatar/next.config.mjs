@@ -3,11 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   headers: () => [
     {
-      source: '/(.*)',
+      source: "/(.*)",
       headers: [
         {
-          key: 'Cache-Control',
-          value: 'no-store',
+          key: "Cache-Control",
+          value: "no-store",
         },
       ],
     },
