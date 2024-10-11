@@ -135,6 +135,8 @@ export const NavigationSidebar = () => {
       changeView(navigateTo);
       logger.info("stopped streaming");
     }
+
+    setOpen(false);
   };
 
   const handleExitClick = async () => {
@@ -144,6 +146,7 @@ export const NavigationSidebar = () => {
     }
     router.push("/");
     changeView("Settings");
+    setOpen(false);
   };
 
   return (
