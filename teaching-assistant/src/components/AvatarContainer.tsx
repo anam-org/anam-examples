@@ -9,7 +9,6 @@ import { Spinner } from "@radix-ui/themes";
 
 interface AvatarContainerProps {
   conversation: { sender: string; text: string }[];
-  onStreamingEnd: () => void;
 }
 
 /**
@@ -22,7 +21,6 @@ interface AvatarContainerProps {
  */
 export const AvatarContainer = ({
   conversation,
-  onStreamingEnd,
 }: AvatarContainerProps) => {
   const { anamClient, isClientInitialized } = useAnamContext();
 
@@ -102,9 +100,8 @@ export const AvatarContainer = ({
     (reason: string) => {
       logger.info("Connection closed", reason);
       setIsVideoStreaming(false);
-      onStreamingEnd();
     },
-    [onStreamingEnd],
+    [isVideoStreaming],
   );
 
   /**

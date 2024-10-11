@@ -60,6 +60,7 @@ export function DemoView() {
         errorHandler(`Failed to stop streaming: ${error}`, "Demo.tsx");
       });
     }
+    router.push("/");
   }, [anamClient]);
 
   /**
@@ -79,16 +80,6 @@ export function DemoView() {
     }));
     setConversation(mappedMessages); // Update conversation state with the new messages
   }, []);
-
-  /**
-   * Handles the end of streaming by redirecting the user to the home page.
-   *
-   * @function
-   * @returns {void}
-   */
-  const handleStreamingEnd = useCallback(() => {
-    router.push("/"); // Navigate to home page
-  }, [router]);
 
   /**
    * Countdown timer effect. Decreases time left by 1 second every interval and stops streaming when time reaches zero.
@@ -153,7 +144,6 @@ export function DemoView() {
             {/* Avatar Container to display conversation with streaming state */}
             <AvatarContainer
               conversation={conversation}
-              onStreamingEnd={handleStreamingEnd}
             />
           </Box>
           {/* Progress Bar */}
