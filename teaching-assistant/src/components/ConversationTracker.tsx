@@ -6,18 +6,48 @@ interface ResponsiveConversationProps {
   conversation: { sender: string; text: string }[];
 }
 
+/**
+ * ConversationTracker component handles displaying the conversation history in a toggleable section
+ * on mobile screens (small screens). It can expand or collapse the conversation and scroll to the bottom
+ * when new messages arrive.
+ *
+ * @component
+ * @param {ResponsiveConversationProps} props - The props for the component, including the conversation array.
+ * @returns {JSX.Element} The ConversationTracker component.
+ */
 export const ConversationTracker = ({
   conversation,
 }: ResponsiveConversationProps) => {
+  /** 
+   * Ref to the end of the conversation list to automatically scroll to the bottom.
+   * @type {React.MutableRefObject<HTMLDivElement | null>}
+   */
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  /** 
+   * State to track if the conversation history is open.
+   * @type {[boolean, Function]}
+   */
   const [open, setOpen] = useState(false);
 
+  /**
+   * Scrolls the conversation content to the bottom of the list.
+   *
+   * @function
+   * @returns {void}
+   */
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  /**
+   * Effect that triggers when the conversation updates or when the history is opened.
+   * It ensures the chat scrolls to the bottom when new messages are added or the history is opened.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     if (open) {
       scrollToBottom();

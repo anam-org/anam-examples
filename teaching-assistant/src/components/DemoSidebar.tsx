@@ -5,90 +5,6 @@ import { ChevronLeft, ChevronRight, BookOpen, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
-const lessons: Record<string, MenuItem[]> = {
-  french: [
-    {
-      title: "Introduction to French",
-      description: "Basic greetings and phrases",
-      clickable: true,
-    },
-    {
-      title: "French Numbers",
-      description: "Learn to count in French",
-      clickable: false,
-    },
-    {
-      title: "Basic Conversations",
-      description: "Common questions and answers",
-      clickable: false,
-    },
-    {
-      title: "French Verbs",
-      description: "Introduction to verb conjugation",
-      clickable: false,
-    },
-    {
-      title: "Everyday Vocabulary",
-      description: "Essential words for daily life",
-      clickable: false,
-    },
-  ],
-  spanish: [
-    {
-      title: "Introduction to Spanish",
-      description: "Basic greetings and phrases",
-      clickable: true,
-    },
-    {
-      title: "Spanish Numbers",
-      description: "Learn to count in Spanish",
-      clickable: false,
-    },
-    {
-      title: "Basic Conversations",
-      description: "Common questions and answers",
-      clickable: false,
-    },
-    {
-      title: "Spanish Verbs",
-      description: "Introduction to verb conjugation",
-      clickable: false,
-    },
-    {
-      title: "Everyday Vocabulary",
-      description: "Essential words for daily life",
-      clickable: false,
-    },
-  ],
-  german: [
-    {
-      title: "Introduction to German",
-      description: "Basic greetings and phrases",
-      clickable: true,
-    },
-    {
-      title: "German Numbers",
-      description: "Learn to count in German",
-      clickable: false,
-    },
-    {
-      title: "Basic Conversations",
-      description: "Common questions and answers",
-      clickable: false,
-    },
-    {
-      title: "German Verbs",
-      description: "Introduction to verb conjugation",
-      clickable: false,
-    },
-    {
-      title: "Everyday Vocabulary",
-      description: "Essential words for daily life",
-      clickable: false,
-    },
-  ],
-};
-
 interface MenuItem {
   title: string;
   description: string;
@@ -106,6 +22,39 @@ interface DemoSidebarContentsProps {
   setSelectedLesson: (lesson: string) => void;
 }
 
+const lessons: Record<string, MenuItem[]> = {
+  french: [
+    { title: "Introduction to French", description: "Basic greetings and phrases", clickable: true },
+    { title: "French Numbers", description: "Learn to count in French", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "French Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+  spanish: [
+    { title: "Introduction to Spanish", description: "Basic greetings and phrases", clickable: true },
+    { title: "Spanish Numbers", description: "Learn to count in Spanish", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "Spanish Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+  german: [
+    { title: "Introduction to German", description: "Basic greetings and phrases", clickable: true },
+    { title: "German Numbers", description: "Learn to count in German", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "German Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+};
+
+/**
+ * DemoSidebarContents renders the list of lessons in the sidebar based on the selected language.
+ * Users can select a lesson, but only clickable lessons are selectable.
+ *
+ * @component
+ * @param {DemoSidebarContentsProps} props - Props including whether the sidebar is open, the lessons to display,
+ * the currently selected lesson, and a setter function for the selected lesson.
+ * @returns {JSX.Element} The sidebar content with lesson items.
+ */
 const DemoSidebarContents = ({
   open,
   lessons,
@@ -116,10 +65,7 @@ const DemoSidebarContents = ({
     <ul className="space-y-2">
       {open &&
         lessons.map((lesson, index) => (
-          <li
-            key={index}
-            onClick={() => lesson.clickable && setSelectedLesson(lesson.title)}
-          >
+          <li key={index} onClick={() => lesson.clickable && setSelectedLesson(lesson.title)}>
             <Box
               className={`p-2 sm:p-3 lg:p-4 border border-gray-200 dark:border-gray-500 dark:bg-gray-700 rounded-lg shadow transition cursor-pointer ${
                 lesson.clickable
@@ -127,16 +73,8 @@ const DemoSidebarContents = ({
                   : "opacity-50 pointer-events-none"
               } ${selectedLesson === lesson.title ? "bg-gray-200" : ""}`}
             >
-              {/* Title*/}
-              <Heading size={{ initial: "1", sm: "1", md: "1", lg: "2" }}>
-                {lesson.title}
-              </Heading>
-
-              {/* Description*/}
-              <Text
-                size={{ initial: "1", sm: "1", md: "1", lg: "2" }}
-                className="text-gray-500 hidden xl:block"
-              >
+              <Heading size={{ initial: "1", sm: "1", md: "1", lg: "2" }}>{lesson.title}</Heading>
+              <Text size={{ initial: "1", sm: "1", md: "1", lg: "2" }} className="text-gray-500 hidden xl:block">
                 {lesson.description}
               </Text>
             </Box>
@@ -146,11 +84,34 @@ const DemoSidebarContents = ({
   );
 };
 
+/**
+ * DemoSidebar component renders a toggleable sidebar with a list of lessons based on the selected language.
+ * The sidebar can be expanded or collapsed and adapts to different screen sizes.
+ *
+ * @component
+ * @param {DemoSidebarProps} props - The props containing the selected language (french, spanish, or german).
+ * @returns {JSX.Element} The sidebar component with language lessons.
+ */
 export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
+  /** 
+   * State to track if the sidebar is open or collapsed.
+   * @type {[boolean, Function]}
+   */
   const [open, setOpen] = useState(false);
+
+  /** 
+   * State to track the selected lesson.
+   * @type {[string, Function]}
+   */
   const [selectedLesson, setSelectedLesson] = useState<string>("");
+
   const { theme } = useTheme();
 
+  /**
+   * Sets the default lesson when the selected language changes.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     setSelectedLesson(lessons[selectedLanguage][0].title);
   }, [selectedLanguage]);
@@ -197,10 +158,7 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
               Lessons
             </Heading>
           )}
-          <BookOpen
-            className={`dark:stroke-white cursor-pointer transition-transform ${open && "rotate-[360deg]"}`}
-            size={open ? 40 : 30}
-          />
+          <BookOpen className={`dark:stroke-white cursor-pointer transition-transform ${open && "rotate-[360deg]"}`} size={open ? 40 : 30} />
         </Box>
 
         {/* Sidebar Contents */}

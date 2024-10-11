@@ -64,6 +64,17 @@ const Menus: MenuItem[] = [
   },
 ];
 
+/**
+ * SidebarContents component renders the sidebar menu options.
+ *
+ * @component
+ * @param {Object} props - The props for the component.
+ * @param {boolean} props.open - Determines if the sidebar is open.
+ * @param {string} props.theme - The current theme ("light" or "dark").
+ * @param {string} props.currentView - The current selected view.
+ * @param {Function} props.handleMenuClick - Function to handle clicks on menu items.
+ * @returns {JSX.Element} The sidebar content with menu items.
+ */
 const SidebarContents = ({
   open,
   theme,
@@ -112,6 +123,13 @@ const SidebarContents = ({
   );
 };
 
+/**
+ * NavigationSidebar component renders the navigation sidebar with options like Lessons, Vocabulary, and Practice.
+ * It supports toggling between open and collapsed states, and allows the user to navigate to different views.
+ *
+ * @component
+ * @returns {JSX.Element} The navigation sidebar component.
+ */
 export const NavigationSidebar = () => {
   const [open, setOpen] = useState(false);
   const { currentView, changeView } = useViewContext();
@@ -119,6 +137,16 @@ export const NavigationSidebar = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
+  /**
+   * Handles clicks on menu items. If the item is not clickable, it does nothing.
+   * If the "Exit" menu item is clicked, it stops streaming and navigates to the initial page.
+   *
+   * @async
+   * @function
+   * @param {string} navigateTo - The view to navigate to.
+   * @param {boolean} clickable - Whether the menu item is clickable.
+   * @returns {Promise<void>} Resolves when the navigation is complete.
+   */
   const handleMenuClick = async (navigateTo: string, clickable: boolean) => {
     if (!clickable) return;
 
@@ -139,6 +167,13 @@ export const NavigationSidebar = () => {
     setOpen(false);
   };
 
+  /**
+   * Handles the exit action by stopping the streaming and navigating to the home page.
+   *
+   * @async
+   * @function
+   * @returns {Promise<void>} Resolves when the exit action is complete.
+   */
   const handleExitClick = async () => {
     if (anamClient) {
       await anamClient.stopStreaming().catch(console.error);
@@ -164,7 +199,6 @@ export const NavigationSidebar = () => {
         </Box>
       )}
 
-      {/* Sidebar always rendered, with transition applied */}
       <Box
         className={`fixed top-0 left-0 h-screen p-5 pt-8 z-50 bg-white dark:bg-black transition-all duration-300 border-r border-gray-200 dark:border-gray-500 shadow-lg ${
           open

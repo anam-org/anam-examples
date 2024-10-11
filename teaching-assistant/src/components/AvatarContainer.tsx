@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ConversationPopup } from "@/components";
 import { useAnamContext } from "@/contexts";
 import { errorHandler, logger } from "@/utils";
-import { AnamEvent, Message, MessageRole } from "@anam-ai/js-sdk/dist/module/types";
+import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { Spinner } from "@radix-ui/themes";
 
 interface AvatarContainerProps {
@@ -12,6 +12,14 @@ interface AvatarContainerProps {
   onStreamingEnd: () => void;
 }
 
+/**
+ * AvatarContainer component handles the streaming of video and audio, and displays the conversation popup.
+ * It listens for streaming events and handles video/audio rendering as well as connection management.
+ *
+ * @component
+ * @param {AvatarContainerProps} props - The props including conversation array and onStreamingEnd callback.
+ * @returns {JSX.Element} The AvatarContainer component.
+ */
 export const AvatarContainer = ({
   conversation,
   onStreamingEnd,
@@ -23,10 +31,30 @@ export const AvatarContainer = ({
   const streamingStartedRef = useRef(false);
   const listenersAddedRef = useRef(false);
 
+  /** 
+   * State to track if the video is streaming.
+   * @type {[boolean, Function]}
+   */
   const [isVideoStreaming, setIsVideoStreaming] = useState(false);
+
+  /** 
+   * State to track loading text during connection.
+   * @type {[string, Function]}
+   */
   const [loadingText, setLoadingText] = useState("Connecting...");
+
+  /** 
+   * State to track any streaming errors.
+   * @type {[string | null, Function]}
+   */
   const [streamError, setStreamError] = useState<string | null>(null);
 
+  /**
+   * Stops the current video/audio streaming session by invoking the anamClient's stopStreaming method.
+   *
+   * @function
+   * @returns {void}
+   */
   const stopStreaming = useCallback(() => {
     if (anamClient) {
       anamClient.stopStreaming().catch((error) => {
@@ -36,12 +64,26 @@ export const AvatarContainer = ({
     }
   }, [anamClient]);
 
+  /**
+   * Handles the connection establishment event.
+   * Sets loading text to indicate successful connection and resets any errors.
+   *
+   * @function
+   * @returns {void}
+   */
   const onConnectionEstablished = useCallback(() => {
     setLoadingText("Connected to a Persona...");
     setStreamError(null);
     logger.info("Connection established");
   }, []);
 
+  /**
+   * Handles the event when video streaming starts.
+   * Clears loading text and marks video as streaming.
+   *
+   * @function
+   * @returns {void}
+   */
   const onVideoStartedStreaming = useCallback(() => {
     setLoadingText("");
     setStreamError(null);
@@ -49,12 +91,28 @@ export const AvatarContainer = ({
     logger.info("Video started streaming");
   }, []);
 
-  const onConnectionClosed = useCallback((reason: string) => {
-    logger.info("Connection closed", reason);
-    setIsVideoStreaming(false);
-    onStreamingEnd();
-  }, [onStreamingEnd]);
+  /**
+   * Handles the connection close event, logs the reason, and calls the onStreamingEnd callback.
+   *
+   * @function
+   * @param {string} reason - The reason for the connection being closed.
+   * @returns {void}
+   */
+  const onConnectionClosed = useCallback(
+    (reason: string) => {
+      logger.info("Connection closed", reason);
+      setIsVideoStreaming(false);
+      onStreamingEnd();
+    },
+    [onStreamingEnd]
+  );
 
+  /**
+   * Effect to add listeners for connection and streaming events when the anamClient is initialized.
+   * Cleans up listeners on component unmount.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     if (anamClient && !listenersAddedRef.current) {
       anamClient.addListener(
@@ -88,6 +146,12 @@ export const AvatarContainer = ({
     };
   }, [anamClient, onConnectionEstablished, onVideoStartedStreaming, onConnectionClosed]);
 
+  /**
+   * Effect to start the streaming process when the client is initialized and references to video/audio elements are set.
+   * Cleans up by stopping the streaming if the component unmounts.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     const startStreaming = async () => {
       if (

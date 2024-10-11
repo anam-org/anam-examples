@@ -5,7 +5,7 @@ import constate from "constate";
 import { useRef } from "react";
 import { FetchError, errorHandler, logger, env } from "@/utils";
 
-const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_ID!;
+const PERSONA_ID = env.NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY!;
 const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
 const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
 

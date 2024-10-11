@@ -20,6 +20,14 @@ interface AudioPermissionsModalProps {
   onPermissionGranted: () => void;
 }
 
+/**
+ * AudioPermissionsModal component handles microphone permission requests, allowing the user to select a microphone
+ * and toggle audio on/off before proceeding. Displays an overlay and modal with microphone options.
+ *
+ * @component
+ * @param {AudioPermissionsModalProps} props - The props for the modal, including `onClose` and `onPermissionGranted` callbacks.
+ * @returns {JSX.Element} The AudioPermissionsModal component.
+ */
 export function AudioPermissionsModal({
   onClose,
   onPermissionGranted,
@@ -34,14 +42,29 @@ export function AudioPermissionsModal({
     toggleAudioTrack,
   } = useAudioPermissionContext();
 
+  /** 
+   * State to track if the microphone is currently on.
+   * @type {[boolean, Function]}
+   */
   const [isMicOn, setIsMicOn] = useState(true);
 
   const { theme } = useTheme();
 
+  /**
+   * Requests microphone permissions when the component mounts.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     requestAudioPermissions();
-  }, []);
+  }, [requestAudioPermissions]);
 
+  /**
+   * Handles the permission grant action. If permissions are granted, calls `onPermissionGranted`, otherwise alerts the user.
+   *
+   * @function
+   * @returns {void}
+   */
   const handlePermissionGranted = () => {
     if (audioPermissionsGranted) {
       onPermissionGranted();
@@ -50,6 +73,12 @@ export function AudioPermissionsModal({
     }
   };
 
+  /**
+   * Toggles the microphone's audio track on or off and updates the mic state.
+   *
+   * @function
+   * @returns {void}
+   */
   const handleToggleMic = () => {
     toggleAudioTrack();
     setIsMicOn((prev) => !prev);

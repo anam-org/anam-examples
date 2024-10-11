@@ -7,16 +7,45 @@ interface ConversationPopupProps {
   conversation: { sender: string; text: string }[];
 }
 
+/**
+ * ConversationPopup component displays a chat interface in a popover with a button to toggle the visibility.
+ * It scrolls the chat content to the bottom automatically when opened or new messages arrive.
+ *
+ * @component
+ * @param {ConversationPopupProps} props - The props for the component, including the conversation array.
+ * @returns {JSX.Element} The ConversationPopup component.
+ */
 export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
+  /** 
+   * State to track whether the popover is open.
+   * @type {[boolean, Function]}
+   */
   const [open, setOpen] = useState(false);
+
+  /** 
+   * Ref to the end of the messages list to automatically scroll to the bottom.
+   * @type {React.MutableRefObject<HTMLDivElement | null>}
+   */
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  /**
+   * Scrolls the chat content to the bottom of the list.
+   *
+   * @function
+   * @returns {void}
+   */
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  /**
+   * Effect that triggers when the popover opens or when new messages arrive.
+   * It ensures that the chat scrolls to the bottom.
+   *
+   * @useEffect
+   */
   useEffect(() => {
     if (open) {
       scrollToBottom();
