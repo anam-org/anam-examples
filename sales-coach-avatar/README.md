@@ -24,7 +24,7 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 
    ```bash
    git clone https://github.com/anam-org/anam-examples.git
-   cd teaching-assistant
+   cd sales-coach-avatar
    ```
 
 2. **Install dependencies:**
