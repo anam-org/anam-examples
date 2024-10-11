@@ -1,9 +1,33 @@
 "use client";
 
-import { Heading, Text, Box } from "@radix-ui/themes";
-import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { Heading, Text, Box, IconButton } from "@radix-ui/themes";
+import { ChevronLeft, ChevronRight, BookOpen, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+
+const lessons: Record<string, MenuItem[]> = {
+  french: [
+    { title: "Introduction to French", description: "Basic greetings and phrases", clickable: true },
+    { title: "French Numbers", description: "Learn to count in French", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "French Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+  spanish: [
+    { title: "Introduction to Spanish", description: "Basic greetings and phrases", clickable: true },
+    { title: "Spanish Numbers", description: "Learn to count in Spanish", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "Spanish Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+  german: [
+    { title: "Introduction to German", description: "Basic greetings and phrases", clickable: true },
+    { title: "German Numbers", description: "Learn to count in German", clickable: false },
+    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
+    { title: "German Verbs", description: "Introduction to verb conjugation", clickable: false },
+    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+  ],
+};
 
 interface MenuItem {
   title: string;
@@ -15,163 +39,120 @@ interface DemoSidebarProps {
   selectedLanguage: "french" | "spanish" | "german";
 }
 
+interface DemoSidebarContentsProps {
+  open: boolean;
+  lessons: MenuItem[];
+  selectedLesson: string;
+  setSelectedLesson: (lesson: string) => void;
+}
+
+const DemoSidebarContents = ({
+  open,
+  lessons,
+  selectedLesson,
+  setSelectedLesson,
+}: DemoSidebarContentsProps) => {
+  return (
+    <ul className="space-y-2">
+      {open &&
+        lessons.map((lesson, index) => (
+          <li
+            key={index}
+            onClick={() => lesson.clickable && setSelectedLesson(lesson.title)}
+          >
+            <Box
+              className={`p-2 sm:p-3 lg:p-4 border border-gray-200 dark:border-gray-500 dark:bg-gray-700 rounded-lg shadow transition cursor-pointer ${
+                lesson.clickable
+                  ? "hover:bg-gray-100 dark:hover:bg-gray-800"
+                  : "opacity-50 pointer-events-none"
+              } ${
+                selectedLesson === lesson.title
+                  ? "bg-gray-200"
+                  : ""
+              }`}
+            >
+              {/* Title*/}
+              <Heading size={{ initial: "1", sm: "1", md: "1", lg: "2" }}>
+                {lesson.title}
+              </Heading>
+
+              {/* Description*/}
+              <Text
+                size={{ initial: "1", sm: "1", md: "1", lg: "2" }}
+                className="text-gray-500 hidden xl:block"
+              >
+                {lesson.description}
+              </Text>
+            </Box>
+          </li>
+        ))}
+    </ul>
+  );
+};
+
 export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<string>("");
   const { theme } = useTheme();
 
-  const lessons: Record<string, MenuItem[]> = {
-    french: [
-      {
-        title: "Introduction to French",
-        description: "Basic greetings and phrases",
-        clickable: true,
-      },
-      {
-        title: "French Numbers",
-        description: "Learn to count in French",
-        clickable: false,
-      },
-      {
-        title: "Basic Conversations",
-        description: "Common questions and answers",
-        clickable: false,
-      },
-      {
-        title: "French Verbs",
-        description: "Introduction to verb conjugation",
-        clickable: false,
-      },
-      {
-        title: "Everyday Vocabulary",
-        description: "Essential words for daily life",
-        clickable: false,
-      },
-    ],
-    spanish: [
-      {
-        title: "Introduction to Spanish",
-        description: "Basic greetings and phrases",
-        clickable: true,
-      },
-      {
-        title: "Spanish Numbers",
-        description: "Learn to count in Spanish",
-        clickable: false,
-      },
-      {
-        title: "Basic Conversations",
-        description: "Common questions and answers",
-        clickable: false,
-      },
-      {
-        title: "Spanish Verbs",
-        description: "Introduction to verb conjugation",
-        clickable: false,
-      },
-      {
-        title: "Everyday Vocabulary",
-        description: "Essential words for daily life",
-        clickable: false,
-      },
-    ],
-    german: [
-      {
-        title: "Introduction to German",
-        description: "Basic greetings and phrases",
-        clickable: true,
-      },
-      {
-        title: "German Numbers",
-        description: "Learn to count in German",
-        clickable: false,
-      },
-      {
-        title: "Basic Conversations",
-        description: "Common questions and answers",
-        clickable: false,
-      },
-      {
-        title: "German Verbs",
-        description: "Introduction to verb conjugation",
-        clickable: false,
-      },
-      {
-        title: "Everyday Vocabulary",
-        description: "Essential words for daily life",
-        clickable: false,
-      },
-    ],
-  };
 
   useEffect(() => {
     setSelectedLesson(lessons[selectedLanguage][0].title);
   }, [selectedLanguage]);
 
   return (
-    <div
-      className={`${
-        open
-          ? "w-[20vw] min-w-[200px] max-w-[400px]"
-          : "w-[5vw] min-w-[50px] max-w-[80px]"
-      } bg-dark-purple h-screen p-5 pt-8 fixed top-0 right-0 z-50 duration-300 border-l border-gray-200 dark:border-gray-500 shadow-lg`}
-    >
-      {/* Toggle Button */}
-      <div
-        className="absolute cursor-pointer -left-3 top-9 w-7 h-7 bg-black dark:bg-white border border-gray-200 dark:border-gray-700 rounded-full flex items-center justify-center"
-        onClick={() => setOpen(!open)}
+    <Box>
+      {/* Button to toggle sidebar on smaller screens */}
+      {!open && (
+        <Box className="lg:hidden fixed top-6 right-5 z-50">
+          <IconButton
+            onClick={() => setOpen(true)}
+            className="p-2 rounded-full bg-black dark:bg-white border border-gray-200 dark:border-gray-700"
+          >
+            <Menu stroke={theme === "dark" ? "black" : "white"} />
+          </IconButton>
+        </Box>
+      )}
+
+      {/* Sidebar always rendered, with transition applied */}
+      <Box
+        className={`fixed top-0 right-0 z-50 h-screen p-5 pt-8 bg-white dark:bg-black border-l shadow-lg border-gray-200 dark:border-gray-500 transition-all duration-300 ${
+          open
+            ? "w-[20vw] min-w-[200px] max-w-[400px]"
+            : "w-0 lg:w-[5vw] xl:w-[6vw] 2xl:w-[3vw] min-w-[50px]"
+        } ${open ? "block" : "lg:block hidden"}`}
       >
-        {open ? (
-          <ChevronRight stroke={theme === "dark" ? "black" : "white"} />
-        ) : (
-          <ChevronLeft stroke={theme === "dark" ? "black" : "white"} />
-        )}
-      </div>
+        {/* Toggle Button */}
+        <Box
+          className="absolute -left-4 top-9 w-7 h-7 flex items-center justify-center bg-black dark:bg-white border rounded-full cursor-pointer"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? (
+            <ChevronRight stroke={theme === "dark" ? "black" : "white"} />
+          ) : (
+            <ChevronLeft stroke={theme === "dark" ? "black" : "white"} />
+          )}
+        </Box>
 
-      {/* Heading and Icon */}
-      <div className="flex gap-x-4 items-center mb-6 justify-end">
-        {open && (
-          <Heading className="origin-right font-medium text-xl duration-200 text-white">
-            Lessons
-          </Heading>
-        )}
-        <BookOpen
-          className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
-          stroke="white"
-          size={open ? 40 : 30}
+        {/* Sidebar Header */}
+        <Box className="flex items-center gap-x-4 mb-6 justify-end">
+          {open && (
+            <Heading className="text-black dark:text-white text-xl font-medium">Lessons</Heading>
+          )}
+          <BookOpen
+            className={`dark:stroke-white cursor-pointer transition-transform ${open && "rotate-[360deg]"}`}
+            size={open ? 40 : 30}
+          />
+        </Box>
+
+        {/* Sidebar Contents */}
+        <DemoSidebarContents
+          open={open}
+          lessons={lessons[selectedLanguage]}
+          selectedLesson={selectedLesson}
+          setSelectedLesson={setSelectedLesson}
         />
-      </div>
-
-      {/* Lessons List */}
-      <ul className="pt-6 space-y-4">
-        {open &&
-          lessons[selectedLanguage].map((lesson, index) => (
-            <li
-              key={index}
-              onClick={() =>
-                lesson.clickable && setSelectedLesson(lesson.title)
-              }
-            >
-              <Box
-                className={`p-4 border border-gray-200 dark:border-gray-500 rounded-lg shadow transition duration-150 cursor-pointer ${
-                  lesson.clickable
-                    ? "hover:bg-gray-100 dark:hover:bg-gray-800"
-                    : "opacity-50 pointer-events-none"
-                } ${selectedLesson === lesson.title ? "bg-gray-200 dark:bg-gray-700" : ""}`}
-              >
-                <Heading size={{ sm: "1", md: "2", lg: "3" }}>
-                  {lesson.title}
-                </Heading>
-                <Text
-                  size={{ sm: "1", md: "1", lg: "2" }}
-                  className="text-gray-500"
-                >
-                  {lesson.description}
-                </Text>
-              </Box>
-            </li>
-          ))}
-      </ul>
-    </div>
+      </Box>
+    </Box>
   );
 };
