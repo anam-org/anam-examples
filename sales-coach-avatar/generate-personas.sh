@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the API key and the output file
-API_KEY="ZWI2MWNlMTMtZTUxMy00MTMzLWJhOTktMTAzOTcyMDY3NzBlOjlJdEdvUlo1SUt0Vkl6MFNhMU1HNlhUdllJSzB3Q2pWbng2QnFHaWp1QlU9"
+API_KEY="your_api_key"
 OUTPUT_FILE="persona-ids.txt"
 
 # Define the API URL
