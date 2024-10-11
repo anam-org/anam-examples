@@ -42,7 +42,7 @@ export function AudioPermissionsModal({
     toggleAudioTrack,
   } = useAudioPermissionContext();
 
-  /** 
+  /**
    * State to track if the microphone is currently on.
    * @type {[boolean, Function]}
    */

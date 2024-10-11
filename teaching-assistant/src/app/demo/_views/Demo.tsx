@@ -3,7 +3,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { DemoSidebar, ConversationTracker } from "@/components";
 import { useAnamContext, useSettingsContext } from "@/contexts";
-import { AnamEvent, Message, MessageRole } from "@anam-ai/js-sdk/dist/module/types";
+import {
+  AnamEvent,
+  Message,
+  MessageRole,
+} from "@anam-ai/js-sdk/dist/module/types";
 import { useRouter } from "next/navigation";
 import { AvatarContainer } from "@/components/AvatarContainer";
 
@@ -22,19 +26,21 @@ export function DemoView() {
   const { selectedLanguage } = useSettingsContext();
   const router = useRouter();
 
-  /** 
+  /**
    * State to track conversation messages.
-   * @type {[{ sender: string, text: string }[], Function]} 
+   * @type {[{ sender: string, text: string }[], Function]}
    */
-  const [conversation, setConversation] = useState<{ sender: string; text: string }[]>([]);
+  const [conversation, setConversation] = useState<
+    { sender: string; text: string }[]
+  >([]);
 
-  /** 
+  /**
    * State to track the countdown timer.
    * @type {[number, Function]}
    */
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME_LEFT);
 
-  /** 
+  /**
    * Ref to track if event listeners have been added to the client.
    * @type {React.MutableRefObject<boolean>}
    */
@@ -63,7 +69,10 @@ export function DemoView() {
    */
   const updateConversation = useCallback((updatedMessages: Message[]) => {
     const mappedMessages = updatedMessages.map((message) => ({
-      sender: message.role === MessageRole.PERSONA ? MessageRole.PERSONA : MessageRole.USER,
+      sender:
+        message.role === MessageRole.PERSONA
+          ? MessageRole.PERSONA
+          : MessageRole.USER,
       text: message.content,
     }));
     setConversation(mappedMessages); // Update conversation state with the new messages
@@ -88,7 +97,10 @@ export function DemoView() {
     if (timeLeft === 0) {
       stopStreaming(); // Stop streaming when the timer reaches zero
     }
-    const timer = timeLeft > 0 ? setInterval(() => setTimeLeft((prev) => prev - 1), 1000) : undefined;
+    const timer =
+      timeLeft > 0
+        ? setInterval(() => setTimeLeft((prev) => prev - 1), 1000)
+        : undefined;
     return () => {
       if (timer) clearInterval(timer); // Clean up the timer on component unmount
     };
@@ -102,14 +114,20 @@ export function DemoView() {
   useEffect(() => {
     if (anamClient && !listenersAddedRef.current) {
       // Add message history update listener to the Anam client
-      anamClient.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, updateConversation);
+      anamClient.addListener(
+        AnamEvent.MESSAGE_HISTORY_UPDATED,
+        updateConversation,
+      );
       listenersAddedRef.current = true;
     }
 
     return () => {
       if (anamClient && listenersAddedRef.current) {
         // Clean up listener on component unmount or when anamClient changes
-        anamClient.removeListener(AnamEvent.MESSAGE_HISTORY_UPDATED, updateConversation);
+        anamClient.removeListener(
+          AnamEvent.MESSAGE_HISTORY_UPDATED,
+          updateConversation,
+        );
         setConversation([]); // Clear the conversation state
         listenersAddedRef.current = false;
       }
@@ -118,10 +136,11 @@ export function DemoView() {
 
   /**
    * Progress bar value calculated based on the remaining time.
-   * 
+   *
    * @type {number}
    */
-  const progressValue = ((INITIAL_TIME_LEFT - timeLeft) / INITIAL_TIME_LEFT) * 100;
+  const progressValue =
+    ((INITIAL_TIME_LEFT - timeLeft) / INITIAL_TIME_LEFT) * 100;
 
   return (
     <div className="overflow-y-auto">
@@ -130,7 +149,10 @@ export function DemoView() {
         <div className="flex flex-col items-center p-5 flex-1">
           <div className="relative">
             {/* Avatar Container to display conversation with streaming state */}
-            <AvatarContainer conversation={conversation} onStreamingEnd={handleStreamingEnd} />
+            <AvatarContainer
+              conversation={conversation}
+              onStreamingEnd={handleStreamingEnd}
+            />
           </div>
           {/* Progress Bar */}
           <div className="w-full max-w-2xl mt-4">

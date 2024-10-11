@@ -16,13 +16,13 @@ interface ConversationPopupProps {
  * @returns {JSX.Element} The ConversationPopup component.
  */
 export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
-  /** 
+  /**
    * State to track whether the popover is open.
    * @type {[boolean, Function]}
    */
   const [open, setOpen] = useState(false);
 
-  /** 
+  /**
    * Ref to the end of the messages list to automatically scroll to the bottom.
    * @type {React.MutableRefObject<HTMLDivElement | null>}
    */

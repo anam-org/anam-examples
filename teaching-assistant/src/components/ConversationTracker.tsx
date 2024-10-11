@@ -18,13 +18,13 @@ interface ResponsiveConversationProps {
 export const ConversationTracker = ({
   conversation,
 }: ResponsiveConversationProps) => {
-  /** 
+  /**
    * Ref to the end of the conversation list to automatically scroll to the bottom.
    * @type {React.MutableRefObject<HTMLDivElement | null>}
    */
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  /** 
+  /**
    * State to track if the conversation history is open.
    * @type {[boolean, Function]}
    */

@@ -31,19 +31,19 @@ export const AvatarContainer = ({
   const streamingStartedRef = useRef(false);
   const listenersAddedRef = useRef(false);
 
-  /** 
+  /**
    * State to track if the video is streaming.
    * @type {[boolean, Function]}
    */
   const [isVideoStreaming, setIsVideoStreaming] = useState(false);
 
-  /** 
+  /**
    * State to track loading text during connection.
    * @type {[string, Function]}
    */
   const [loadingText, setLoadingText] = useState("Connecting...");
 
-  /** 
+  /**
    * State to track any streaming errors.
    * @type {[string | null, Function]}
    */
@@ -104,7 +104,7 @@ export const AvatarContainer = ({
       setIsVideoStreaming(false);
       onStreamingEnd();
     },
-    [onStreamingEnd]
+    [onStreamingEnd],
   );
 
   /**
@@ -117,11 +117,11 @@ export const AvatarContainer = ({
     if (anamClient && !listenersAddedRef.current) {
       anamClient.addListener(
         AnamEvent.CONNECTION_ESTABLISHED,
-        onConnectionEstablished
+        onConnectionEstablished,
       );
       anamClient.addListener(
         AnamEvent.VIDEO_PLAY_STARTED,
-        onVideoStartedStreaming
+        onVideoStartedStreaming,
       );
       anamClient.addListener(AnamEvent.CONNECTION_CLOSED, onConnectionClosed);
       listenersAddedRef.current = true;
@@ -131,20 +131,25 @@ export const AvatarContainer = ({
       if (anamClient && listenersAddedRef.current) {
         anamClient.removeListener(
           AnamEvent.CONNECTION_ESTABLISHED,
-          onConnectionEstablished
+          onConnectionEstablished,
         );
         anamClient.removeListener(
           AnamEvent.VIDEO_PLAY_STARTED,
-          onVideoStartedStreaming
+          onVideoStartedStreaming,
         );
         anamClient.removeListener(
           AnamEvent.CONNECTION_CLOSED,
-          onConnectionClosed
+          onConnectionClosed,
         );
         listenersAddedRef.current = false;
       }
     };
-  }, [anamClient, onConnectionEstablished, onVideoStartedStreaming, onConnectionClosed]);
+  }, [
+    anamClient,
+    onConnectionEstablished,
+    onVideoStartedStreaming,
+    onConnectionClosed,
+  ]);
 
   /**
    * Effect to start the streaming process when the client is initialized and references to video/audio elements are set.
@@ -166,7 +171,7 @@ export const AvatarContainer = ({
       try {
         await anamClient.streamToVideoAndAudioElements(
           videoRef.current.id,
-          audioRef.current.id
+          audioRef.current.id,
         );
         streamingStartedRef.current = true;
       } catch (error) {

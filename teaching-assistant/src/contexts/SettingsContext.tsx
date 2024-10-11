@@ -38,8 +38,10 @@ const useSettings = () => {
   const { setPersonaConfig } = useAnamContext();
   const { theme } = useTheme();
 
-  const [selectedLanguage, setSelectedLanguage] = useState<LanguageType>("french");
-  const [selectedPersona, setSelectedPersona] = useState<PersonaType>("friendly");
+  const [selectedLanguage, setSelectedLanguage] =
+    useState<LanguageType>("french");
+  const [selectedPersona, setSelectedPersona] =
+    useState<PersonaType>("friendly");
 
   const applyPersonaConfig = () => {
     const config = personaConfigurations[selectedLanguage][selectedPersona];
@@ -56,4 +58,5 @@ const useSettings = () => {
   };
 };
 
-export const [SettingsContextProvider, useSettingsContext] = constate(useSettings);
+export const [SettingsContextProvider, useSettingsContext] =
+  constate(useSettings);
