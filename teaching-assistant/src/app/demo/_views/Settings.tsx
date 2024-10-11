@@ -12,7 +12,6 @@ import {
 import { LanguageType, PersonaType, useSettingsContext } from "@/contexts";
 import { useTheme } from "next-themes";
 
-// Utility function to capitalize first letter
 const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -26,8 +25,6 @@ export function SettingsView() {
   } = useSettingsContext();
 
   const { theme, setTheme } = useTheme();
-
-  // This ensures that the dark mode switch is correctly synced with the current theme
   const isDarkMode = theme === "dark";
 
   const toggleDarkMode = (checked: boolean) => {
@@ -36,12 +33,18 @@ export function SettingsView() {
 
   const handleSaveSettings = () => {
     applyPersonaConfig();
-    // Provide feedback to the user if needed
   };
 
   return (
-    <Box className="flex items-center justify-center h-screen">
-      <Box className="p-8 max-w-lg w-full mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+    <Flex
+      align="center"
+      justify="center"
+      className="min-h-screen p-4 md:p-8 lg:p-10"
+    >
+      <Box
+        p="6"
+        className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg"
+      >
         <Heading
           size="8"
           className="mb-6 text-center text-gray-900 dark:text-white"
@@ -50,11 +53,11 @@ export function SettingsView() {
         </Heading>
 
         {/* Language Preference */}
-        <Box className="mb-6">
-          <Heading size="6" className="mb-2 text-gray-800 dark:text-gray-200">
+        <Box mb="3">
+          <Heading size="6" mb="2" className="text-gray-800 dark:text-gray-200">
             Configure Language Preference
           </Heading>
-          <Text className="mb-4 text-gray-600 dark:text-gray-400">
+          <Text mb="2" className="text-gray-600 dark:text-gray-400">
             Select your preferred language.
           </Text>
           <Select.Root
@@ -63,10 +66,10 @@ export function SettingsView() {
               setSelectedLanguage(value as LanguageType)
             }
           >
-            <Select.Trigger className="w-full p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+            <Select.Trigger className="w-full rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
               {capitalizeFirstLetter(selectedLanguage)}
             </Select.Trigger>
-            <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md p-2">
+            <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
               <Select.Group>
                 <Select.Label className="text-gray-800 dark:text-gray-200">
                   Languages
@@ -80,21 +83,21 @@ export function SettingsView() {
         </Box>
 
         {/* Persona Mode */}
-        <Box className="mb-6">
-          <Heading size="6" className="mb-2 text-gray-800 dark:text-gray-200">
+        <Box mb="4">
+          <Heading size="6" mb="1" className="text-gray-800 dark:text-gray-200">
             Persona Mode
           </Heading>
-          <Text className="mb-4 text-gray-600 dark:text-gray-400">
+          <Text mb="2" className="text-gray-600 dark:text-gray-400">
             Choose the persona of the avatar.
           </Text>
           <Select.Root
             value={selectedPersona}
             onValueChange={(value) => setSelectedPersona(value as PersonaType)}
           >
-            <Select.Trigger className="w-full p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+            <Select.Trigger className="w-full rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
               {capitalizeFirstLetter(selectedPersona)}
             </Select.Trigger>
-            <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md p-2">
+            <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
               <Select.Group>
                 <Select.Label className="text-gray-800 dark:text-gray-200">
                   Personas
@@ -108,8 +111,8 @@ export function SettingsView() {
         </Box>
 
         {/* Dark Mode Toggle */}
-        <Box className="mb-6">
-          <Heading size="6" className="mb-2 text-gray-800 dark:text-gray-200">
+        <Box mb="4">
+          <Heading size="6" mb="1" className="text-gray-800 dark:text-gray-200">
             Display Settings
           </Heading>
           <Flex align="center" justify="between" className="mb-4">
@@ -118,10 +121,10 @@ export function SettingsView() {
           </Flex>
         </Box>
 
-        <Flex justify="end" className="mt-6">
+        <Flex justify="end" mt="5">
           <Button onClick={handleSaveSettings}>Save Settings</Button>
         </Flex>
       </Box>
-    </Box>
+    </Flex>
   );
 }

@@ -10,7 +10,7 @@ import {
   Spinner,
 } from "@radix-ui/themes";
 import { Volume2, VolumeX, Play, Pause, Maximize2 } from "lucide-react";
-import { LessonsSidebar, ConversationPopup } from "@/components";
+import { DemoSidebar, ConversationPopup } from "@/components";
 import { useAnamContext, useSettingsContext } from "@/contexts";
 import { errorHandler, logger } from "@/utils";
 import {
@@ -20,7 +20,7 @@ import {
 } from "@anam-ai/js-sdk/dist/module/types";
 import { useRouter } from "next/navigation";
 
-export function LessonsView() {
+export function DemoView() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { anamClient, isClientInitialized } = useAnamContext();
@@ -172,10 +172,10 @@ export function LessonsView() {
         return;
 
       try {
-        await anamClient.streamToVideoAndAudioElements(
-          videoRef.current.id,
-          audioRef.current.id,
-        );
+        // await anamClient.streamToVideoAndAudioElements(
+        //   videoRef.current.id,
+        //   audioRef.current.id,
+        // );
         streamingStartedRef.current = true;
       } catch (error) {
         streamingStartedRef.current = false;
@@ -201,87 +201,84 @@ export function LessonsView() {
 
   return (
     <Flex>
-      <Flex direction="column" className="flex-1">
-        <Flex direction="column" align="center" className="p-5 h-full">
-          <Box className="border-lg bg-gray-200 w-auto h-[85vh] aspect-square mx-auto relative flex justify-center">
-            <video
-              id="avatar-video"
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover rounded-lg"
-              muted={isMuted}
-              onPlay={() => setIsPlaying(true)}
-              onPause={() => setIsPlaying(false)}
-            />
-            <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
-            <Flex
-              justify="center"
-              align="center"
-              className="w-full h-full absolute top-0 left-0"
-            >
-              {streamError ? (
-                <Text size="2" className="text-red-500">
-                  {streamError}
+      <Flex direction="column" align="center" className="flex-1 p-5 h-full">
+        <Box className="border-lg bg-gray-200 w-auto h-[85vh] aspect-square mx-auto relative flex justify-center">
+          <video
+            id="avatar-video"
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover rounded-lg"
+            muted={isMuted}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
+          <audio id="avatar-audio" ref={audioRef} autoPlay hidden />
+          <Flex
+            justify="center"
+            align="center"
+            className="w-full h-full absolute top-0 left-0"
+          >
+            {streamError ? (
+              <Text size="2" className="text-red-500">
+                {streamError}
+              </Text>
+            ) : loadingText ? (
+              <>
+                <Spinner size="3" />
+                <Text size="2" className="dark:text-black">
+                  {loadingText}
                 </Text>
-              ) : loadingText ? (
-                <>
-                  <Spinner size="3" />
-                  <Text size="2" className="dark:text-black">
-                    {loadingText}
-                  </Text>
-                </>
-              ) : null}
-            </Flex>
-            <Flex
-              justify="center"
-              align="center"
-              className="absolute bottom-4 inset-x-0"
-            >
-              <IconButton
-                variant="solid"
-                onClick={handlePlayPauseToggle}
-                className="p-2 rounded-full mx-1"
-              >
-                {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-              </IconButton>
-              <IconButton
-                variant="solid"
-                onClick={() => setIsMuted((prev) => !prev)}
-                className="p-2 rounded-full mx-1"
-              >
-                {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-              </IconButton>
-              <IconButton
-                variant="solid"
-                onClick={requestFullscreen}
-                className="p-2 rounded-full mx-1"
-              >
-                <Maximize2 size={24} />
-              </IconButton>
-            </Flex>
-            <Flex
-              justify="center"
-              align="center"
-              className="absolute bottom-4 right-4"
-            >
-              <ConversationPopup conversation={conversation} />
-            </Flex>
-          </Box>
-          <Flex direction="column" align="center" className="p-4">
-            <Progress
-              color="mint"
-              value={progressValue}
-              max={100}
-              className="w-[45vw]"
-            />
-            <Text size="2" align="center" className="mt-2">
-              Time Left: {formatTime(timeLeft)}
-            </Text>
+              </>
+            ) : null}
           </Flex>
-        </Flex>
+          <Flex
+            justify="center"
+            align="center"
+            className="absolute bottom-4 inset-x-0"
+          >
+            <IconButton
+              variant="solid"
+              onClick={handlePlayPauseToggle}
+              className="p-2 rounded-full mx-1"
+            >
+              {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+            </IconButton>
+            <IconButton
+              variant="solid"
+              onClick={() => setIsMuted((prev) => !prev)}
+              className="p-2 rounded-full mx-1"
+            >
+              {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+            </IconButton>
+            <IconButton
+              variant="solid"
+              onClick={requestFullscreen}
+              className="p-2 rounded-full mx-1"
+            >
+              <Maximize2 size={24} />
+            </IconButton>
+          </Flex>
+          <Flex
+            justify="center"
+            align="center"
+            className="absolute bottom-4 right-4"
+          >
+            <ConversationPopup conversation={conversation} />
+          </Flex>
+        </Box>
+        <Progress
+          mt="4"
+          color="mint"
+          value={progressValue}
+          max={100}
+          className="w-[45vw]"
+        />
+        <Text size="2" align="center" className="mt-2">
+          Time Left: {formatTime(timeLeft)}
+        </Text>
       </Flex>
-      <LessonsSidebar selectedLanguage={selectedLanguage} />
+      <DemoSidebar selectedLanguage={selectedLanguage} />
     </Flex>
   );
 }

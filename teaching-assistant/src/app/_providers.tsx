@@ -8,8 +8,7 @@ import {
   ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
-import { logger } from "@/utils";
-import { fetchSessionToken } from "@/utils/fetchSessionToken";
+import { logger, fetchSessionToken } from "@/utils";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [sessionToken, setSessionToken] = useState<string | null>(null);

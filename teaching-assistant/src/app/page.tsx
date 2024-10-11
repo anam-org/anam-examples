@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <Box className="appcontainer">
-      <Flex justify="start" align="start" className="pt-6">
+      <Flex justify="start" align="start" className="pt-4 pb-6 md:pb-12">
         <Heading>ANAM.AI</Heading>
       </Flex>
       <Flex align="center" justify="center" className="h-[80vh] flex-col">

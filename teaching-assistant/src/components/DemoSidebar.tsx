@@ -11,11 +11,11 @@ interface MenuItem {
   clickable: boolean;
 }
 
-interface LessonsSidebarProps {
+interface DemoSidebarProps {
   selectedLanguage: "french" | "spanish" | "german";
 }
 
-export const LessonsSidebar = ({ selectedLanguage }: LessonsSidebarProps) => {
+export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
   const [open, setOpen] = useState(true);
   const [selectedLesson, setSelectedLesson] = useState<string>("");
   const { theme } = useTheme();
@@ -138,7 +138,7 @@ export const LessonsSidebar = ({ selectedLanguage }: LessonsSidebarProps) => {
         <BookOpen
           className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
           stroke="white"
-          size={open ? 40 : 30} // Adjust size based on open state
+          size={open ? 40 : 30}
         />
       </div>
 

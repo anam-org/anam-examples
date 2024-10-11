@@ -30,8 +30,14 @@ export async function GET() {
     if (!response.ok) {
       const errorMessage = `Failed to fetch session token. Status: ${response.status}`;
       const responseBody = await response.text();
-      errorHandler(`${errorMessage}. Response: ${responseBody}`, "GET session token request");
-      return NextResponse.json({ error: errorMessage }, { status: response.status });
+      errorHandler(
+        `${errorMessage}. Response: ${responseBody}`,
+        "GET session token request",
+      );
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: response.status },
+      );
     }
 
     const { sessionToken } = await response.json();
@@ -39,6 +45,9 @@ export async function GET() {
     return NextResponse.json({ sessionToken });
   } catch (error) {
     errorHandler(`An error occurred: ${error}`, "GET session token request");
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

@@ -34,7 +34,7 @@ export const NavigationSidebar = () => {
   const { theme } = useTheme();
 
   const Menus: MenuItem[] = [
-    { title: "Lessons", navigateTo: "Lessons", Icon: Book, clickable: true },
+    { title: "Lessons", navigateTo: "Demo", Icon: Book, clickable: true },
     {
       title: "Vocabulary",
       navigateTo: "Vocabulary",
@@ -76,7 +76,7 @@ export const NavigationSidebar = () => {
     if (navigateTo === "Initial") {
       await handleExitClick();
     } else {
-      if (currentView === "Lessons" && navigateTo !== "Lessons") {
+      if (currentView === "Demo" && navigateTo !== "Demo") {
         if (anamClient) {
           await anamClient.stopStreaming().catch((error) => {
             logger.error("Failed to stop streaming:", error);

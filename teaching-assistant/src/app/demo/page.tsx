@@ -1,7 +1,7 @@
 "use client";
 
 import { ViewContextProvider, useViewContext } from "@/contexts";
-import { LessonsView, SettingsView } from "./_views";
+import { DemoView, SettingsView } from "./_views";
 import { NavigationSidebar } from "@/components";
 
 export default function DemoPage() {
@@ -17,8 +17,8 @@ function Content() {
 
   const renderView = () => {
     switch (currentView) {
-      case "Lessons":
-        return <LessonsView />;
+      case "Demo":
+        return <DemoView />;
       case "Settings":
       default:
         return <SettingsView />;
