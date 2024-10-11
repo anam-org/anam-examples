@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anam AI Sales Coach Example
+
+This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive language teaching experience. The avatar ca  teach multiple languages and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Navigating the Code](#navigating-the-code)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **An Anam AI account**: Public account creation is currently unavailable. Design partners will have their accounts created by the Anam team.
+- **An Anam API key**: API keys are shared with design partners during onboarding.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/anam-org/anam-examples.git
+   cd teaching-assistant
+   ```
 
-## Learn More
+2. **Install dependencies:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   # or
+   pnpm install
+   # or
+   yarn install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Generate personas and set up your .env file:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   After installing dependencies, run the following command to generate personas:
 
-## Deploy on Vercel
+   ```bash
+   npm run generate-personas
+   # or
+   pnpm generate-personas
+   # or
+   yarn generate-personas
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   This will generate the personas required for the different scenarios in the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Once the personas are generated, you will receive an output with persona IDs. Update your `.env` file with the generated persona IDs as shown below:
+
+   ```env
+   ANAM_API_KEY=your_api_key
+   NEXT_PUBLIC_BASE_URL=https://api.anam.ai
+
+   # Persona IDs for each scenario
+   NEXT_PUBLIC_PERSONA_JORDAN=generated_persona_id_for_jordan
+   NEXT_PUBLIC_PERSONA_TAYLOR=generated_persona_id_for_taylor
+   NEXT_PUBLIC_PERSONA_ALEX=generated_persona_id_for_alex
+   NEXT_PUBLIC_PERSONA_JAMIE=generated_persona_id_for_jamie
+   NEXT_PUBLIC_PERSONA_SAM=generated_persona_id_for_sam
+   NEXT_PUBLIC_PERSONA_MORGAN=generated_persona_id_for_morgan
+   ```
+
+## Usage
+
+### Running the Application
+
+To start the development server, use one of the following commands:
+
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   # or
+   yarn dev
+   ```
+
+Access the application at [http://localhost:3000](http://localhost:3000).
+
+## Navigating the Code
+
+Key components are organized to facilitate quick navigation and extendibility.
+
+### Project Structure
+
+   ```
+   sales-coach-avatar/
+   ├── app/
+   │   ├── api/
+   │   │   └── session-token/
+   │   │       └── route.ts
+   │   ├── demo/
+   │   │   ├── _views/
+   │   │   │   └── Demo.tsx
+   │   │   │   └── Settings.tsx
+   │   │   └── page.tsx
+   │   ├── _providers.tsx
+   │   ├── layout.tsx
+   │   └── page.tsx
+   ├── components/
+   │   ├── AudioPermissionsModal.tsx
+   │   ├── AvatarContainer.tsx
+   │   ├── ConversationPopUp.tsx
+   │   ├── ConverstaionTracker.tsx
+   │   ├── DemoSidebar.tsx
+   │   └── NavigationSidebar.tsx
+   ├── contexts/
+   │   ├── AnamContext.tsx
+   │   ├── AudioPermissionContext.tsx
+   │   ├── SettingsContext.tsx
+   │   └── ViewContext.tsx
+   ├── utils/
+   │   └── useFetchToken.js
+   ├── utils/
+   │   ├── env.js
+   │   ├── errorHandler.ts
+   │   ├── fetchSessionToken.ts
+   │   ├── logger.ts
+   │   └── types.ts
+   └── ...
+   ```
+...
+
+### Extending the Example
+
+You can extend or modify the application by adding new views, introducing your own personas/scenarios. Contexts like `SettingsContext` and `AnamContext` provide centralized control over configurations and can be expanded for more advanced use cases.
