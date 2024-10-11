@@ -1,6 +1,6 @@
 # Anam AI Sales Coach Example
 
-This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive language teaching experience. The avatar ca  teach multiple languages and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
+This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive language teaching experience. The avatar can teach multiple languages and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
 
 ## Table of Contents
 
@@ -51,19 +51,30 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 
    This will generate the personas required for the different scenarios in the application.
 
-   Once the personas are generated, you will receive an output with persona IDs. Update your `.env` file with the generated persona IDs as shown below:
+   Once the personas are generated, you will receive an output with persona IDs in the format:
+
+   ```
+   NEXT_PUBLIC_PERSONA_LANGUAGE_PERSONALITY=$PERSONA_ID
+   ```
+
+   Update your `.env` file with the generated persona IDs as shown below:
 
    ```env
    ANAM_API_KEY=your_api_key
    NEXT_PUBLIC_BASE_URL=https://api.anam.ai
 
    # Persona IDs for each scenario
-   NEXT_PUBLIC_PERSONA_JORDAN=generated_persona_id_for_jordan
-   NEXT_PUBLIC_PERSONA_TAYLOR=generated_persona_id_for_taylor
-   NEXT_PUBLIC_PERSONA_ALEX=generated_persona_id_for_alex
-   NEXT_PUBLIC_PERSONA_JAMIE=generated_persona_id_for_jamie
-   NEXT_PUBLIC_PERSONA_SAM=generated_persona_id_for_sam
-   NEXT_PUBLIC_PERSONA_MORGAN=generated_persona_id_for_morgan
+   NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY=FIRST_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_FRENCH_PROFESSIONAL=SECOND_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_FRENCH_FORMAL=THIRD_PERSONA_ID
+
+   NEXT_PUBLIC_PERSONA_SPANISH_FRIENDLY=FOURTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_SPANISH_PROFESSIONAL=FIFTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_SPANISH_FORMAL=SIXTH_PERSONA_ID
+
+   NEXT_PUBLIC_PERSONA_GERMAN_FRIENDLY=SEVENTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_GERMAN_PROFESSIONAL=EIGHTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_GERMAN_FORMAL=NINTH_PERSONA_ID
    ```
 
 ## Usage
@@ -124,7 +135,8 @@ Key components are organized to facilitate quick navigation and extendibility.
    │   └── types.ts
    └── ...
    ```
-...
+
+---
 
 ### Extending the Example
 

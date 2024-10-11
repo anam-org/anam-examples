@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the API key and the output file
-API_KEY="your-api-key-here"
+API_KEY="ZWI2MWNlMTMtZTUxMy00MTMzLWJhOTktMTAzOTcyMDY3NzBlOjlJdEdvUlo1SUt0Vkl6MFNhMU1HNlhUdllJSzB3Q2pWbng2QnFHaWp1QlU9"
 OUTPUT_FILE="persona-ids.txt"
 
 # Define the API URL
@@ -44,14 +44,7 @@ create_persona() {
 
   # Check if the creation was successful
   if [ "$PERSONA_ID" != "null" ]; then
-    echo "Created persona '$NAME' with ID: $PERSONA_ID"
-    # Append the details to the output file
-    echo "Persona '$NAME' Details:" >> $OUTPUT_FILE
-    echo "  ID: $PERSONA_ID" >> $OUTPUT_FILE
-    echo "  Brain ID: $BRAIN_ID" >> $OUTPUT_FILE
-    echo "  Created At: $CREATED_AT" >> $OUTPUT_FILE
-    echo "  Updated At: $UPDATED_AT" >> $OUTPUT_FILE
-    echo "" >> $OUTPUT_FILE
+    echo "NEXT_PUBLIC_PERSONA_LANGUAGE_PERSONALITY=$PERSONA_ID" >> $OUTPUT_FILE
   else
     echo "Failed to create persona '$NAME'"
     echo "Response: $RESPONSE"
