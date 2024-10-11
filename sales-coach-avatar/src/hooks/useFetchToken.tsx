@@ -3,6 +3,7 @@
 import useSWR from "swr";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
+import { logger } from "@/utils";
 
 interface SessionTokenResponse {
   sessionToken: string;
@@ -34,7 +35,7 @@ export const useFetchToken = () => {
   );
 
   const fetchSessionToken = async (): Promise<string> => {
-    console.log("Fetching new session token...");
+    logger.info("Fetching new session token...");
     const response = await fetch("/api/session-token", {
       method: "GET",
       headers: {
@@ -48,7 +49,7 @@ export const useFetchToken = () => {
     }
 
     const data: SessionTokenResponse = await response.json();
-    console.log("New session token received:", data.sessionToken);
+    logger.info("New session token received:", data.sessionToken);
     return data.sessionToken;
   };
 
@@ -66,13 +67,13 @@ export const useFetchToken = () => {
 
   useEffect(() => {
     if (sessionToken && isTokenExpired(sessionToken)) {
-      console.log("Token expired, refreshing...");
+      logger.info("Token expired, refreshing...");
       setFetchKey(`/session-token-${Date.now()}`);
     }
   }, [sessionToken]);
 
   const refreshToken = () => {
-    console.log("Manually refreshing token...");
+    logger.info("Manually refreshing token...");
     setFetchKey(`/session-token-${Date.now()}`);
   };
 
