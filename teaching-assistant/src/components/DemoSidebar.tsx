@@ -7,25 +7,85 @@ import { useState, useEffect } from "react";
 
 const lessons: Record<string, MenuItem[]> = {
   french: [
-    { title: "Introduction to French", description: "Basic greetings and phrases", clickable: true },
-    { title: "French Numbers", description: "Learn to count in French", clickable: false },
-    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
-    { title: "French Verbs", description: "Introduction to verb conjugation", clickable: false },
-    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+    {
+      title: "Introduction to French",
+      description: "Basic greetings and phrases",
+      clickable: true,
+    },
+    {
+      title: "French Numbers",
+      description: "Learn to count in French",
+      clickable: false,
+    },
+    {
+      title: "Basic Conversations",
+      description: "Common questions and answers",
+      clickable: false,
+    },
+    {
+      title: "French Verbs",
+      description: "Introduction to verb conjugation",
+      clickable: false,
+    },
+    {
+      title: "Everyday Vocabulary",
+      description: "Essential words for daily life",
+      clickable: false,
+    },
   ],
   spanish: [
-    { title: "Introduction to Spanish", description: "Basic greetings and phrases", clickable: true },
-    { title: "Spanish Numbers", description: "Learn to count in Spanish", clickable: false },
-    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
-    { title: "Spanish Verbs", description: "Introduction to verb conjugation", clickable: false },
-    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+    {
+      title: "Introduction to Spanish",
+      description: "Basic greetings and phrases",
+      clickable: true,
+    },
+    {
+      title: "Spanish Numbers",
+      description: "Learn to count in Spanish",
+      clickable: false,
+    },
+    {
+      title: "Basic Conversations",
+      description: "Common questions and answers",
+      clickable: false,
+    },
+    {
+      title: "Spanish Verbs",
+      description: "Introduction to verb conjugation",
+      clickable: false,
+    },
+    {
+      title: "Everyday Vocabulary",
+      description: "Essential words for daily life",
+      clickable: false,
+    },
   ],
   german: [
-    { title: "Introduction to German", description: "Basic greetings and phrases", clickable: true },
-    { title: "German Numbers", description: "Learn to count in German", clickable: false },
-    { title: "Basic Conversations", description: "Common questions and answers", clickable: false },
-    { title: "German Verbs", description: "Introduction to verb conjugation", clickable: false },
-    { title: "Everyday Vocabulary", description: "Essential words for daily life", clickable: false },
+    {
+      title: "Introduction to German",
+      description: "Basic greetings and phrases",
+      clickable: true,
+    },
+    {
+      title: "German Numbers",
+      description: "Learn to count in German",
+      clickable: false,
+    },
+    {
+      title: "Basic Conversations",
+      description: "Common questions and answers",
+      clickable: false,
+    },
+    {
+      title: "German Verbs",
+      description: "Introduction to verb conjugation",
+      clickable: false,
+    },
+    {
+      title: "Everyday Vocabulary",
+      description: "Essential words for daily life",
+      clickable: false,
+    },
   ],
 };
 
@@ -65,11 +125,7 @@ const DemoSidebarContents = ({
                 lesson.clickable
                   ? "hover:bg-gray-100 dark:hover:bg-gray-800"
                   : "opacity-50 pointer-events-none"
-              } ${
-                selectedLesson === lesson.title
-                  ? "bg-gray-200"
-                  : ""
-              }`}
+              } ${selectedLesson === lesson.title ? "bg-gray-200" : ""}`}
             >
               {/* Title*/}
               <Heading size={{ initial: "1", sm: "1", md: "1", lg: "2" }}>
@@ -95,7 +151,6 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
   const [selectedLesson, setSelectedLesson] = useState<string>("");
   const { theme } = useTheme();
 
-
   useEffect(() => {
     setSelectedLesson(lessons[selectedLanguage][0].title);
   }, [selectedLanguage]);
@@ -104,8 +159,9 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
     <Box>
       {/* Button to toggle sidebar on smaller screens */}
       {!open && (
-        <Box className="lg:hidden fixed top-6 right-5 z-50">
+        <Box className="lg:hidden fixed top-2 right-2 z-50">
           <IconButton
+            size="4"
             onClick={() => setOpen(true)}
             className="p-2 rounded-full bg-black dark:bg-white border border-gray-200 dark:border-gray-700"
           >
@@ -119,7 +175,7 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
         className={`fixed top-0 right-0 z-50 h-screen p-5 pt-8 bg-white dark:bg-black border-l shadow-lg border-gray-200 dark:border-gray-500 transition-all duration-300 ${
           open
             ? "w-[20vw] min-w-[200px] max-w-[400px]"
-            : "w-0 lg:w-[5vw] xl:w-[6vw] 2xl:w-[3vw] min-w-[50px]"
+            : "w-0 lg:w-[5vw] xl:w-[5vw] 2xl:w-[4vw] min-w-[50px]"
         } ${open ? "block" : "lg:block hidden"}`}
       >
         {/* Toggle Button */}
@@ -137,7 +193,9 @@ export const DemoSidebar = ({ selectedLanguage }: DemoSidebarProps) => {
         {/* Sidebar Header */}
         <Box className="flex items-center gap-x-4 mb-6 justify-end">
           {open && (
-            <Heading className="text-black dark:text-white text-xl font-medium">Lessons</Heading>
+            <Heading className="text-black dark:text-white text-xl font-medium">
+              Lessons
+            </Heading>
           )}
           <BookOpen
             className={`dark:stroke-white cursor-pointer transition-transform ${open && "rotate-[360deg]"}`}
