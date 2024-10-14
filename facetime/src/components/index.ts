@@ -1,2 +1,2 @@
 export * from "./PermissionModal";
-export * from './DarkModeToggle';
+export * from "./DarkModeToggle";

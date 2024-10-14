@@ -38,7 +38,8 @@ export function Home() {
               Persona Facetime
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-sm sm:text-base">
-              Enjoy real-time, interactive video conversations with your AI assistant.
+              Enjoy real-time, interactive video conversations with your AI
+              assistant.
             </p>
           </div>
 
