@@ -116,7 +116,13 @@ export function ConfigureAI() {
                   onOpenChange={setDropdownOpen}
                 >
                   <DropdownMenuTrigger asChild>
-                    <Button className="bg-white text-black w-full flex justify-between items-center px-3 py-2 border rounded-md">
+                    <Button
+                      className={`${
+                        personaPreset
+                          ? "text-black dark:text-white"
+                          : "text-gray-400"
+                      } bg-transparent w-full flex justify-between items-center px-3 py-2 border dark:border-gray-600 rounded-md hover:bg-transparent hover:border-transparent focus:ring-0`}
+                    >
                       {personaPreset
                         ? personalityPresets.find(
                             (preset) => preset.value === personaPreset,
@@ -146,6 +152,7 @@ export function ConfigureAI() {
               <div>
                 <label className="block">AI Description</label>
                 <Textarea
+                  className="dark:border-gray-600"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
@@ -156,7 +163,7 @@ export function ConfigureAI() {
               <Button
                 size="lg"
                 type="submit"
-                className=" w-full py-3 font-semibold rounded-lg focus:outline-none"
+                className="w-full py-3 font-semibold rounded-lg focus:outline-none"
               >
                 Continue to Video Call
               </Button>
