@@ -85,7 +85,7 @@ export function PermissionsModal({
       <div className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
 
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg z-[1000] p-6 w-[90vw]">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg z-[1000] w-[90vw] max-w-[460px] p-4">
         <button
           className="absolute top-1 right-1 text-gray-900 dark:text-gray-300"
           onClick={onClose}
@@ -94,10 +94,10 @@ export function PermissionsModal({
         </button>
 
         {/* Modal content */}
-        <div className="flex flex-col md:flex-row gap-3">
-          {/* Left Section (Video Stream & Controls) */}
-          <div className="flex flex-col items-center justify-center w-full md:w-1/2">
-            <div className="relative w-full mt-1 mb-4">
+        <div className="flex flex-col gap-3">
+          {/* Video Stream & Controls */}
+          <div className="flex flex-col items-center justify-center w-full">
+            <div className="relative w-full mt-4 mb-4">
               {mediaStream ? (
                 <video
                   ref={videoRef}
@@ -128,7 +128,7 @@ export function PermissionsModal({
             </div>
 
             {/* Device Selection */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="grid grid-cols-1 gap-4 w-full">
               <DeviceSelector
                 devices={cameras}
                 selectedDevice={selectedCamera}
@@ -146,8 +146,8 @@ export function PermissionsModal({
             </div>
           </div>
 
-          {/* Right Section (Text and Buttons) */}
-          <div className="flex flex-col justify-center items-center w-full md:w-1/2 text-center">
+          {/* Text and Buttons */}
+          <div className="flex flex-col justify-center items-center w-full text-center">
             <p className="text-gray-700 dark:text-gray-300 mb-4">
               Before proceeding, we need to check your camera and microphone.
             </p>
@@ -160,7 +160,7 @@ export function PermissionsModal({
                 className="px-6 py-2 font-semibold rounded-lg transition w-full"
                 onClick={requestPermissions}
               >
-                Authorise
+                Authorize
               </Button>
             ) : (
               <Button

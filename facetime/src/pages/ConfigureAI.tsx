@@ -121,7 +121,7 @@ export function ConfigureAI() {
                         personaPreset
                           ? "text-black dark:text-white"
                           : "text-gray-400"
-                      } bg-transparent w-full flex justify-between items-center px-3 py-2 border dark:border-gray-600 rounded-md hover:bg-transparent hover:border-transparent focus:ring-0`}
+                      } text-base bg-transparent w-full flex justify-between items-center px-3 py-2 border dark:border-gray-600 rounded-md hover:bg-transparent hover:border-transparent focus:ring-0`}
                     >
                       {personaPreset
                         ? personalityPresets.find(
@@ -138,6 +138,7 @@ export function ConfigureAI() {
                   <DropdownMenuContent className="w-full">
                     {personalityPresets.map((preset) => (
                       <DropdownMenuItem
+                        className="text-base"
                         key={preset.value}
                         onSelect={() => setPersonaPreset(preset.value)}
                       >
@@ -152,7 +153,7 @@ export function ConfigureAI() {
               <div>
                 <label className="block">AI Description</label>
                 <Textarea
-                  className="dark:border-gray-600"
+                  className="dark:border-gray-600 text-base"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
