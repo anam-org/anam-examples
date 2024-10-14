@@ -1,40 +1,11 @@
-import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PermissionsModal } from "@/components";
+import { PermissionsModal, DarkModeToggle } from "@/components";
+import { useState } from "react";
 
 export function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const navigate = useNavigate();
-
-  const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => {
-      const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode ? "enabled" : "disabled");
-      return newMode;
-    });
-  };
-
-  useEffect(() => {
-    const savedDarkMode = localStorage.getItem("darkMode");
-    if (savedDarkMode === "enabled") {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -57,23 +28,17 @@ export function Home() {
           <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             ANAM.AI
           </div>
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full flex items-center justify-center w-9 sm:w-10 h-9 sm:h-10"
-          >
-            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <DarkModeToggle />
         </header>
 
         {/* Main content */}
         <main className="flex-grow flex flex-col items-center justify-center w-full max-w-[480px] px-3 sm:px-4 py-5 sm:py-6">
           <div className="text-center mb-4 sm:mb-5">
-            <h1 className="text-5xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-4xl sm:text-4xl font-bold text-gray-900 dark:text-white">
               Persona Facetime
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-sm sm:text-base">
-              Enjoy real-time, interactive video conversations with your AI
-              assistant.
+              Enjoy real-time, interactive video conversations with your AI assistant.
             </p>
           </div>
 

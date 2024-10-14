@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
+import { DarkModeToggle } from "@/components";
 
 export function ConfigureAI() {
   const navigate = useNavigate();
@@ -71,6 +72,7 @@ export function ConfigureAI() {
       {/* Header with Back button */}
       <header className="w-full max-w-[480px] bg-white dark:bg-gray-800 py-4 shadow-md flex items-center justify-between px-4 min-h-[60px]">
         <button onClick={() => navigate("/")}>Back</button>
+        <DarkModeToggle />
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center w-full max-w-[480px] px-4">
