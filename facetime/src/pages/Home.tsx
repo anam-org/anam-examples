@@ -2,8 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PermissionsModal, DarkModeToggle } from "@/components";
 import { useState } from "react";
+import { useViewportHeight } from "@/hooks";
 
 export function Home() {
+  useViewportHeight();
   const [isModalVisible, setModalVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -22,7 +24,10 @@ export function Home() {
 
   return (
     <>
-      <div className="min-h-screen h-full w-full overflow-x-hidden flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div
+        className="w-full overflow-x-hidden flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+      >
         {/* Header */}
         <header className="w-full max-w-[480px] bg-white dark:bg-gray-800 py-3 sm:py-4 shadow-md flex justify-between items-center px-3 sm:px-4">
           <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
@@ -61,14 +66,14 @@ export function Home() {
           {/* Ready to Connect Section */}
           <Button
             onClick={handleOpenModal}
-            className="w-full py-2 sm:py-3 font-semibold rounded-lg focus:outline-none"
+            className="w-full p-6 font-semibold rounded-lg focus:outline-none"
           >
             Start Video Call
           </Button>
         </main>
 
         {/* Footer */}
-        <footer className="mt-4 sm:mt-5 mb-4 sm:mb-5 text-gray-500 dark:text-gray-400 max-w-[480px] w-full text-center text-sm sm:text-base">
+        <footer className="mb-4 sm:mb-5 text-gray-500 dark:text-gray-400 max-w-[480px] w-full text-center text-sm sm:text-base">
           <p>&copy; 2024 ANAM.AI. All rights reserved.</p>
         </footer>
       </div>

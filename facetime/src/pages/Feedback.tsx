@@ -1,9 +1,11 @@
 import { DarkModeToggle } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useViewportHeight } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 
 export function Feedback() {
+  useViewportHeight();
   const navigate = useNavigate();
 
   const handleGoHome = () => {
@@ -11,7 +13,10 @@ export function Feedback() {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-between bg-gray-100 dark:bg-gray-900">
+    <div
+      className="flex flex-col justify-between bg-gray-100 dark:bg-gray-900"
+      style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+    >
       {/* Header */}
       <header className="w-full max-w-[480px] bg-white dark:bg-gray-800 py-3 sm:py-4 shadow-md flex justify-between items-center px-3 sm:px-4">
         <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">

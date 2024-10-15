@@ -5,8 +5,10 @@ import { useAnamContext } from "@/contexts";
 import { errorHandler } from "@/utils";
 import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
 import { useVideoAudioPermissionContext } from "@/contexts";
+import { useViewportHeight } from "@/hooks";
 
 export function VideoCall() {
+  useViewportHeight();
   const [loading, setLoading] = useState(true);
   const [loadingText, setLoadingText] = useState("Connecting...");
   const [secondsElapsed, setSecondsElapsed] = useState(0);
@@ -129,11 +131,16 @@ export function VideoCall() {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds,
+    ).padStart(2, "0")}`;
   };
 
   return (
-    <div className="relative h-screen w-full bg-gray-100 dark:bg-gray-900">
+    <div
+      className="relative w-full bg-gray-100 dark:bg-gray-900"
+      style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+    >
       <div className="flex items-center justify-center w-full h-full bg-gray-100 dark:bg-gray-900">
         {loading && (
           <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-10">

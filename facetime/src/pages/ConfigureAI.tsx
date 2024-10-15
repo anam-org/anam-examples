@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAnamContext } from "../contexts/AnamContext";
 import { errorHandler } from "../utils";
@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { DarkModeToggle } from "@/components";
+import { useViewportHeight } from "@/hooks";
 
 export function ConfigureAI() {
+  useViewportHeight();
   const navigate = useNavigate();
   const { createPersona, setPersonaConfig } = useAnamContext();
   const [description, setDescription] = useState("");
@@ -21,6 +23,17 @@ export function ConfigureAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Configuring AI...");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [triggerWidth, setTriggerWidth] = useState<number | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    if (triggerRef.current) {
+      setTriggerWidth(triggerRef.current.offsetWidth);
+    }
+  }, [dropdownOpen, personaPreset]);
 
   const personalityPresets = [
     { value: "friendly", label: "Friendly and welcoming" },
@@ -68,7 +81,10 @@ export function ConfigureAI() {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div
+      className="w-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900"
+      style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+    >
       {/* Header with Back button */}
       <header className="w-full max-w-[480px] bg-white dark:bg-gray-800 py-4 shadow-md flex items-center justify-between px-4 min-h-[60px]">
         <button onClick={() => navigate("/")}>Back</button>
@@ -117,25 +133,25 @@ export function ConfigureAI() {
                 >
                   <DropdownMenuTrigger asChild>
                     <Button
+                      ref={triggerRef}
                       className={`${
                         personaPreset
                           ? "text-black dark:text-white"
-                          : "text-gray-400"
-                      } text-base bg-transparent w-full flex justify-between items-center px-3 py-2 border dark:border-gray-600 rounded-md hover:bg-transparent hover:border-transparent focus:ring-0`}
+                          : "text-gray-500 dark:text-gray-500"
+                      } text-base bg-transparent w-full flex justify-between items-center px-3 py-2 border dark:border-gray-600 rounded-md hover:bg-transparent hover:border-transparent`}
                     >
                       {personaPreset
                         ? personalityPresets.find(
                             (preset) => preset.value === personaPreset,
                           )?.label
                         : "Select a personality"}
-                      {dropdownOpen ? (
-                        <ChevronUp className="ml-2" />
-                      ) : (
-                        <ChevronDown className="ml-2" />
-                      )}
+                      {dropdownOpen ? <ChevronUp /> : <ChevronDown />}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
+                  <DropdownMenuContent
+                    className="w-full"
+                    style={{ width: triggerWidth }}
+                  >
                     {personalityPresets.map((preset) => (
                       <DropdownMenuItem
                         className="text-base"
@@ -153,7 +169,7 @@ export function ConfigureAI() {
               <div>
                 <label className="block">AI Description</label>
                 <Textarea
-                  className="dark:border-gray-600 text-base"
+                  className="text-base text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-500 dark:border-gray-600 shadow-md"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
@@ -164,7 +180,7 @@ export function ConfigureAI() {
               <Button
                 size="lg"
                 type="submit"
-                className="w-full py-3 font-semibold rounded-lg focus:outline-none"
+                className="w-full p-6 font-semibold rounded-lg focus:outline-none"
               >
                 Continue to Video Call
               </Button>

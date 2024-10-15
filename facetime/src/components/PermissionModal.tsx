@@ -1,47 +1,14 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, X } from "lucide-react";
 import { useVideoAudioPermissionContext } from "@/contexts";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
+import { DeviceSelector } from "./DeviceSelector";
 
 interface PermissionsModalProps {
   onClose: () => void;
   onPermissionGranted: () => void;
 }
-
-interface DeviceSelectorProps {
-  devices: Array<{ deviceId: string; label: string | null }>;
-  selectedDevice: string;
-  onDeviceChange: (deviceId: string) => void;
-  icon: ReactNode;
-  placeholderLabel: string;
-}
-
-export const DeviceSelector = ({
-  devices,
-  selectedDevice,
-  onDeviceChange,
-  icon,
-  placeholderLabel,
-}: DeviceSelectorProps) => {
-  return (
-    <div className="flex items-center w-full">
-      <select
-        value={selectedDevice}
-        onChange={(e) => onDeviceChange(e.target.value)}
-        className="w-full border border-gray-300 dark:border-gray-600 px-3 py-2 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-      >
-        <option value="">{placeholderLabel}</option>
-        {icon}
-        {devices.map((device) => (
-          <option key={device.deviceId} value={device.deviceId}>
-            {device.label || `Device ${device.deviceId}`}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
 
 export function PermissionsModal({
   onClose,
@@ -128,29 +95,29 @@ export function PermissionsModal({
             </div>
 
             {/* Device Selection */}
+            <p className="text-gray-700 dark:text-gray-300 mb-3 text-center">
+              To speak with Leo we need your permission first
+            </p>
             <div className="grid grid-cols-1 gap-4 w-full">
               <DeviceSelector
                 devices={cameras}
                 selectedDevice={selectedCamera}
                 onDeviceChange={setSelectedCamera}
                 icon={<Video />}
-                placeholderLabel="Camera"
+                placeholderLabel="Select Camera"
               />
               <DeviceSelector
                 devices={microphones}
                 selectedDevice={selectedMicrophone}
                 onDeviceChange={setSelectedMicrophone}
                 icon={<Mic />}
-                placeholderLabel="Microphone"
+                placeholderLabel="Select Microphone"
               />
             </div>
           </div>
 
           {/* Text and Buttons */}
           <div className="flex flex-col justify-center items-center w-full text-center">
-            <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Before proceeding, we need to check your camera and microphone.
-            </p>
             {errorMessage && (
               <p className="text-red-500 mb-4">{errorMessage}</p>
             )}
@@ -164,7 +131,7 @@ export function PermissionsModal({
               </Button>
             ) : (
               <Button
-                className="px-6 py-2 font-semibold rounded-lg transition w-full"
+                className="font-semibold rounded-lg transition w-full"
                 onClick={handlePermissionGranted}
               >
                 Continue
