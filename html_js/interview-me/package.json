@@ -6,6 +6,7 @@
   "scripts": {
     "serve": "browser-sync start --server --files \"**/*.html\"",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "wrangler pages dev .",
     "build:js": "webpack --mode=production",
     "watch:js": "onchange \"src/js\" -- webpack --mode=development"
   },
