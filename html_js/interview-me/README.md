@@ -2,6 +2,8 @@
 
 Interview Me is an interactive web application that showcases the integration of the Anam SDK with Cloudflare Pages and Workers. This app simulates a job interview experience with an AI-powered digital human interviewer, helping users practice their interview skills in a realistic setting.
 
+If you're implementing this yourself you'll have to replace the GPT call defined in callGPT (which provides feedback on the user's interview at the end of the conversation) with your own LLM call. I would also suggest removing the rate limit logic for debugging purposes. If you're looking for a more minimal example to get started, html_js/local_example is a better starting point.
+
 ## Features
 
 - User input for interview context and job description
