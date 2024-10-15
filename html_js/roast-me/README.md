@@ -2,6 +2,8 @@
 
 Roast Me is a fun, interactive web application that demonstrates the integration of the Anam SDK with Cloudflare Pages and Workers. This app allows users to input information about themselves and receive a humorous "roast" from an AI-powered digital human.
 
+If you're implementing this yourself I would suggest removing the rate limit logic for debugging purposes. If you're looking for a more minimal example to get started, html_js/local_example is a better starting point.
+
 ## Features
 
 - User input for personal information
