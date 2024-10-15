@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anam AI Teaching Assistant Example
+
+This application demonstrates how to integrate and utilize the Anam AI Avatar SDK to create an interactive language teaching experience. The avatar can teach multiple languages and serves as a reference for engineers exploring the SDK's capabilities. For more in-depth information on the Anam client's capabilities, you can find its documentation [here](https://www.npmjs.com/package/@anam-ai/js-sdk).
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Navigating the Code](#navigating-the-code)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **An Anam AI account**: Public account creation is currently unavailable. Design partners will have their accounts created by the Anam team.
+- **An Anam API key**: API keys are shared with design partners during onboarding.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/anam-org/anam-examples.git
+   cd teaching-assistant
+   ```
 
-## Learn More
+2. **Install dependencies:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   # or
+   pnpm install
+   # or
+   yarn install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Generate personas and set up your .env file:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   After installing dependencies, run the following command to generate personas:
 
-## Deploy on Vercel
+   ```bash
+   npm run generate-personas
+   # or
+   pnpm generate-personas
+   # or
+   yarn generate-personas
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   This will generate the personas required for the different scenarios in the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Once the personas are generated, you will receive an output with persona IDs in the format:
+
+   ```
+   NEXT_PUBLIC_PERSONA_LANGUAGE_PERSONALITY=$PERSONA_ID
+   ```
+
+   Update your `.env` file with the generated persona IDs as shown below:
+
+   ```env
+   ANAM_API_KEY=your_api_key
+   NEXT_PUBLIC_BASE_URL=https://api.anam.ai
+
+   # Persona IDs for each scenario
+   NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY=FIRST_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_FRENCH_PROFESSIONAL=SECOND_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_FRENCH_FORMAL=THIRD_PERSONA_ID
+
+   NEXT_PUBLIC_PERSONA_SPANISH_FRIENDLY=FOURTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_SPANISH_PROFESSIONAL=FIFTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_SPANISH_FORMAL=SIXTH_PERSONA_ID
+
+   NEXT_PUBLIC_PERSONA_GERMAN_FRIENDLY=SEVENTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_GERMAN_PROFESSIONAL=EIGHTH_PERSONA_ID
+   NEXT_PUBLIC_PERSONA_GERMAN_FORMAL=NINTH_PERSONA_ID
+   ```
+
+## Usage
+
+### Running the Application
+
+To start the development server, use one of the following commands:
+
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   # or
+   yarn dev
+   ```
+
+Access the application at [http://localhost:3000](http://localhost:3000).
+
+## Navigating the Code
+
+Key components are organized to facilitate quick navigation and extendibility.
+
+### Project Structure
+
+   ```
+   teaching-assistant/
+   ├── app/
+   │   ├── api/
+   │   │   └── session-token/
+   │   │       └── route.ts
+   │   ├── demo/
+   │   │   ├── _views/
+   │   │   │   └── Demo.tsx
+   │   │   │   └── Settings.tsx
+   │   │   └── page.tsx
+   │   ├── _providers.tsx
+   │   ├── layout.tsx
+   │   └── page.tsx
+   ├── components/
+   │   ├── AudioPermissionsModal.tsx
+   │   ├── AvatarContainer.tsx
+   │   ├── ConversationPopUp.tsx
+   │   ├── ConversationTracker.tsx
+   │   ├── DemoSidebar.tsx
+   │   └── NavigationSidebar.tsx
+   ├── contexts/
+   │   ├── AnamContext.tsx
+   │   ├── AudioPermissionContext.tsx
+   │   ├── SettingsContext.tsx
+   │   └── ViewContext.tsx
+   ├── hooks/
+   │   └── useFetchToken.tsx
+   ├── utils/
+   │   ├── env.js
+   │   ├── errorHandler.ts
+   │   ├── fetchSessionToken.ts
+   │   ├── logger.ts
+   │   └── types.ts
+   └── ...
+   ```
+
+### Key Directories and Files
+
+#### 1. **`app/`**
+
+- **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, etc.) for global state management.
+- **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. The token is used to initialize and authenticate the Anam AI client.
+- **`demo/`**:
+  - **`page.tsx`**: The main entry point for the teaching experience. It manages the lifecycle of different views (scenarios, settings, demo) using the `ViewContext`.
+  - **`_views/`**:
+    - **Demo.tsx**: Manages the interactive teaching session.
+    - **Settings.tsx**: Provides configuration options for different language teaching scenarios.
+
+#### 2. **`components/`**
+
+- **`AudioPermissionsModal.tsx`**: Handles audio permissions, ensuring the required permissions are granted before starting a session.
+
+#### 3. **`contexts/`**
+
+- **`AnamContext.tsx`**: Manages the initialization and integration with the Anam AI client, including handling session tokens and persona configurations.
+- **`SettingsContext.tsx`**: Manages application settings such as the selected language and persona configuration.
+- **`AudioPermissionContext.tsx`**: Handles audio permissions and device management.
+- **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the teaching assistant demo.
+
+#### 4. **`hooks/`**
+
+- **`useFetchToken.ts`**: Hook for fetching & refreshing session tokens.
+
+#### 5. **`utils/`**
+
+- **`env.js`**: Handles environment variable loading and validation.
+- **`errorHandler.ts`**: Centralized error handling utility.
+- **`logger.ts`**: Provides logging functionality.
+- **`types.ts`**: Contains TypeScript types and interfaces for error handling.
+
+### Extending the Example
+
+You can extend or modify the application by adding new views, introducing your own personas/scenarios. Contexts like `SettingsContext` and `AnamContext` provide centralized control over configurations and can be expanded for more advanced use cases.
