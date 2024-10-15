@@ -16,28 +16,33 @@ If you're implementing this yourself you'll have to replace the GPT call defined
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (version 14 or later)
 - [npm](https://www.npmjs.com/) (usually comes with Node.js)
 - [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) (for Cloudflare Workers)
 
 You'll also need:
+
 - A Cloudflare account
 - An Anam API key
 
 ## Local Development
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-repo/interview-me.git
    cd interview-me
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Create a `wrangler.toml` file in the project root (if it doesn't exist) and add your Anam API key:
+
    ```toml
    [vars]
    ANAM_API_KEY = "your-anam-api-key-here"
@@ -45,13 +50,15 @@ You'll also need:
    ```
 
 4. Build the JavaScript bundle:
+
    ```bash
    npm run build:js
    ```
 
 5. Run the project locally using Wrangler:
+
    ```bash
-   wrangler pages dev .
+   npm run start
    ```
 
    This command will start a local development server, typically at `http://localhost:8788`.
@@ -61,16 +68,19 @@ You'll also need:
 To deploy the Interview Me app to Cloudflare Pages:
 
 1. Ensure you're logged in to your Cloudflare account in Wrangler:
+
    ```bash
    wrangler login
    ```
 
 2. Build your project:
+
    ```bash
    npm run build:js
    ```
 
 3. Deploy to Cloudflare Pages:
+
    ```bash
    wrangler pages deploy
    ```
@@ -81,7 +91,7 @@ To deploy the Interview Me app to Cloudflare Pages:
 
 ## Configuration
 
-- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables (production and preview) or in the `wrangler.toml` file. For local development, you can also add it to the `.dev.vars` file. 
+- Update the `ANAM_API_KEY` in your Cloudflare Pages environment variables (production and preview) or in the `wrangler.toml` file. For local development, you can also add it to the `.dev.vars` file.
 - Modify the `src/js/index.js` file to customize the interview logic or adjust the Anam SDK integration.
 - You can update the `index.html` file to change the layout or add additional UI elements.
 
