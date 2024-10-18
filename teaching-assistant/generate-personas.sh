@@ -19,8 +19,6 @@ create_persona() {
   PERSONALITY=$5
   FILLER_PHRASES=$6
 
-  echo "Creating persona: $NAME - $DESCRIPTION"
-
   # Make the API request to create the persona
   RESPONSE=$(curl -s -X POST "$API_URL" \
     -H "Content-Type: application/json" \
@@ -38,16 +36,14 @@ create_persona() {
 
   # Extract persona details from the response
   PERSONA_ID=$(echo $RESPONSE | jq -r '.id')
-  CREATED_AT=$(echo $RESPONSE | jq -r '.createdAt')
-  UPDATED_AT=$(echo $RESPONSE | jq -r '.updatedAt')
-  BRAIN_ID=$(echo $RESPONSE | jq -r '.brain.id')
 
   # Check if the creation was successful
   if [ "$PERSONA_ID" != "null" ]; then
-    echo "NEXT_PUBLIC_PERSONA_LANGUAGE_PERSONALITY=$PERSONA_ID" >> $OUTPUT_FILE
+    echo "$PERSONA_ID"
   else
     echo "Failed to create persona '$NAME'"
     echo "Response: $RESPONSE"
+    exit 1
   fi
 }
 
@@ -64,12 +60,29 @@ personaConfigurations=(
   "Leo|Leo is a formal AI language tutor for German learners.|leo_desk|You are Leo, an AI tutor for learning German.|You are formal and focused on teaching.|[\"Let me check that for you.\", \"Please hold on a moment.\"]"
 )
 
-# Loop through the persona configurations and create personas
+# Loop through the persona configurations and collect the persona IDs
+persona_ids=()
 for personaConfig in "${personaConfigurations[@]}"; do
   echo "Processing: $personaConfig"
 
   IFS="|" read -r NAME DESCRIPTION PERSONA_PRESET SYSTEM_PROMPT PERSONALITY FILLER_PHRASES <<< "$personaConfig"
-  create_persona "$NAME" "$DESCRIPTION" "$PERSONA_PRESET" "$SYSTEM_PROMPT" "$PERSONALITY" "$FILLER_PHRASES"
+  PERSONA_ID=$(create_persona "$NAME" "$DESCRIPTION" "$PERSONA_PRESET" "$SYSTEM_PROMPT" "$PERSONALITY" "$FILLER_PHRASES")
+  persona_ids+=("$PERSONA_ID")
 done
+
+# Output the persona IDs
+{
+  echo "NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY=${persona_ids[0]}"
+  echo "NEXT_PUBLIC_PERSONA_FRENCH_PROFESSIONAL=${persona_ids[1]}"
+  echo "NEXT_PUBLIC_PERSONA_FRENCH_FORMAL=${persona_ids[2]}"
+  echo ""
+  echo "NEXT_PUBLIC_PERSONA_SPANISH_FRIENDLY=${persona_ids[3]}"
+  echo "NEXT_PUBLIC_PERSONA_SPANISH_PROFESSIONAL=${persona_ids[4]}"
+  echo "NEXT_PUBLIC_PERSONA_SPANISH_FORMAL=${persona_ids[5]}"
+  echo ""
+  echo "NEXT_PUBLIC_PERSONA_GERMAN_FRIENDLY=${persona_ids[6]}"
+  echo "NEXT_PUBLIC_PERSONA_GERMAN_PROFESSIONAL=${persona_ids[7]}"
+  echo "NEXT_PUBLIC_PERSONA_GERMAN_FORMAL=${persona_ids[8]}"
+} >> $OUTPUT_FILE
 
 echo "Persona details have been saved to $OUTPUT_FILE."
