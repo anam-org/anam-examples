@@ -1,0 +1,13 @@
+# Ignore build artifacts
+build/
+coverage/
+.Vercel/
+.next/
+node_modules/
+
+# Environment and configuration files
+.env.*
+.husky/
+
+# Prevent Prettier from formatting itself
+.prettierignore
