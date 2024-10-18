@@ -8,15 +8,15 @@ interface AvatarContainerProps {
   videoId?: string;
   audioId?: string;
   className?: string;
+  videoClassName?: string;
   children?: React.ReactNode;
+  audioStream?: MediaStream;
 }
 
 /**
  * AvatarContainer component handles the streaming of video and audio.
  * It allows passing in additional elements (e.g., video controls) as children, which will be rendered in the container.
- * Supports custom styling via className prop with default styles applied.
- *
- * Now supports receiving a ref from the parent component via forwardRef.
+ * It doesn't apply any default styling and remains flexible.
  */
 export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
   (
@@ -24,7 +24,9 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
       videoId = "avatar-video",
       audioId = "avatar-audio",
       className = "",
+      videoClassName = "",
       children,
+      audioStream,
     }: AvatarContainerProps,
     ref,
   ): JSX.Element => {
@@ -36,14 +38,13 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
 
     useEffect(() => {
       if (isClientInitialized && videoRef.current && audioRef.current) {
-        startStreaming(videoRef.current.id, audioRef.current.id).catch(
-          (error) => {
+        startStreaming(videoRef.current.id, audioRef.current.id, audioStream) 
+          .catch((error) => {
             errorHandler(
               `Error during streaming: ${error}`,
               "AvatarContainer.tsx useEffect",
             );
-          },
-        );
+          });
       }
 
       return () => {
@@ -52,18 +53,21 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
     }, [isClientInitialized, startStreaming, stopStreaming]);
 
     return (
-      <div ref={ref} className={`${className}`}>
-        <>
+      <div ref={ref} className={className}>
         <video
           id={videoId}
           ref={videoRef}
           autoPlay
           playsInline
-          className="w-full h-full object-contain"
+          className={videoClassName}
         />
-        <audio id={audioId} ref={audioRef} autoPlay hidden />
+        <audio
+          id={audioId}
+          ref={audioRef}
+          autoPlay
+          hidden
+        />
         {children && <>{children}</>}
-        </>
       </div>
     );
   },
