@@ -1,8 +1,9 @@
-import { ScenarioType, useSettingsContext } from "@/contexts";
+import { ScenarioType, useAnamContext, useSettingsContext } from "@/contexts";
+import { useViewportHeight } from "@/hooks";
 import { Button, Flex, Heading, Text } from "@radix-ui/themes";
 import { Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 /**
  * Contains descriptions and instructions for different sales scenarios.
@@ -102,12 +103,23 @@ const DemoText: Record<
  * brief/full description and a list of key instructions for the user to follow during the demo.
  */
 export const DemoDescription = () => {
+  useViewportHeight();
+  const { anamClient } = useAnamContext();
   const { selectedScenario } = useSettingsContext();
   const scenario = DemoText[selectedScenario];
   const router = useRouter();
   const [showFullText, setShowFullText] = useState(false);
 
   const toggleTextVisibility = () => setShowFullText(!showFullText);
+
+  const stopStreaming = useCallback((): void => {
+    if (anamClient) {
+      anamClient.stopStreaming().catch((error: Error) => {
+        console.error("Failed to stop streaming:", error);
+      });
+    }
+    router.push("/");
+  }, [anamClient, router]);
 
   return (
     <Flex
@@ -142,13 +154,13 @@ export const DemoDescription = () => {
           {showFullText ? "Show Less" : "Show More"}
         </Text>
       </Text>
-      <Heading as="h2" size="3" mb="3" weight="medium">
+      <Heading as="h2" size="3" weight="medium" className="mb-0">
         Key Steps for Support Agent
       </Heading>
-      <ul className="list-disc list-inside pl-1">
+      <ul className="list-decimal list-inside">
         {scenario.instructions.map((instruction, index) => (
-          <li key={index}>
-            <Text as="span" size="2">
+          <li key={index} className="mb-1">
+            <Text size="2" >
               {instruction}
             </Text>
           </li>
@@ -160,7 +172,7 @@ export const DemoDescription = () => {
           mb="3"
           size="4"
           className="w-full sm:w-auto"
-          onClick={() => router.push("/")}
+          onClick={() => stopStreaming()}
         >
           End Demo
         </Button>

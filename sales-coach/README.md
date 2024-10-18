@@ -72,13 +72,13 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 
 To start the development server, use one of the following commands:
 
-   ```bash
-   npm run dev
-   # or
-   pnpm dev
-   # or
-   yarn dev
-   ```
+```bash
+npm run dev
+# or
+pnpm dev
+# or
+yarn dev
+```
 
 Access the application at [http://localhost:3000](http://localhost:3000).
 
@@ -88,37 +88,37 @@ Key components are organized to facilitate quick navigation and extendibility.
 
 ### Project Structure
 
-   ```
-   sales-coach-avatar/
-   ├── app/
-   │   ├── api/
-   │   │   └── session-token/
-   │   │       └── route.ts
-   │   ├── demo/
-   │   │   ├── _views/
-   │   │   │   └── ScenariosView.tsx
-   │   │   │   └── DescriptionView.tsx
-   │   │   │   └── DemoView.tsx
-   │   │   └── page.tsx
-   │   ├── _providers.tsx
-   │   ├── layout.tsx
-   │   └── page.tsx
-   ├── components/
-   │   └── PermissionsModal.tsx
-   ├── contexts/
-   │   ├── AnamContext.tsx
-   │   ├── SettingsContext.tsx
-   │   ├── VideoAudioPermissionContext.tsx
-   │   └── ViewContext.tsx
-   ├── hooks/
-   │   └── useFetchToken.tsx
-   ├── utils/
-   │   ├── env.js
-   │   ├── errorHandler.ts
-   │   ├── logger.ts
-   │   └── types.ts
-   └── ...
-   ```
+```
+sales-coach-avatar/
+├── app/
+│   ├── api/
+│   │   └── session-token/
+│   │       └── route.ts
+│   ├── demo/
+│   │   ├── _views/
+│   │   │   └── ScenariosView.tsx
+│   │   │   └── DescriptionView.tsx
+│   │   │   └── DemoView.tsx
+│   │   └── page.tsx
+│   ├── _providers.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   └── PermissionsModal.tsx
+├── contexts/
+│   ├── AnamContext.tsx
+│   ├── SettingsContext.tsx
+│   ├── VideoAudioPermissionContext.tsx
+│   └── ViewContext.tsx
+├── hooks/
+│   └── useFetchToken.tsx
+├── utils/
+│   ├── env.js
+│   ├── errorHandler.ts
+│   ├── logger.ts
+│   └── types.ts
+└── ...
+```
 
 ### Key Directories and Files
 
@@ -145,6 +145,7 @@ Key components are organized to facilitate quick navigation and extendibility.
 - **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the demo.
 
 #### 5. **`hooks/`**
+
 - **`useFetchToken.ts`**: Hook for fetching & refreshing session tokens.
 
 #### 6. **`utils/`**

@@ -22,7 +22,10 @@ export function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (error) {
-      errorHandler(`Error: ${error?.message || "Unknown error occurred"}`, "_providers.tsx");
+      errorHandler(
+        `Error: ${error?.message || "Unknown error occurred"}`,
+        "_providers.tsx",
+      );
     }
   }, [error]);
 
@@ -37,9 +40,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <AnamContextProvider sessionToken={sessionToken}>
-    <VideoAudioPermissionProvider>
+      <VideoAudioPermissionProvider>
         <SettingsContextProvider>{children}</SettingsContextProvider>
-    </VideoAudioPermissionProvider>
+      </VideoAudioPermissionProvider>
     </AnamContextProvider>
   );
 }

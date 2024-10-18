@@ -37,7 +37,10 @@ export async function GET(): Promise<NextResponse> {
     // If the response is not OK, log and return the error
     if (!response.ok) {
       const errorMessage = "Failed to fetch session token";
-      errorHandler(`${errorMessage}. Status code: ${response.status}`, "GET session token request");
+      errorHandler(
+        `${errorMessage}. Status code: ${response.status}`,
+        "GET session token request",
+      );
       return NextResponse.json(
         { error: errorMessage },
         { status: response.status },

@@ -1,6 +1,6 @@
 import { useAnamContext, useVideoAudioPermissionContext } from "@/contexts";
 import { Flex, IconButton, Separator, Slider } from "@radix-ui/themes";
-import { Dispatch, RefObject, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   RotateCcw,
   Video,
@@ -17,21 +17,15 @@ import { Timer } from "./Timer";
  * the demo stream. It handles muting, adjusting volume, toggling video, and restarting
  * the session using the Anam AI client.
  *
- * @param props - The props for the DemoControls component.
  * @param props.secondsElapsed - The number of seconds elapsed during the demo session.
  * @param props.setSecondsElapsed - Function to update the elapsed time.
- * @param props.audioRef - Reference to the audio element used for the demo.
- *
- * @returns The rendered DemoControls component.
  */
 export const DemoControls = ({
   secondsElapsed,
   setSecondsElapsed,
-  audioRef,
 }: {
   secondsElapsed: number;
   setSecondsElapsed: Dispatch<SetStateAction<number>>;
-  audioRef: RefObject<HTMLAudioElement>;
 }) => {
   const { toggleTrack, isVideoOn } = useVideoAudioPermissionContext();
   const [isMuted, setIsMuted] = useState(false);
@@ -40,29 +34,19 @@ export const DemoControls = ({
   const { anamClient, isClientInitialized } = useAnamContext();
 
   const handleToggleMute = () => {
-    if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.muted = false;
-        audioRef.current.volume = previousVolume / 100;
-        setVolume(previousVolume);
-        setIsMuted(false);
-      } else {
-        setPreviousVolume(volume);
-        audioRef.current.muted = true;
-        audioRef.current.volume = 0;
-        setVolume(0);
-        setIsMuted(true);
-      }
+    if (isMuted) {
+      setVolume(previousVolume);
+      setIsMuted(false);
+    } else {
+      setPreviousVolume(volume);
+      setVolume(0);
+      setIsMuted(true);
     }
   };
 
   const handleVolumeChange = (value: number[]) => {
     const volumeValue = value[0];
     setVolume(volumeValue);
-    if (audioRef.current) {
-      audioRef.current.volume = volumeValue / 100;
-      audioRef.current.muted = volumeValue === 0;
-    }
     setIsMuted(volumeValue === 0);
     if (volumeValue > 0) {
       setPreviousVolume(volumeValue);

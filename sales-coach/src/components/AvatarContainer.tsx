@@ -1,137 +1,79 @@
+"use client";
+
+import { useEffect, useRef, forwardRef } from "react";
 import { useAnamContext } from "@/contexts";
 import { errorHandler } from "@/utils";
-import { AnamEvent } from "@anam-ai/js-sdk/dist/module/types";
-import { Flex, Spinner } from "@radix-ui/themes";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { DemoControls } from "./DemoControls";
-import { UserVideoContainer } from "./UserVideoContainer";
+
+interface AvatarContainerProps {
+  videoId?: string;
+  audioId?: string;
+  className?: string;
+  videoClassName?: string;
+  children?: React.ReactNode;
+  onStreamingStart?: () => void;
+}
 
 /**
- * AvatarContainer component handles the streaming of video and audio for the Avatar
- * using the Anam SDK. It listens to Anam client events for connection status and manages
- * the UI state based on the connection lifecycle (loading, connected, or disconnected).
- *
- * @param props - The props for the AvatarContainer component.
- * @param props.audioRef - Reference to the audio element used for streaming.
- *
- * @returns The rendered AvatarContainer component.
+ * AvatarContainer component handles the streaming of video and audio.
+ * It allows passing in additional elements (e.g., video controls) as children, which will be rendered in the container.
+ * It doesn't apply any default styling and remains flexible.
  */
-export const AvatarContainer = () => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const { anamClient, isClientInitialized } = useAnamContext();
-  const [loading, setLoading] = useState(true);
-  const [loadingText, setLoadingText] = useState("Connecting...");
-  const [secondsElapsed, setSecondsElapsed] = useState(0);
+export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
+  (
+    {
+      videoId = "avatar-video",
+      audioId = "avatar-audio",
+      className = "",
+      videoClassName = "",
+      children,
+      onStreamingStart,
+    }: AvatarContainerProps,
+    ref,
+  ): JSX.Element => {
+    const { isClientInitialized, startStreaming, stopStreaming } =
+      useAnamContext();
 
-  const onConnectionEstablished = useCallback(() => {
-    setLoadingText("Connected to a Persona.");
-  }, []);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const onVideoStartedStreaming = useCallback(() => {
-    setLoading(false);
-  }, []);
-
-  const onConnectionClosed = useCallback(() => {
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    // Initializes video and audio streaming using the Anam client.
-    const startStreaming = async () => {
-      if (
-        isClientInitialized &&
-        anamClient &&
-        videoRef.current &&
-        audioRef.current
-      ) {
-        try {
-          anamClient.addListener(
-            AnamEvent.CONNECTION_ESTABLISHED,
-            onConnectionEstablished,
-          );
-          anamClient.addListener(
-            AnamEvent.VIDEO_PLAY_STARTED,
-            onVideoStartedStreaming,
-          );
-          anamClient.addListener(
-            AnamEvent.CONNECTION_CLOSED,
-            onConnectionClosed,
-          );
-          await anamClient.streamToVideoAndAudioElements(
-            videoRef.current.id,
-            audioRef.current.id,
-          );
-        } catch (error) {
-          errorHandler(error);
-        }
+    useEffect(() => {
+      if (isClientInitialized && videoRef.current && audioRef.current) {
+        startStreaming(videoRef.current.id, audioRef.current.id)
+          .then(() => {
+            if (onStreamingStart) {
+              onStreamingStart();
+            }
+          })
+          .catch((error) => {
+            errorHandler(
+              `Error during streaming: ${error}`,
+              "AvatarContainer.tsx useEffect",
+            );
+          });
       }
-    };
 
-    startStreaming();
+      return () => {
+        stopStreaming();
+      };
+    }, [isClientInitialized, startStreaming, stopStreaming, onStreamingStart]);
 
-    return () => {
-      if (anamClient) {
-        anamClient.removeListener(
-          AnamEvent.CONNECTION_ESTABLISHED,
-          onConnectionEstablished,
-        );
-        anamClient.removeListener(
-          AnamEvent.VIDEO_PLAY_STARTED,
-          onVideoStartedStreaming,
-        );
-        anamClient.removeListener(
-          AnamEvent.CONNECTION_CLOSED,
-          onConnectionClosed,
-        );
-      }
-    };
-  }, [
-    anamClient,
-    isClientInitialized,
-    onConnectionEstablished,
-    onVideoStartedStreaming,
-    onConnectionClosed,
-  ]);
-
-  useEffect(() => {
-    // Updates the elapsed seconds every second.
-    const interval = setInterval(
-      () => setSecondsElapsed((prev) => prev + 1),
-      1000,
+    return (
+      <div ref={ref} className={className}>
+        <video
+          id={videoId}
+          ref={videoRef}
+          autoPlay
+          playsInline
+          className={videoClassName}
+        />
+        <audio
+          id={audioId}
+          ref={audioRef}
+          autoPlay
+          hidden
+        />
+        {children && <>{children}</>}
+      </div>
     );
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <Flex
-      align="center"
-      justify="center"
-      mt="2"
-      className="relative sm:min-w-[80vw] md:min-w-[500px] lg:min-h-[90vh] xl:min-h-[98vh] 2xl:min-h-[98vh] aspect-square bg-gray-100 rounded-lg border border-gray-300"
-    >
-      {loading && (
-        <Flex className="absolute" align="center" justify="center">
-          <Spinner aria-label="Loading..." size="1" />
-          <label className="ml-2 text-sm md:text-base lg:text-lg">
-            {loadingText}
-          </label>
-        </Flex>
-      )}
-      <video
-        id="video"
-        ref={videoRef}
-        autoPlay
-        playsInline
-        className="w-auto h-full object-cover rounded-lg"
-      />
-      <audio id="audio" ref={audioRef} autoPlay hidden />
-      <DemoControls
-        secondsElapsed={secondsElapsed}
-        audioRef={audioRef}
-        setSecondsElapsed={setSecondsElapsed}
-      />
-      <UserVideoContainer />
-    </Flex>
-  );
-};
+  },
+);
