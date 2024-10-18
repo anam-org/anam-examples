@@ -68,6 +68,3 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
     );
   },
 );
-
-// This ensures proper display of the component name in React DevTools
-AvatarContainer.displayName = "AvatarContainer";
