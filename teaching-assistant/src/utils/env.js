@@ -18,6 +18,7 @@ export const env = createEnv({
     ANAM_API_KEY: z.string(),
   },
   client: {
+    NEXT_PUBLIC_DEFAULT_PERSONA_ID: z.string(),
     NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY: z.string(),
     NEXT_PUBLIC_PERSONA_FRENCH_PROFESSIONAL: z.string(),
     NEXT_PUBLIC_PERSONA_FRENCH_FORMAL: z.string(),
@@ -33,6 +34,7 @@ export const env = createEnv({
   },
   runtimeEnv: {
     ANAM_API_KEY: process.env.ANAM_API_KEY,
+    NEXT_PUBLIC_DEFAULT_PERSONA_ID: process.env.NEXT_PUBLIC_DEFAULT_PERSONA_ID,
     NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY:
       process.env.NEXT_PUBLIC_PERSONA_FRENCH_FRIENDLY,
     NEXT_PUBLIC_PERSONA_FRENCH_PROFESSIONAL:
