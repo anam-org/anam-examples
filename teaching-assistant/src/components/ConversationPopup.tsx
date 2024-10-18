@@ -1,40 +1,30 @@
-import { useState, useEffect, useRef } from "react";
+"use client";
+
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";
 import { IconButton, Flex, Box, Popover, Text } from "@radix-ui/themes";
 import { MessageCircle, X } from "lucide-react";
-
-interface ConversationPopupProps {
-  conversation: { sender: string; text: string }[];
-}
+import { usePersonaConversation } from "@/hooks/usePersonaConversation";
 
 /**
  * ConversationPopup component displays a chat interface in a popover with a button to toggle the visibility.
  * It scrolls the chat content to the bottom automatically when opened or new messages arrive.
- *
- * @component
- * @param {ConversationPopupProps} props - The props for the component, including the conversation array.
- * @returns {JSX.Element} The ConversationPopup component.
  */
-export const ConversationPopup = ({ conversation }: ConversationPopupProps) => {
+export const ConversationPopup = (): JSX.Element => {
   /**
    * State to track whether the popover is open.
    * @type {[boolean, Function]}
    */
+  const conversation = usePersonaConversation();
   const [open, setOpen] = useState(false);
 
   /**
-   * Ref to the end of the messages list to automatically scroll to the bottom.
-   * @type {React.MutableRefObject<HTMLDivElement | null>}
+   * Ref to the end of the conversation list to automatically scroll to the bottom.
    */
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef: MutableRefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement | null>(null);
 
-  /**
-   * Scrolls the chat content to the bottom of the list.
-   *
-   * @function
-   * @returns {void}
-   */
-  const scrollToBottom = () => {
+  const scrollToBottom = (): void => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }

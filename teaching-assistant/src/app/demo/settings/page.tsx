@@ -11,14 +11,12 @@ import {
 } from "@radix-ui/themes";
 import { LanguageType, PersonaType, useSettingsContext } from "@/contexts";
 import { useTheme } from "next-themes";
+import { useViewportHeight } from "@/hooks";
 
 /**
  * Capitalizes the first letter of the provided string.
- *
- * @param {string} string - The string to capitalize.
- * @returns {string} - The string with the first letter capitalized.
  */
-const capitalizeFirstLetter = (string: string) =>
+const capitalizeFirstLetter = (string: string): string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
 /**
@@ -26,10 +24,9 @@ const capitalizeFirstLetter = (string: string) =>
  * It allows users to change the language, persona type (friendly, professional, formal),
  * and toggle dark mode. The user can save their settings which will apply the persona
  * configuration.
- *
- * @component
  */
-export function SettingsView() {
+export default function Settings() {
+  useViewportHeight();
   const {
     selectedLanguage,
     setSelectedLanguage,
@@ -43,8 +40,6 @@ export function SettingsView() {
 
   /**
    * Toggles the theme between light and dark mode.
-   *
-   * @param {boolean} checked - Whether dark mode is enabled.
    */
   const toggleDarkMode = (checked: boolean) => {
     setTheme(checked ? "dark" : "light");
@@ -61,25 +56,24 @@ export function SettingsView() {
     <Flex
       align="center"
       justify="center"
-      className="min-h-screen p-4 md:p-8 lg:p-10"
+      className="min-h-screen p-3 md:p-8 lg:p-10"
     >
       <Box
-        p="6"
-        className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg"
+        className="p-3 sm:p-6 w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg"
       >
         <Heading
           size="8"
-          className="mb-6 text-center text-gray-900 dark:text-white"
+          className="mb-6 text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl text-gray-900 dark:text-white"
         >
           Persona Settings
         </Heading>
 
         {/* Language Preference */}
         <Box mb="3">
-          <Heading size="6" mb="2" className="text-gray-800 dark:text-gray-200">
+          <Heading size="6" mb="2" className="text-lg sm:text-xl md:text-xl lg:text-2xl text-gray-800 dark:text-gray-200">
             Configure Language Preference
           </Heading>
-          <Text mb="2" className="text-gray-600 dark:text-gray-400">
+          <Text mb="2" className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400">
             Select your preferred language.
           </Text>
           <Select.Root
@@ -93,7 +87,7 @@ export function SettingsView() {
             </Select.Trigger>
             <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
               <Select.Group>
-                <Select.Label className="text-gray-800 dark:text-gray-200">
+                <Select.Label className="text-sm sm:text-base md:text-lg text-gray-800 dark:text-gray-200">
                   Languages
                 </Select.Label>
                 <Select.Item value="french">French</Select.Item>
@@ -106,10 +100,10 @@ export function SettingsView() {
 
         {/* Persona Mode */}
         <Box mb="4">
-          <Heading size="6" mb="1" className="text-gray-800 dark:text-gray-200">
+          <Heading size="6" mb="1" className="text-lg sm:text-xl md:text-2xl lg:text-2xl text-gray-800 dark:text-gray-200">
             Persona Mode
           </Heading>
-          <Text mb="2" className="text-gray-600 dark:text-gray-400">
+          <Text mb="2" className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400">
             Choose the persona of the avatar.
           </Text>
           <Select.Root
@@ -121,7 +115,7 @@ export function SettingsView() {
             </Select.Trigger>
             <Select.Content className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
               <Select.Group>
-                <Select.Label className="text-gray-800 dark:text-gray-200">
+                <Select.Label className="text-sm sm:text-base md:text-lg text-gray-800 dark:text-gray-200">
                   Personas
                 </Select.Label>
                 <Select.Item value="friendly">Friendly</Select.Item>
@@ -134,11 +128,11 @@ export function SettingsView() {
 
         {/* Dark Mode Toggle */}
         <Box mb="4">
-          <Heading size="6" mb="1" className="text-gray-800 dark:text-gray-200">
+          <Heading size="6" mb="1" className="text-lg sm:text-xl md:text-2xl lg:text-2xl text-gray-800 dark:text-gray-200">
             Display Settings
           </Heading>
-          <Flex align="center" justify="between" className="mb-4">
-            <Text className="text-gray-800 dark:text-gray-200">Dark Mode</Text>
+          <Flex align="center" className="mb-4 gap-3">
+            <Text className="text-sm sm:text-base md:text-lg text-gray-800 dark:text-gray-200">Dark Mode</Text>
             <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode} />
           </Flex>
         </Box>

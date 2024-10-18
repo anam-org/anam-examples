@@ -1,12 +1,14 @@
 "use client";
 
 import { AudioPermissionsModal } from "@/components";
+import { useViewportHeight } from "@/hooks";
 import { Box, Flex, Heading, IconButton, Text } from "@radix-ui/themes";
 import { Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function HomePage() {
+  useViewportHeight();
   const router = useRouter();
   const [isModalVisible, setModalVisible] = useState(false);
 

@@ -39,7 +39,6 @@ const personaConfigurations: Record<
  * persona type (friendly, professional, formal), and applying the persona configuration
  * to the Anam AI client.
  *
- * @returns {Object} An object containing:
  * - `selectedLanguage` {LanguageType}: The currently selected language (french, spanish, or german).
  * - `setSelectedLanguage` {function}: Function to update the selected language.
  * - `selectedPersona` {PersonaType}: The currently selected persona type (friendly, professional, or formal).

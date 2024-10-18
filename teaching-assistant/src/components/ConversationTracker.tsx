@@ -1,34 +1,28 @@
-import { useRef, useEffect, useState } from "react";
-import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";
-import { ArrowUp, ArrowDown } from "lucide-react";
+"use client";
 
-interface ResponsiveConversationProps {
-  conversation: { sender: string; text: string }[];
-}
+import { useRef, useState, useEffect, MutableRefObject } from "react";
+import { ArrowUp, ArrowDown } from "lucide-react";
+import { usePersonaConversation } from "@/hooks/usePersonaConversation";
+import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";
 
 /**
  * ConversationTracker component handles displaying the conversation history in a toggleable section
  * on mobile screens (small screens). It can expand or collapse the conversation and scroll to the bottom
  * when new messages arrive.
- *
- * @component
- * @param {ResponsiveConversationProps} props - The props for the component, including the conversation array.
- * @returns {JSX.Element} The ConversationTracker component.
  */
-export const ConversationTracker = ({
-  conversation,
-}: ResponsiveConversationProps) => {
+export const ConversationTracker = (): JSX.Element => {
+  const conversation = usePersonaConversation();
+
   /**
    * Ref to the end of the conversation list to automatically scroll to the bottom.
-   * @type {React.MutableRefObject<HTMLDivElement | null>}
    */
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef: MutableRefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement | null>(null);
 
   /**
    * State to track if the conversation history is open.
-   * @type {[boolean, Function]}
    */
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   /**
    * Scrolls the conversation content to the bottom of the list.
@@ -36,7 +30,7 @@ export const ConversationTracker = ({
    * @function
    * @returns {void}
    */
-  const scrollToBottom = () => {
+  const scrollToBottom = (): void => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }

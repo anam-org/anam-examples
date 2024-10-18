@@ -4,7 +4,6 @@ import {
   AnamContextProvider,
   AudioPermissionProvider,
   SettingsContextProvider,
-  ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
@@ -17,7 +16,10 @@ export function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (error) {
-      errorHandler(`Error: ${error?.message || "Unknown error occurred"}`, "Provider.tsx");
+      errorHandler(
+        `Error: ${error?.message || "Unknown error occurred"}`,
+        "Provider.tsx",
+      );
     }
   }, [error]);
 
@@ -33,12 +35,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <AudioPermissionProvider>
       <AnamContextProvider sessionToken={sessionToken}>
-        <SettingsContextProvider>
-          
-        <ViewContextProvider>
-          {children}
-        </ViewContextProvider>
-        </SettingsContextProvider>
+        <SettingsContextProvider>{children}</SettingsContextProvider>
       </AnamContextProvider>
     </AudioPermissionProvider>
   );

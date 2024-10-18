@@ -1,19 +1,9 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  IconButton,
-  Select,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, IconButton, Select, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { Mic, MicOff, X } from "lucide-react";
 import { useAudioPermissionContext } from "@/contexts";
-import { useTheme } from "next-themes";
 
 interface AudioPermissionsModalProps {
   onClose: () => void;
@@ -23,15 +13,11 @@ interface AudioPermissionsModalProps {
 /**
  * AudioPermissionsModal component handles microphone permission requests, allowing the user to select a microphone
  * and toggle audio on/off before proceeding. Displays an overlay and modal with microphone options.
- *
- * @component
- * @param {AudioPermissionsModalProps} props - The props for the modal, including `onClose` and `onPermissionGranted` callbacks.
- * @returns {JSX.Element} The AudioPermissionsModal component.
  */
 export function AudioPermissionsModal({
   onClose,
   onPermissionGranted,
-}: AudioPermissionsModalProps) {
+}: AudioPermissionsModalProps): JSX.Element {
   const {
     microphones,
     selectedMicrophone,
@@ -42,29 +28,12 @@ export function AudioPermissionsModal({
     toggleAudioTrack,
   } = useAudioPermissionContext();
 
-  /**
-   * State to track if the microphone is currently on.
-   * @type {[boolean, Function]}
-   */
   const [isMicOn, setIsMicOn] = useState(true);
 
-  const { theme } = useTheme();
-
-  /**
-   * Requests microphone permissions when the component mounts.
-   *
-   * @useEffect
-   */
   useEffect(() => {
     requestAudioPermissions();
   }, [requestAudioPermissions]);
 
-  /**
-   * Handles the permission grant action. If permissions are granted, calls `onPermissionGranted`, otherwise alerts the user.
-   *
-   * @function
-   * @returns {void}
-   */
   const handlePermissionGranted = () => {
     if (audioPermissionsGranted) {
       onPermissionGranted();
@@ -73,12 +42,6 @@ export function AudioPermissionsModal({
     }
   };
 
-  /**
-   * Toggles the microphone's audio track on or off and updates the mic state.
-   *
-   * @function
-   * @returns {void}
-   */
   const handleToggleMic = () => {
     toggleAudioTrack();
     setIsMicOn((prev) => !prev);
@@ -89,7 +52,15 @@ export function AudioPermissionsModal({
       {/* Overlay */}
       <Box className="fixed inset-0 bg-black bg-opacity-50 z-[999]" />
       {/* Modal */}
-      <Grid className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-85 dark:bg-opacity-95 border border-gray-300 dark:border-gray-600 rounded-lg z-[1000] p-9 w-[clamp(300px,90vw,600px)] h-[clamp(300px,60vh,400px)] grid-cols-1">
+      <Flex
+        direction="column"
+        align="center"
+        justify="center"
+        height="clamp(300px,60vh,325px)"
+        width="clamp(300px,90vw,475px)"
+        p="2"
+        className="fixed p-5 top-1/2 left-1/2 z-[1000] transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-85 dark:bg-opacity-95 border border-gray-300 dark:border-gray-600 rounded-lg"
+      >
         <IconButton
           variant="ghost"
           className="absolute top-2 right-2"
@@ -97,27 +68,20 @@ export function AudioPermissionsModal({
         >
           <X />
         </IconButton>
-        <Heading
-          as="h2"
-          size="3"
-          className="text-center text-gray-900 dark:text-white"
-        >
-          Ready to Start?
-        </Heading>
         <Text className="text-center text-gray-700 dark:text-gray-300">
-          Before proceeding, we need to check your microphone.
+          To start we need your permission first
         </Text>
         {audioErrorMessage && (
           <Text className="mb-3 text-center text-red-500">
             {audioErrorMessage}
           </Text>
         )}
-        <Flex className="justify-center items-center gap-4 p-2">
+        <Flex className="justify-center items-center mt-4">
           <IconButton size="4" radius="full" onClick={handleToggleMic}>
             {isMicOn ? <Mic /> : <MicOff />}
           </IconButton>
         </Flex>
-        <Flex className="items-center gap-2 w-full">
+        <Flex direction="column" align="center" className="mt-4 w-full">
           <Select.Root
             value={selectedMicrophone}
             onValueChange={setSelectedMicrophone}
@@ -148,7 +112,7 @@ export function AudioPermissionsModal({
             Start Demo
           </Button>
         </Flex>
-      </Grid>
+      </Flex>
     </>
   );
 }

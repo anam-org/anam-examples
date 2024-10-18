@@ -8,8 +8,7 @@ import { errorHandler } from "@/utils";
  * Custom hook for managing audio permissions and microphone devices.
  * This hook handles permission requests for microphone access, enumeration of available audio input devices,
  * and managing the audio stream.
- * 
- * @returns {Object} Contains:
+ *
  * - `microphones` {MediaDeviceInfo[]}: List of available microphone devices.
  * - `selectedMicrophone` {string}: The currently selected microphone's device ID.
  * - `audioPermissionsGranted` {boolean}: Indicates if the microphone permissions have been granted.

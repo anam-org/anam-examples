@@ -49,15 +49,7 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
    yarn generate-personas
    ```
 
-   This will generate the personas required for the different scenarios in the application.
-
-   Once the personas are generated, you will receive an output with persona IDs in the format:
-
-   ```
-   NEXT_PUBLIC_PERSONA_LANGUAGE_PERSONALITY=$PERSONA_ID
-   ```
-
-   Update your `.env` file with the generated persona IDs as shown below:
+   Update your `.env` file with the generated persona IDs (found in persona-ids.txt) as shown below:
 
    ```env
    ANAM_API_KEY=your_api_key
@@ -83,85 +75,147 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 
 To start the development server, use one of the following commands:
 
-   ```bash
-   npm run dev
-   # or
-   pnpm dev
-   # or
-   yarn dev
-   ```
+```bash
+npm run dev
+# or
+pnpm dev
+# or
+yarn dev
+```
 
 Access the application at [http://localhost:3000](http://localhost:3000).
 
 ## Navigating the Code
 
-Key components are organized to facilitate quick navigation and extendibility.
-
-### Project Structure
-
-   ```
-   teaching-assistant/
-   ├── app/
-   │   ├── api/
-   │   │   └── session-token/
-   │   │       └── route.ts
-   │   ├── demo/
-   │   │   ├── _views/
-   │   │   │   └── Demo.tsx
-   │   │   │   └── Settings.tsx
-   │   │   └── page.tsx
-   │   ├── _providers.tsx
-   │   ├── layout.tsx
-   │   └── page.tsx
-   ├── components/
-   │   ├── AudioPermissionsModal.tsx
-   │   ├── AvatarContainer.tsx
-   │   ├── ConversationPopUp.tsx
-   │   ├── ConversationTracker.tsx
-   │   ├── DemoSidebar.tsx
-   │   └── NavigationSidebar.tsx
-   ├── contexts/
-   │   ├── AnamContext.tsx
-   │   ├── AudioPermissionContext.tsx
-   │   ├── SettingsContext.tsx
-   │   └── ViewContext.tsx
-   ├── hooks/
-   │   └── useFetchToken.tsx
-   ├── utils/
-   │   ├── env.js
-   │   ├── errorHandler.ts
-   │   ├── fetchSessionToken.ts
-   │   ├── logger.ts
-   │   └── types.ts
-   └── ...
-   ```
-
 ### Key Directories and Files
 
-#### 1. **`app/`**
+### 1. **`app/`**
 
-- **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, etc.) for global state management.
-- **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. The token is used to initialize and authenticate the Anam AI client.
+- **`_providers.tsx`**: Wraps the app with the necessary context providers (`AnamContext`, `SettingsContext`, `AudioPermissionContext`) for global state management. Ensures session tokens are fetched and required contexts are provided.
+- **`api/session-token/route.ts`**: Manages session token generation by communicating with the backend. This token is used to initialize and authenticate the Anam AI client.
+
 - **`demo/`**:
-  - **`page.tsx`**: The main entry point for the teaching experience. It manages the lifecycle of different views (scenarios, settings, demo) using the `ViewContext`.
-  - **`_views/`**:
-    - **Demo.tsx**: Manages the interactive teaching session.
-    - **Settings.tsx**: Provides configuration options for different language teaching scenarios.
 
-#### 2. **`components/`**
+  - **`page.tsx`** (`Demo.tsx`): The main entry point for the demo experience. It tracks the remaining time using a countdown timer and manages the Anam client’s streaming state. The page renders conversation tracking and an avatar streaming video and audio.
+    - **Key Components**:
+      - `AvatarContainer`: Handles streaming of video and audio from the Anam client.
+      - `ConversationTracker`: Displays the conversation between the user and the Anam persona.
+      - `useStreamTimer`: Manages the countdown timer for stopping streaming automatically after a specified time.
 
-- **`AudioPermissionsModal.tsx`**: Handles audio permissions, ensuring the required permissions are granted before starting a session.
+- **`demo/settings/`**:
+  - **`page.tsx`** (`Settings.tsx`): Manages persona and language settings, as well as dark mode preferences. It allows the user to configure the avatar's persona and language, and apply dark or light themes.
+    - **Key Components**:
+      - `useSettingsContext`: Provides access to the selected language, persona, and theme settings.
+      - `applyPersonaConfig`: Applies the chosen persona configuration to the Anam client.
 
-#### 3. **`contexts/`**
+### 2. **`components/`**
 
-- **`AnamContext.tsx`**: Manages the initialization and integration with the Anam AI client, including handling session tokens and persona configurations.
-- **`SettingsContext.tsx`**: Manages application settings such as the selected language and persona configuration.
-- **`AudioPermissionContext.tsx`**: Handles audio permissions and device management.
-- **`ViewContext.tsx`**: Manages navigation between views without traditional routing, controlling the user flow between different stages of the teaching assistant demo.
+- **`NavigationSidebar.tsx`**:
 
-#### 4. **`hooks/`**
+  - Renders the navigation sidebar with menu options such as "Lessons," "Vocabulary," and "Practice."
+  - Supports toggling between expanded and collapsed states and allows navigation to different views.
+  - **Key Functions**:
+    - `handleMenuClick()`: Handles navigation and stops streaming when necessary.
+    - `handleExitClick()`: Stops the Anam client streaming and navigates to the home page.
+  - **Props**: No external props, manages internal state for toggling and navigation.
 
-- **`useFetchToken.ts`**: Hook for fetching & refreshing session tokens.
+- **`LessonsSidebar.tsx`**:
+
+  - Renders a toggleable sidebar with a list of lessons, based on the selected language from the context.
+  - Supports toggling between expanded and collapsed views and adapts to different screen sizes.
+  - **Key Functions**:
+    - `useEffect()`: Updates the default selected lesson when the language changes.
+  - **Props**: No external props, uses context for managing the selected language and lessons.
+
+- **`AudioPermissionsModal.tsx`**:
+
+  - Displays a modal to request microphone permissions from the user, allowing them to select a microphone and toggle the audio on/off.
+  - **Key Functions**:
+    - `requestAudioPermissions()`: Requests microphone access from the user.
+    - `handleToggleMic()`: Toggles the audio stream on or off.
+    - `setSelectedMicrophone()`: Allows the user to select from available microphones.
+    - **Props**:
+      - `onClose`: Closes the modal.
+      - `onPermissionGranted`: Confirms microphone permission and starts the session.
+
+- **`AvatarContainer.tsx`**:
+
+  - Manages the streaming of video and audio from the Anam client. Initializes streaming when the client is ready and cleans up when the component unmounts.
+  - **Key Functions**:
+    - `startStreaming()`: Starts video and audio streaming.
+    - `stopStreaming()`: Stops the stream when the component unmounts.
+    - **Props**:
+      - `videoId` & `audioId`: IDs for the HTML video and audio elements used for streaming.
+
+- **`ConversationPopup.tsx`**:
+
+  - Displays a chat interface within a popover, allowing the user to toggle the visibility of the conversation.
+  - **Key Functions**:
+    - `scrollToBottom()`: Scrolls to the bottom of the conversation.
+    - **Props**:
+      - No external props, but listens to conversation updates via `usePersonaConversation`.
+
+- **`ConversationTracker.tsx`**:
+  - Displays the conversation history in a toggleable UI, optimized for mobile screens. Automatically scrolls to the bottom when new messages arrive or when the history is opened.
+  - **Key Functions**:
+    - `scrollToBottom()`: Scrolls to the bottom of the conversation.
+    - **Props**:
+      - No external props, but listens to conversation updates via `usePersonaConversation`.
+
+### 3. **`contexts/`**
+
+- **`AnamContext.tsx`**:
+
+  - Manages Anam AI client initialization and session tokens. Provides hooks for starting/stopping streaming, updating persona configurations, and setting event listeners.
+  - **Key Components**:
+    - `anamClient`: The initialized client.
+    - `isClientInitialized`: Boolean indicating if the client is initialized.
+    - **Listener Setters**: `setOnMessageHistoryUpdated`, `setOnConnectionEstablished`, `setOnVideoStartedStreaming`, `setOnConnectionClosed`.
+    - `setPersonaConfig`: Updates the current persona.
+    - `startStreaming` & `stopStreaming`: Controls streaming sessions.
+
+- **`SettingsContext.tsx`**:
+
+  - Manages application settings such as the selected language, persona type (friendly, professional, formal), and applies persona configurations to the Anam AI client.
+  - **Key Components**:
+    - `selectedLanguage`: Currently selected language (e.g., French, Spanish, German).
+    - `selectedPersona`: Currently selected persona type (friendly, professional, formal).
+    - `applyPersonaConfig`: Applies the selected persona configuration to the Anam client.
+    - `isDarkMode`: Checks if dark mode is enabled.
+
+- **`AudioPermissionContext.tsx`**:
+  - Manages microphone access, audio permissions, and available audio devices.
+  - **Key Components**:
+    - `microphones`: List of available microphones.
+    - `selectedMicrophone`: Current microphone in use.
+    - `audioPermissionsGranted`: Boolean indicating if microphone access is granted.
+    - `requestAudioPermissions`: Requests microphone access.
+    - `toggleAudioTrack`: Toggles the audio stream on/off.
+
+### 4. **`hooks/`**
+
+- **`useFetchToken.ts`**:
+
+  - A hook for fetching and managing session tokens using `SWR`. It checks for token expiration and refreshes automatically or manually.
+  - **Functions**:
+    - `fetchSessionToken()`: Fetches the session token from the API.
+    - `isTokenExpired()`: Checks if the token is expired.
+    - `refreshToken()`: Manually triggers a token refresh.
+  - **Returns**: `sessionToken`, `error`, `refreshToken`, `isValidating`.
+
+- **`usePersonaConversation.ts`**:
+
+  - A hook for tracking and updating the conversation from the Anam client.
+  - **Functions**:
+    - `updateConversation()`: Maps the received messages, splitting between "persona" and "user".
+  - **Uses**: `setOnMessageHistoryUpdated` to listen for message updates from the Anam client.
+  - **Returns**: The current `conversation` as an array of `{ sender, text }`.
+
+- **`useStreamTimer.ts`**:
+  - A countdown timer hook for managing streaming sessions.
+  - **Functions**:
+    - Decrements the timer every second and stops streaming when time reaches zero.
+  - **Returns**: `[timeLeft, progressValue]`, where `progressValue` is the timer's progress as a percentage.
 
 #### 5. **`utils/`**
 
