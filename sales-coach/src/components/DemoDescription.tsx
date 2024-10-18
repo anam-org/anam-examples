@@ -1,6 +1,8 @@
 import { ScenarioType, useSettingsContext } from "@/contexts";
 import { Button, Flex, Heading, Text } from "@radix-ui/themes";
 import { Phone } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 /**
  * Contains descriptions and instructions for different sales scenarios.
@@ -98,25 +100,14 @@ const DemoText: Record<
 /**
  * DemoDescription component renders the selected scenario's details, including a
  * brief/full description and a list of key instructions for the user to follow during the demo.
- *
- * @param props - The props for the DemoDescription component.
- * @param props.showFullText - Boolean value determining whether the full or brief description is displayed.
- * @param props.toggleTextVisibility - Function to toggle between showing the full and brief description.
- * @param props.changeView - Function to switch views within the demo (e.g., ending the demo).
- *
- * @returns The rendered DemoDescription component.
  */
-export const DemoDescription = ({
-  showFullText,
-  toggleTextVisibility,
-  changeView,
-}: {
-  showFullText: boolean;
-  toggleTextVisibility: () => void;
-  changeView: (view: string) => void;
-}) => {
+export const DemoDescription = () => {
   const { selectedScenario } = useSettingsContext();
   const scenario = DemoText[selectedScenario];
+  const router = useRouter();
+  const [showFullText, setShowFullText] = useState(false);
+
+  const toggleTextVisibility = () => setShowFullText(!showFullText);
 
   return (
     <Flex
@@ -169,7 +160,7 @@ export const DemoDescription = ({
           mb="3"
           size="4"
           className="w-full sm:w-auto"
-          onClick={() => changeView("initial")}
+          onClick={() => router.push("/")}
         >
           End Demo
         </Button>

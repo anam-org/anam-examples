@@ -9,7 +9,7 @@ import {
   Button,
   IconButton,
 } from "@radix-ui/themes";
-import { ScenarioType, useSettingsContext, useViewContext } from "@/contexts";
+import { ScenarioType, useSettingsContext } from "@/contexts";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -68,7 +68,7 @@ const scenarioDetails: Record<
  * It allows the user to select a scenario, which updates the selected scenario context.
  * The component also handles navigation and proceeding to the next step of the demo.
  */
-export function ScenariosView() {
+export default function ScenariosView() {
   const router = useRouter();
 
   const handleNavigation = () => {
@@ -77,15 +77,13 @@ export function ScenariosView() {
   const { selectedScenario, setSelectedScenario, applyScenarioConfig } =
     useSettingsContext();
 
-  const { changeView } = useViewContext();
-
   const handleScenarioSelect = (scenario: string) => {
     setSelectedScenario(scenario as keyof typeof scenarioDetails);
   };
 
   const handleSaveSettings = () => {
     applyScenarioConfig();
-    changeView("description");
+    router.push("/description");
   };
 
   return (

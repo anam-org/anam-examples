@@ -1,29 +1,17 @@
 "use client";
 
-import { ViewContextProvider, useViewContext } from "@/contexts";
-import { DemoView, DescriptionView, ScenariosView } from "./_views";
+import { Flex } from "@radix-ui/themes";
+import { AvatarContainer, DemoDescription } from "@/components";
 
-export default function DemoPage() {
+export default function DemoView() {
+
   return (
-    <ViewContextProvider>
-      <Content />
-    </ViewContextProvider>
+    <Flex
+      gap="2"
+      className="appcontainer mx-auto flex flex-col md:flex-col lg:flex-row xl:flex-row"
+    >
+      <AvatarContainer />
+      <DemoDescription />
+    </Flex>
   );
-}
-
-function Content() {
-  const { currentView } = useViewContext();
-  const renderView = () => {
-    switch (currentView) {
-      case "description":
-        return <DescriptionView />;
-      case "demo":
-        return <DemoView />;
-      case "scenarios":
-      default:
-        return <ScenariosView />;
-    }
-  };
-
-  return <>{renderView()}</>;
 }

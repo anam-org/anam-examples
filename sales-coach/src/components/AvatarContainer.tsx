@@ -16,11 +16,8 @@ import { UserVideoContainer } from "./UserVideoContainer";
  *
  * @returns The rendered AvatarContainer component.
  */
-export const AvatarContainer = ({
-  audioRef,
-}: {
-  audioRef: React.RefObject<HTMLAudioElement>;
-}) => {
+export const AvatarContainer = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { anamClient, isClientInitialized } = useAnamContext();
   const [loading, setLoading] = useState(true);
