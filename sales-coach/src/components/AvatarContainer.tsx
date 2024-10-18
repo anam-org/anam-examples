@@ -10,7 +10,7 @@ interface AvatarContainerProps {
   className?: string;
   videoClassName?: string;
   children?: React.ReactNode;
-  onStreamingStart?: () => void;
+  audioStream?: MediaStream;
 }
 
 /**
@@ -26,7 +26,7 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
       className = "",
       videoClassName = "",
       children,
-      onStreamingStart,
+      audioStream,
     }: AvatarContainerProps,
     ref,
   ): JSX.Element => {
@@ -38,12 +38,7 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
 
     useEffect(() => {
       if (isClientInitialized && videoRef.current && audioRef.current) {
-        startStreaming(videoRef.current.id, audioRef.current.id)
-          .then(() => {
-            if (onStreamingStart) {
-              onStreamingStart();
-            }
-          })
+        startStreaming(videoRef.current.id, audioRef.current.id, audioStream) 
           .catch((error) => {
             errorHandler(
               `Error during streaming: ${error}`,
@@ -55,7 +50,7 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
       return () => {
         stopStreaming();
       };
-    }, [isClientInitialized, startStreaming, stopStreaming, onStreamingStart]);
+    }, [isClientInitialized, startStreaming, stopStreaming]);
 
     return (
       <div ref={ref} className={className}>

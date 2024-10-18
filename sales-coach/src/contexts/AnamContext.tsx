@@ -1,7 +1,7 @@
 "use client";
 
-import constate from "constate";
 import { createClient, AnamClient } from "@anam-ai/js-sdk";
+import constate from "constate";
 import { useRef, useCallback, useEffect } from "react";
 import { FetchError, errorHandler, logger, env } from "@/utils";
 import { AnamEvent, Message } from "@anam-ai/js-sdk/dist/module/types";
@@ -171,22 +171,37 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   const startStreaming = async (
     videoElementId: string,
     audioElementId: string,
-  ) => {
+    userProvidedMediaStream?: MediaStream,
+  ): Promise<void> => {
     if (anamClientRef.current) {
       try {
-        logger.info("starting stream");
+        logger.info("Starting stream...");
         stopStreaming();
-        await anamClientRef.current.streamToVideoAndAudioElements(
-          videoElementId,
-          audioElementId,
-        );
-        logger.info("stream started successfully");
+  
+        // Check if a custom MediaStream is provided
+        if (userProvidedMediaStream) {
+          // Pass the custom MediaStream to the Anam client's stream method
+          await anamClientRef.current.streamToVideoAndAudioElements(
+            videoElementId,
+            audioElementId,
+            userProvidedMediaStream,
+          );
+          logger.info("Stream started with user-provided MediaStream");
+        } else {
+          // Start streaming using the default behavior
+          await anamClientRef.current.streamToVideoAndAudioElements(
+            videoElementId,
+            audioElementId,
+          );
+          logger.info("Stream started with default MediaStream");
+        }
       } catch (error) {
         errorHandler(error);
         throw new Error("Failed to start streaming");
       }
     }
   };
+  
 
   /**
    * Stops the current video/audio streaming session.

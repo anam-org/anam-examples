@@ -8,11 +8,12 @@ import {
   UserVideoContainer,
 } from "@/components";
 import { useEffect, useState } from "react";
-import { useAnamContext } from "@/contexts";
+import { useAnamContext, useVideoAudioPermissionContext } from "@/contexts";
 import { useViewportHeight } from "@/hooks";
 
 export default function DemoView() {
   useViewportHeight();
+  const { mediaStream } = useVideoAudioPermissionContext();
   const { setOnVideoStartedStreaming } = useAnamContext();
   const [isVideoStreaming, setIsVideoStreaming] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
@@ -39,6 +40,7 @@ export default function DemoView() {
       <AvatarContainer
         className="relative mt-2 flex items-center justify-center sm:min-w-[80vw] md:min-w-[500px] lg:min-h-[90vh] xl:min-h-[98vh] 2xl:min-h-[98vh] aspect-square bg-gray-100 rounded-lg border border-gray-300"
         videoClassName="w-auto h-full object-cover rounded-lg"
+        audioStream={mediaStream || undefined}
       >
         {!isVideoStreaming && (
           <Flex className="absolute" align="center" justify="center">
