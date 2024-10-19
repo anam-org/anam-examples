@@ -4,7 +4,6 @@ import {
   AnamContextProvider,
   SettingsContextProvider,
   VideoAudioPermissionProvider,
-  ViewContextProvider,
 } from "@/contexts";
 import { Text, Spinner, Flex } from "@radix-ui/themes";
 import { useEffect } from "react";
