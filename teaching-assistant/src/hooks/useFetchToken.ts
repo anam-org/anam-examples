@@ -55,7 +55,6 @@ export const useFetchToken = () => {
   const {
     data: sessionToken,
     error,
-    mutate,
     isValidating,
   } = useSWR<string, Error>(fetchKey, fetchSessionToken, {
     revalidateOnFocus: false,
