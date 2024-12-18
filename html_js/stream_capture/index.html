@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <video id="anamVideo" autoplay muted></video>
+    <audio id="anamAudio" autoplay></audio>
+    <div style="margin: 20px;">
+        <button onclick="startSession()">Start Session</button>
+        <button onclick="endSession()">End Session</button>
+    </div>
+
+    <script src="https://unpkg.com/@anam-ai/js-sdk@1.5.0/dist/umd/anam.js"></script>
+    <script>
+        // Recording setup
+        let userMediaRecorder = null;
+        let personaMediaRecorder = null;
+        let userChunks = [];
+        let personaChunks = [];
+        let anamClient = null;
+
+        async function startSession() {
+    // Clear any previous recordings
+    userChunks = [];
+    personaChunks = [];
+
+    // Initialize Anam client
+    const { createClient, unsafe_createClientWithApiKey } = window.anam;
+    anamClient = unsafe_createClientWithApiKey(
+        'MjQ4YTc2YmYtOWUwNS00ZTRkLThmYzgtZDhlNTA3ZmQ2NzJmOlZ3Um5HMGhrMWVyQ29uM1Bxejc1OUhva2x0VHJaSi9aMlFacmladDdIanM9',
+        { personaId: '773a8ca8-efd8-4449-9305-8b8bc1591475' }
+    );
+
+    try {
+        // Get user's media stream (audio only)
+        const userInputStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        // Setup recording for user audio
+        userMediaRecorder = new MediaRecorder(userInputStream);
+        userMediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                userChunks.push(event.data);
+            }
+        };
+        userMediaRecorder.start(100);
+
+        // Start streaming with the user's input stream
+        /**
+         * Note: the anamClient.stream() function returns the video stream first, then the audio stream.
+         * The docs show this as [videoStream, audioStream] but we don't actually need the audio stream here,
+         * as the video stream contains both video and audio tracks.
+         * This is an issue with the SDK and will be fixed in the next version.
+         */
+        const [videoStream] = await anamClient.stream(userInputStream);
+
+        // Set the video element to use the videoStream
+        const videoElement = document.getElementById('anamVideo');
+        videoElement.srcObject = videoStream;
+        videoElement.play().catch((error) => {
+            console.error('Error playing video:', error);
+        });
+
+        // Extract audio tracks from videoStream
+        const audioTracks = videoStream.getAudioTracks();
+        if (audioTracks.length > 0) {
+            // Create a new stream for audio playback and recording
+            const personaAudioStream = new MediaStream(audioTracks);
+
+            // Set the audio element to use the extracted audio tracks
+            const audioElement = document.getElementById('anamAudio');
+            audioElement.srcObject = personaAudioStream;
+            audioElement.play().catch((error) => {
+                console.error('Error playing audio:', error);
+            });
+
+            // Setup recording for persona audio
+            personaMediaRecorder = new MediaRecorder(personaAudioStream);
+            personaMediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    personaChunks.push(event.data);
+                }
+            };
+            personaMediaRecorder.start(100);
+        } else {
+            console.error('No audio tracks found in videoStream');
+        }
+
+        // Initial greeting
+        anamClient.talk('Hello world!');
+    } catch (error) {
+        console.error('Error during startSession:', error);
+    }
+}
+
+
+        function endSession() {
+            // Stop the user media recorder
+            if (userMediaRecorder && userMediaRecorder.state !== 'inactive') {
+                userMediaRecorder.stop();
+            }
+
+            // Stop the persona media recorder
+            if (personaMediaRecorder && personaMediaRecorder.state !== 'inactive') {
+                personaMediaRecorder.stop();
+            }
+
+            // Create and download recordings
+            const timestamp = Date.now();
+            const userBlob = new Blob(userChunks, { type: 'audio/webm' });
+            const personaBlob = new Blob(personaChunks, { type: 'audio/webm' });
+
+            // Download both recordings
+            const userAudioUrl = URL.createObjectURL(userBlob);
+            const personaAudioUrl = URL.createObjectURL(personaBlob);
+
+            const userLink = document.createElement('a');
+            const personaLink = document.createElement('a');
+
+            userLink.href = userAudioUrl;
+            personaLink.href = personaAudioUrl;
+
+            userLink.download = `user-audio-${timestamp}.webm`;
+            personaLink.download = `persona-audio-${timestamp}.webm`;
+
+            userLink.click();
+            personaLink.click();
+
+            URL.revokeObjectURL(userAudioUrl);
+            URL.revokeObjectURL(personaAudioUrl);
+
+            // Stop the media streams
+            const videoElement = document.getElementById('anamVideo');
+            if (videoElement.srcObject) {
+                videoElement.srcObject.getTracks().forEach(track => track.stop());
+                videoElement.srcObject = null;
+            }
+
+            const audioElement = document.getElementById('anamAudio');
+            if (audioElement.srcObject) {
+                audioElement.srcObject.getTracks().forEach(track => track.stop());
+                audioElement.srcObject = null;
+            }
+
+            // Clean up the Anam session
+            if (anamClient) {
+                anamClient.stopStreaming();
+                anamClient = null;
+            }
+        }
+    </script>
+</body>
+</html>
