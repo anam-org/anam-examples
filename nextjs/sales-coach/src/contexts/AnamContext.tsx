@@ -5,10 +5,8 @@ import constate from "constate";
 import { useRef, useCallback, useEffect } from "react";
 import { FetchError, errorHandler, logger, env } from "@/utils";
 import { AnamEvent, Message } from "@anam-ai/js-sdk/dist/module/types";
-
-const PERSONA_ID = env.NEXT_PUBLIC_DEFAULT_PERSONA_ID!;
-const DISABLE_BRAINS = env.NEXT_PUBLIC_DISABLE_BRAINS;
-const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
+import { Persona } from "@/utils/personas";
+import { useFetchToken } from "@/hooks";
 
 /**
  * useAnam hook initializes the Anam client using session token.
@@ -23,9 +21,12 @@ const DISABLE_FILLER_PHRASES = env.NEXT_PUBLIC_DISABLE_FILLER_PHRASES;
  * - `onConnectionClosed`: Function to handle the connection closed event.
  * - `onMessageHistoryUpdated`: Function to handle message history updates.
  */
-const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
+const useAnam = () => {
+  const { sessionToken, setPersonaName } = useFetchToken();
+
   const anamClientRef = useRef<AnamClient | null>(null);
   const listenersAddedRef = useRef(false);
+  const currentTokenRef = useRef<string | undefined>(sessionToken);
 
   const connectionEstablishedHandlerRef = useRef<() => void>(() => {});
   const videoStartedStreamingHandlerRef = useRef<() => void>(() => {});
@@ -36,21 +37,37 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
 
   if (!anamClientRef.current && sessionToken) {
     try {
-      anamClientRef.current = createClient(sessionToken, {
-        personaId: PERSONA_ID,
-        disableBrains: DISABLE_BRAINS,
-        disableFillerPhrases: DISABLE_FILLER_PHRASES,
-      });
+      anamClientRef.current = createClient(sessionToken);
       logger.info(`Anam client initialized`);
     } catch (err) {
       errorHandler(err as FetchError, "Initializing Anam Client");
-      anamClientRef.current = createClient("dummy", {
-        personaId: PERSONA_ID,
-        disableBrains: DISABLE_BRAINS,
-        disableFillerPhrases: DISABLE_FILLER_PHRASES,
-      });
+      anamClientRef.current = null;
     }
   }
+
+  useEffect(() => {
+    console.log("sessionToken", sessionToken);
+    if (sessionToken && sessionToken !== currentTokenRef.current) {
+      console.log("Reinitializing Anam client");
+      // Clean up the old client if it exists
+      if (anamClientRef.current) {
+        removeListeners();
+        stopStreaming();
+        anamClientRef.current = null;
+      }
+
+      // Initialize with the new token
+      try {
+        anamClientRef.current = createClient(sessionToken);
+        currentTokenRef.current = sessionToken;
+        addListeners();
+        logger.info(`Anam client reinitialized with new token`);
+      } catch (err) {
+        errorHandler(err as FetchError, "Reinitializing Anam Client");
+        anamClientRef.current = null;
+      }
+    }
+  }, [sessionToken]);
 
   /**
    * Adds listeners for Anam client events.
@@ -177,7 +194,7 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
       try {
         logger.info("Starting stream...");
         stopStreaming();
-  
+
         // Check if a custom MediaStream is provided
         if (userProvidedMediaStream) {
           // Pass the custom MediaStream to the Anam client's stream method
@@ -201,7 +218,6 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
       }
     }
   };
-  
 
   /**
    * Stops the current video/audio streaming session.
@@ -218,14 +234,10 @@ const useAnam = ({ sessionToken }: { sessionToken?: string }) => {
   /**
    * Updates the persona configuration for the Anam client.
    */
-  const setPersonaConfig = (config: {
-    personaId: string;
-    disableFillerPhrases?: boolean;
-    disableBrains?: boolean;
-  }) => {
+  const setPersonaConfig = (personaName: string) => {
     if (anamClientRef.current) {
-      anamClientRef.current.setPersonaConfig(config);
-      logger.info("Persona config updated", config);
+      setPersonaName(personaName);
+      logger.info("Persona config updated", personaName);
     } else {
       logger.error("Anam client is not initialized");
     }

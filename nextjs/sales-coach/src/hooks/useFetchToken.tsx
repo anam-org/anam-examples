@@ -31,12 +31,13 @@ const isTokenExpired = (token: string): boolean => {
  */
 export const useFetchToken = () => {
   const [fetchKey, setFetchKey] = useState<string>(
-    `/session-token-${Date.now()}`,
+    `/session-token-JORDAN-${Date.now()}`,
   );
+  const [personaName, setPersonaName] = useState<string>("JORDAN");
 
   const fetchSessionToken = async (): Promise<string> => {
     logger.info("Fetching new session token...");
-    const response = await fetch("/api/session-token", {
+    const response = await fetch(`/api/session-token?persona=${personaName}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -66,16 +67,19 @@ export const useFetchToken = () => {
   });
 
   useEffect(() => {
-    if (sessionToken && isTokenExpired(sessionToken)) {
+    if (
+      (sessionToken && isTokenExpired(sessionToken)) ||
+      !fetchKey.includes(personaName)
+    ) {
       logger.info("Token expired, refreshing...");
-      setFetchKey(`/session-token-${Date.now()}`);
+      setFetchKey(`/session-token-${personaName}-${Date.now()}`);
     }
-  }, [sessionToken]);
+  }, [sessionToken, personaName]);
 
   const refreshToken = () => {
     logger.info("Manually refreshing token...");
-    setFetchKey(`/session-token-${Date.now()}`);
+    setFetchKey(`/session-token-${personaName}-${Date.now()}`);
   };
 
-  return { sessionToken, error, refreshToken, isValidating };
+  return { sessionToken, error, refreshToken, isValidating, setPersonaName };
 };

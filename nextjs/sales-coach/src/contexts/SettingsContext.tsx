@@ -4,6 +4,8 @@ import constate from "constate";
 import { useState } from "react";
 import { useAnamContext } from "@/contexts";
 import { env } from "@/utils";
+import personas from "@/utils/personas";
+import { useFetchToken } from "@/hooks";
 
 export type ScenarioType =
   | "product_demo"
@@ -17,12 +19,12 @@ export type ScenarioType =
  * A mapping of scenario types to their corresponding persona IDs from environment variables.
  */
 export const scenarioIds: Record<ScenarioType, string> = {
-  product_demo: env.NEXT_PUBLIC_PERSONA_JORDAN,
-  negotiation: env.NEXT_PUBLIC_PERSONA_TAYLOR,
-  objection_handling: env.NEXT_PUBLIC_PERSONA_ALEX,
-  closing_deal: env.NEXT_PUBLIC_PERSONA_JAMIE,
-  follow_up: env.NEXT_PUBLIC_PERSONA_SAM,
-  customer_support: env.NEXT_PUBLIC_PERSONA_MORGAN,
+  product_demo: personas.JORDAN.name,
+  negotiation: personas.TAYLOR.name,
+  objection_handling: personas.ALEX.name,
+  closing_deal: personas.JAMIE.name,
+  follow_up: personas.SAM.name,
+  customer_support: personas.MORGAN.name,
 };
 
 /**
@@ -49,9 +51,7 @@ const useSettings = () => {
   const applyScenarioConfig = () => {
     const scenarioId = scenarioIds[selectedScenario];
 
-    setPersonaConfig({
-      personaId: scenarioId,
-    });
+    setPersonaConfig(scenarioId);
   };
 
   return {

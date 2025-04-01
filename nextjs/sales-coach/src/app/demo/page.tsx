@@ -35,10 +35,10 @@ export default function DemoView() {
   return (
     <Flex
       gap="2"
-      className="appcontainer mx-auto flex flex-col md:flex-col lg:flex-row xl:flex-row"
+      className="appcontainer mx-auto flex flex-col md:flex-col lg:flex-row xl:flex-row lg:pt-20"
     >
       <AvatarContainer
-        className="relative mt-2 flex items-center justify-center sm:min-w-[80vw] md:min-w-[500px] lg:min-h-[90vh] xl:min-h-[98vh] 2xl:min-h-[98vh] aspect-square bg-gray-100 rounded-lg border border-gray-300"
+        className="relative mt-2 flex items-center justify-center sm:min-w-[80vw] md:min-w-[500px] lg:min-h-[30vh] xl:min-h-[38vh] 2xl:min-h-[38vh] aspect-square bg-gray-100 rounded-lg border border-gray-300"
         videoClassName="w-auto h-full object-cover rounded-lg"
         audioStream={mediaStream || undefined}
       >

@@ -15,8 +15,8 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
 
 ### Prerequisites
 
-- **An Anam AI account**: Public account creation is currently unavailable. Design partners will have their accounts created by the Anam team.
-- **An Anam API key**: API keys are shared with design partners during onboarding.
+- **An Anam AI account**: You can sign up for a free account [here](https://lab.anam.ai/register)
+- **An Anam API key**: To create your first API key, follow the instructions [here](https://docs.anam.ai/guides/get-started/api-key)
 
 ### Installation
 
@@ -37,33 +37,11 @@ This application demonstrates how to integrate and utilize the Anam AI Avatar SD
    yarn install
    ```
 
-3. **Generate personas and set up your .env file:**
-
-   After installing dependencies, run the following command to generate personas:
-
-   ```bash
-   npm run generate-personas
-   # or
-   pnpm generate-personas
-   # or
-   yarn generate-personas
-   ```
-
-   This will generate the personas required for the different scenarios in the application.
-
-   Once the personas are generated, you will receive an output with persona IDs. Update your `.env` file with the generated persona IDs as shown below:
+3. **Set up your .env file:**
+   Update your `.env` file with the generated persona IDs as shown below:
 
    ```env
    ANAM_API_KEY=your_api_key
-   NEXT_PUBLIC_BASE_URL=https://api.anam.ai
-
-   # Persona IDs for each scenario
-   NEXT_PUBLIC_PERSONA_JORDAN=generated_persona_id_for_jordan
-   NEXT_PUBLIC_PERSONA_TAYLOR=generated_persona_id_for_taylor
-   NEXT_PUBLIC_PERSONA_ALEX=generated_persona_id_for_alex
-   NEXT_PUBLIC_PERSONA_JAMIE=generated_persona_id_for_jamie
-   NEXT_PUBLIC_PERSONA_SAM=generated_persona_id_for_sam
-   NEXT_PUBLIC_PERSONA_MORGAN=generated_persona_id_for_morgan
    ```
 
 ## Usage
