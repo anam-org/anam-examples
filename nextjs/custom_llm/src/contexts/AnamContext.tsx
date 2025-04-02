@@ -1,74 +1,39 @@
 'use client';
-import {
-  createClient,
-  AnamClient,
-  unsafe_createClientWithApiKey,
-} from '@anam-ai/js-sdk';
+import { createClient, AnamClient } from '@anam-ai/js-sdk';
 import { createContext, useContext } from 'react';
-
-const PERSONA_ID = process.env.NEXT_PUBLIC_PERSONA_ID;
-
 interface AnamContextDetails {
-  anamClient: AnamClient;
+  anamClient: AnamClient | undefined;
   sessionToken: string | undefined;
-  apiKey: string | undefined;
 }
 
 const AnamContext = createContext<AnamContextDetails>({
-  anamClient: createClient('dummy', {
-    personaId: PERSONA_ID!,
-    disableBrains: true,
-  }),
+  anamClient: undefined,
   sessionToken: undefined,
-  apiKey: undefined,
 });
 
 type AnamContextProviderProps = {
   children: React.ReactNode;
-  apiKey?: string;
   sessionToken?: string;
 };
 
 export const AnamContextProvider = ({
   children,
-  apiKey,
   sessionToken,
 }: AnamContextProviderProps) => {
   if (sessionToken) {
-    const client = createClient(sessionToken, {
-      personaId: PERSONA_ID!,
-      disableBrains: true,
-    });
+    const client = createClient(sessionToken);
     return (
-      <AnamContext.Provider
-        value={{ anamClient: client, sessionToken, apiKey }}
-      >
-        {children}
-      </AnamContext.Provider>
-    );
-  } else if (apiKey) {
-    const client = unsafe_createClientWithApiKey(apiKey, {
-      personaId: PERSONA_ID!,
-      disableBrains: true,
-    });
-    return (
-      <AnamContext.Provider
-        value={{ anamClient: client, sessionToken, apiKey }}
-      >
+      <AnamContext.Provider value={{ anamClient: client, sessionToken }}>
         {children}
       </AnamContext.Provider>
     );
   } else {
-    console.error('Anam Provider: No session token or API key provided');
+    console.error('Anam Provider: No session token provided');
     return (
       <AnamContext.Provider
         value={{
-          anamClient: createClient('dummy', {
-            personaId: PERSONA_ID!,
-            disableBrains: true,
-          }),
+          anamClient: undefined,
           sessionToken: undefined,
-          apiKey: undefined,
         }}
       >
         {children}

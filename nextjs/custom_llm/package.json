@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@anam-ai/js-sdk": "^1.4.0",
+    "@anam-ai/js-sdk": "^2.1.0",
     "flowbite-react": "^0.10.1",
     "next": "14.2.4",
     "openai": "^4.52.1",

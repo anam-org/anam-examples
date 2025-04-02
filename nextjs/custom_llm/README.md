@@ -12,7 +12,7 @@ npm install
 
 ### Configure env variables
 
-Copy the file `.env.example` and rename to `.env`. Replace `YOUR_API_KEY` with you API key and `YOUR_PERSONA_ID` with your chosen persona id.
+Copy the file `.env.example` and rename to `.env`. Replace `YOUR_API_KEY` with you API key from the Anam Lab.
 Also replace `YOUR_OPEN_AI_API_KEY` with an Open AI API key in order to obtain responses based on user input.
 
 ### Run the project

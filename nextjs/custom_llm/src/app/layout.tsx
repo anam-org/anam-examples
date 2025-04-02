@@ -6,7 +6,7 @@ import { getSessionToken } from '@/lib/server-lib';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const API_KEY = process.env.API_KEY || '';
+const API_KEY = process.env.ANAM_API_KEY ?? '';
 
 export const metadata: Metadata = {
   title: 'ANAM',

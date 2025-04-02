@@ -11,7 +11,7 @@ import ConversationPanel from '@/components/ConversationPanel';
 import { useAnam } from '@/contexts/AnamContext';
 import TalkPanel from '@/components/TalkPanel';
 import { AnamEvent, Message } from '@anam-ai/js-sdk/dist/module/types';
-import { getPersonaResponse } from '@/utils/api';
+import { getPersonaResponse, streamPersonaResponse } from '@/lib/server-lib';
 
 export default function Session() {
   const router = useRouter();
@@ -40,6 +40,10 @@ export default function Session() {
 
   const onVideoStartedStreaming = () => {
     setLoading(false);
+    // send initial greeting.
+    anamClient
+      ?.talk('Hello, how can I help you today?')
+      .catch((err) => console.error('Talk command failed:', err));
   };
 
   const goHome = () => {
@@ -61,7 +65,7 @@ export default function Session() {
 
   const onClickStop = () => {
     setStopped(true);
-    anamClient.stopStreaming();
+    anamClient?.stopStreaming();
     isStreaming.current = false;
     goHome();
   };
@@ -74,14 +78,52 @@ export default function Session() {
       // only respond to user messages
       const lastMessage = messageHistory[messageHistory.length - 1];
       if (lastMessage.role === 'user') {
-        const response = await getPersonaResponse(messageHistory);
-        anamClient.talk(response);
+        if (!anamClient) {
+          console.error('Cannot respond: Anam client is not initialized');
+          return;
+        }
+
+        try {
+          // Use the streaming approach instead of the previous implementation
+          await streamPersonaResponse(
+            messageHistory,
+            anamClient,
+            (error: any) => {
+              console.error('Streaming error:', error);
+              // If streaming fails, fall back to the non-streaming approach
+              getPersonaResponse(messageHistory)
+                .then((response) => {
+                  anamClient
+                    ?.talk(response)
+                    .catch((err: any) =>
+                      console.error('Talk fallback failed:', err),
+                    );
+                })
+                .catch((err) =>
+                  console.error('Fallback getPersonaResponse failed:', err),
+                );
+            },
+          );
+        } catch (error) {
+          console.error('Error in streaming response:', error);
+          // Fall back to non-streaming approach
+          try {
+            const response = await getPersonaResponse(messageHistory);
+            await anamClient.talk(response);
+          } catch (fallbackError) {
+            console.error('Both streaming and fallback failed:', fallbackError);
+          }
+        }
       }
     }
   };
 
   useEffect(() => {
     const startStream = async () => {
+      if (!anamClient) {
+        console.error('Cannot start stream: Anam client is not initialized');
+        return;
+      }
       anamClient.addListener(
         AnamEvent.CONNECTION_ESTABLISHED,
         onConnectionEstablished,
@@ -112,14 +154,14 @@ export default function Session() {
       }
     };
 
-    if (!stopped && !isStreaming.current && !anamClient.isStreaming()) {
+    if (!stopped && !isStreaming.current && !anamClient?.isStreaming()) {
       isStreaming.current = true;
       startStream();
     }
 
     // clean up connection on exit
     return () => {
-      anamClient.stopStreaming();
+      anamClient?.stopStreaming();
     };
   }, []);
 
@@ -186,7 +228,7 @@ export default function Session() {
       {showMessageHistory && (
         <div className="w-full minH-full flex justify-end">
           <ConversationPanel
-            sendData={(message: string) => anamClient.sendDataMessage(message)}
+            sendData={(message: string) => anamClient?.sendDataMessage(message)}
             sentMessages={messageState.sentMessages}
             onSendMessage={onSendMessage}
             showTypingIndicator={messageState.showTypingIndicator}
