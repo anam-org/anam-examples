@@ -148,24 +148,13 @@ export default function Session() {
                 <label className="text-xl my-12">{loadingText}</label>
               </div>
             </div>
-            <div className="w-full p-8 flex flex-row justify-center">
+            <div className="w-full p-8 flex flex-row gap-4 justify-center">
               <Button
                 onClick={() => setShowMessageHistory(!showMessageHistory)}
                 color="blue"
                 size="lg"
               >
                 {showMessageHistory ? 'Hide Chat' : 'Show Chat'}
-              </Button>
-              <Button
-                color="blue"
-                size="lg"
-                onClick={() =>
-                  anamClient.getInputAudioState().isMuted
-                    ? anamClient.unmuteInputAudio()
-                    : anamClient.muteInputAudio()
-                }
-              >
-                {anamClient.getInputAudioState().isMuted ? 'Unmute' : 'Mute'}
               </Button>
             </div>
             <AlertModal
