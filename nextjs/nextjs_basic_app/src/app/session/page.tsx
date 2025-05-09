@@ -10,7 +10,7 @@ import AlertModal from '@/components/AlertModal';
 import ConversationPanel from '@/components/ConversationPanel';
 import { useAnam } from '@/contexts/AnamContext';
 import TalkPanel from '@/components/TalkPanel';
-import { AnamEvent } from '@anam-ai/js-sdk/dist/module/types';
+import { AnamEvent } from '@anam-ai/js-sdk';
 
 export default function Session() {
   const router = useRouter();
