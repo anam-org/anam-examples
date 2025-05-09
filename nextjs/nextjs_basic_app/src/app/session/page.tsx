@@ -148,7 +148,7 @@ export default function Session() {
                 <label className="text-xl my-12">{loadingText}</label>
               </div>
             </div>
-            <div className="w-full p-8 flex justify-center">
+            <div className="w-full p-8 flex flex-row gap-4 justify-center">
               <Button
                 onClick={() => setShowMessageHistory(!showMessageHistory)}
                 color="blue"
