@@ -19,6 +19,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@anam-ai/js-sdk": "^1.4.0"
+    "@anam-ai/js-sdk": "^2.1.1"
   }
 }
