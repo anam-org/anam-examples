@@ -43,9 +43,10 @@ async function createNewPersona(interviewSetup) {
         name: "Interviewer",
         description: "An interviewer for job practice.",
         personaPreset: "leo_desk",
-        systemPrompt: `You are an interviewer conducting a job interview. The interview setup as given from the user is as follows: ${interviewSetup}. Always ask one question. Keep responses brief.`,
-        personality: "You are interviewing the user.",
-        fillerPhrases: ["Hmmm..", "I see..", "Interesting..", "Okay..", "Alright..", "Well..", "Thank you.."],
+        brain: {
+          "systemPrompt": `You are an interviewer conducting a job interview. The interview setup as given from the user is as follows: ${interviewSetup}. Always ask one question. Keep responses brief.`
+        },
+        brainType: "ANAM_GPT_4O_MINI_V1",
         userInput: undefined  // No user input needed as it's already provided in the interview setup
       })
     });
