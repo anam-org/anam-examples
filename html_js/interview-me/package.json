@@ -21,6 +21,6 @@
     "wrangler": "^3.78.12"
   },
   "dependencies": {
-    "@anam-ai/js-sdk": "^1.4.0"
+    "@anam-ai/js-sdk": "^2.4.1"
   }
 }
