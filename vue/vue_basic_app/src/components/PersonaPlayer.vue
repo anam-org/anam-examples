@@ -21,7 +21,15 @@ const startStreaming = async () => {
       isLoading.value = false
       isStreaming.value = true
     })
-    await anamClient.streamToVideoAndAudioElements('video-id', 'audio-id')
+
+    anamClient.addListener(AnamEvent.AUDIO_STREAM_STARTED, (audioStream: MediaStream) => {
+      const audioElement = document.getElementById('audio-id') as HTMLAudioElement
+      if (audioElement) {
+        audioElement.srcObject = audioStream
+      }
+    })
+
+    await anamClient.streamToVideoElement('video-id')
   } catch (error) {
     console.error('Error starting stream:', error)
     isLoading.value = false
