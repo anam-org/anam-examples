@@ -21,7 +21,8 @@ const startStreaming = async () => {
       isLoading.value = false
       isStreaming.value = true
     })
-    await anamClient.streamToVideoAndAudioElements('video-id', 'audio-id')
+
+    await anamClient.streamToVideoElement('video-id')
   } catch (error) {
     console.error('Error starting stream:', error)
     isLoading.value = false
@@ -43,9 +44,8 @@ onUnmounted(() => {
 <template>
   <div class="flex flex-col items-center">
     <div class="relative bg-slate-700 border-none w-[512px] h-[512px] rounded-xl overflow-hidden">
-      <video v-show="!isLoading && isStreaming" id="video-id" class="object-cover w-full h-full" muted autoplay
+      <video v-show="!isLoading && isStreaming" id="video-id" class="object-cover w-full h-full" autoplay
         playsinline></video>
-      <audio id="audio-id" autoplay></audio>
       <!-- Loading Spinner -->
       <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center">
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
