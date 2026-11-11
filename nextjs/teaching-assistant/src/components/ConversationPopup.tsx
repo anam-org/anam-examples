@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, MutableRefObject } from "react";
+import { useState, useEffect, useRef, MutableRefObject, type JSX } from "react";
 import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";
 import { IconButton, Flex, Box, Popover, Text } from "@radix-ui/themes";
 import { MessageCircle, X } from "lucide-react";

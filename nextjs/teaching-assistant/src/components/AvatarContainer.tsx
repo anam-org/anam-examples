@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, forwardRef } from "react";
+import { useEffect, useRef, forwardRef, type JSX } from "react";
 import { useAnamContext } from "@/contexts";
 import { errorHandler } from "@/utils";
 
@@ -72,3 +72,5 @@ export const AvatarContainer = forwardRef<HTMLDivElement, AvatarContainerProps>(
     );
   },
 );
+
+AvatarContainer.displayName = "AvatarContainer";

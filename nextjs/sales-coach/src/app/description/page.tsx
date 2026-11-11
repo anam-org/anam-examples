@@ -19,7 +19,7 @@ import { ScenarioType } from "@/contexts";
  * Contains the scenario details, including instructions, descriptions, role, and customer information.
  * These details are used to guide the user through each scenario during the demo.
  */
-export const scenarioTextContent: Record<
+const scenarioTextContent: Record<
   ScenarioType,
   {
     scenarioTitle: string;
