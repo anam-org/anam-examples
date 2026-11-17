@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Flex, IconButton, Select, Text } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { Mic, MicOff, X } from "lucide-react";
 import { useAudioPermissionContext } from "@/contexts";
 

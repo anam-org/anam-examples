@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, MutableRefObject } from "react";
+import { useRef, useState, useEffect, MutableRefObject, type JSX } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { usePersonaConversation } from "@/hooks/usePersonaConversation";
 import { MessageRole } from "@anam-ai/js-sdk/dist/module/types";

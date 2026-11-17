@@ -8,6 +8,9 @@ export default function TalkPanel() {
   const [sentCommands, setSentCommands] = useState<string[]>([]);
   const { anamClient } = useAnam();
   const sendTalkCommand = async (content: string) => {
+    if (!anamClient) {
+      throw new Error('Cannot send talk command: Anam client is not initialized');
+    }
     return anamClient.talk(content);
   };
 

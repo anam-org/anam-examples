@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, type JSX } from "react";
 import { useAudioPermissionContext } from "@/contexts";
 import {
   ConversationPopup,

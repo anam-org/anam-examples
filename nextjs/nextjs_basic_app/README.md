@@ -1,6 +1,6 @@
 # Anam NextJS Example
 
-This example demonstrates integrating the Anam JS SDK into a NextJS 14 project.
+This example demonstrates integrating the Anam JS SDK into a NextJS 15 project.
 The project uses the NextJS App Router layout and creates the Anam client as part of a context provider.
 The Anam client is initialised with a session token which is obtained by exchanging the API key for a token on the server side when the root layout is requested.
 

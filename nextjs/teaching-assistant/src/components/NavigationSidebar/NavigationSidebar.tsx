@@ -1,10 +1,16 @@
 "use client";
 
 import { Box, Heading, IconButton } from "@radix-ui/themes";
-import { ChevronLeft, ChevronRight, BrainCircuit, Menu } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  BrainCircuit,
+  Menu,
+  type LucideIcon,
+} from "lucide-react";
 import { useAnamContext } from "@/contexts";
 import { usePathname, useRouter } from "next/navigation";
-import { ComponentType, useState } from "react";
+import { useState, type JSX } from "react";
 import { useTheme } from "next-themes";
 import { logger } from "@/utils";
 import { NavigationSidebarContents } from "./NavigationSidebarContents";
@@ -12,7 +18,7 @@ import { NavigationSidebarContents } from "./NavigationSidebarContents";
 export interface SidebarNavMenuItem {
   title: string;
   navigateTo: string;
-  Icon: ComponentType<any>;
+  Icon: LucideIcon;
   gap?: boolean;
   clickable: boolean;
 }

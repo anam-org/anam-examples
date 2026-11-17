@@ -1,13 +1,10 @@
 import { IconButton } from "@radix-ui/themes";
-import { ReactNode } from "react";
+import { ComponentProps } from "react";
 
 export const GhostIconButton = ({
   children,
   ...props
-}: {
-  children: ReactNode;
-  [key: string]: any;
-}) => (
+}: ComponentProps<typeof IconButton>) => (
   <IconButton variant="ghost" className="text-gray-200" {...props}>
     {children}
   </IconButton>

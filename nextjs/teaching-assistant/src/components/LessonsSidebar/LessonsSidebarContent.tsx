@@ -1,4 +1,5 @@
 import { Box, Heading, Text } from "@radix-ui/themes";
+import type { JSX } from "react";
 import { MenuItem } from "./LessonsSidebar";
 
 export const lessons: Record<string, MenuItem[]> = {

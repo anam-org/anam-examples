@@ -3,7 +3,7 @@
 import { Heading, Box } from "@radix-ui/themes";
 import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type JSX } from "react";
 import { DemoSidebarContents, lessons } from "./LessonsSidebarContent";
 import { useSettingsContext } from "@/contexts";
 
